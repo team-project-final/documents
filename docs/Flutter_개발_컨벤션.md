@@ -1062,3 +1062,406 @@ return notes.when(
   error: (_, __) => Container(),   // 에러 무시 — 디버깅 불가
 );
 ```
+
+---
+
+### 3.5 UI 컴포넌트 규칙
+
+#### DESIGN.md 토큰 → Flutter 코드 매핑
+
+**색상 상수:**
+```dart
+// core/constants/app_colors.dart
+abstract class AppColors {
+  // Primary (DESIGN.md: Warm Amber)
+  static const primaryAmber = Color(0xFFD97706);
+  static const primaryHover = Color(0xFFB45309);
+  static const primaryLight = Color(0xFFFEF3C7);
+
+  // Secondary (DESIGN.md: Muted Teal)
+  static const secondaryTeal = Color(0xFF0D9488);
+
+  // Neutrals (DESIGN.md: Warm Stone)
+  static const stone50  = Color(0xFFFAFAF9);
+  static const stone100 = Color(0xFFF5F5F4);
+  static const stone200 = Color(0xFFE7E5E4);
+  static const stone300 = Color(0xFFD6D3D1);
+  static const stone400 = Color(0xFFA8A29E);
+  static const stone500 = Color(0xFF78716C);
+  static const stone600 = Color(0xFF57534E);
+  static const stone700 = Color(0xFF44403C);
+  static const stone800 = Color(0xFF292524);
+  static const stone900 = Color(0xFF1C1917);
+  static const stone950 = Color(0xFF0C0A09);
+
+  // Semantic
+  static const success = Color(0xFF16A34A);
+  static const warning = Color(0xFFF59E0B);
+  static const error   = Color(0xFFDC2626);
+  static const info    = Color(0xFF0EA5E9);
+
+  // Dark Mode
+  static const darkBackground = stone900;  // #1C1917
+  static const darkSurface    = stone800;  // #292524
+  static const darkElevated   = stone700;  // #44403C
+}
+```
+
+**스페이싱 상수:**
+```dart
+// core/constants/app_spacing.dart
+abstract class AppSpacing {
+  static const double xxs  = 2;
+  static const double xs   = 4;
+  static const double sm   = 8;
+  static const double md   = 16;
+  static const double lg   = 24;
+  static const double xl   = 32;
+  static const double xxl  = 48;
+  static const double xxxl = 64;
+
+  // Content padding (반응형)
+  static double contentPadding(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    if (width < AppBreakpoints.mobile) return md;   // 모바일: 16px
+    if (width < AppBreakpoints.tablet) return lg;   // 태블릿: 24px
+    return xl;                                       // 데스크톱: 32px
+  }
+}
+```
+
+**브레이크포인트:**
+```dart
+// core/constants/app_breakpoints.dart
+abstract class AppBreakpoints {
+  static const double mobile  = 640;
+  static const double tablet  = 1024;
+}
+```
+
+**타이포그래피:**
+```dart
+// core/constants/app_text_styles.dart (google_fonts 패키지 사용)
+import 'package:google_fonts/google_fonts.dart';
+
+abstract class AppTextStyles {
+  // Display (DESIGN.md: Fraunces)
+  static TextStyle displayXl = GoogleFonts.fraunces(fontSize: 48, height: 1.1);
+  static TextStyle display   = GoogleFonts.fraunces(fontSize: 36, height: 1.2);
+  static TextStyle h1        = GoogleFonts.fraunces(fontSize: 30, height: 1.3);
+
+  // Headings (DESIGN.md: Plus Jakarta Sans 600)
+  static TextStyle h2 = GoogleFonts.plusJakartaSans(fontSize: 24, height: 1.35, fontWeight: FontWeight.w600);
+  static TextStyle h3 = GoogleFonts.plusJakartaSans(fontSize: 20, height: 1.4, fontWeight: FontWeight.w600);
+
+  // Body (DESIGN.md: Plus Jakarta Sans 400)
+  static TextStyle body      = GoogleFonts.plusJakartaSans(fontSize: 16, height: 1.6);
+  static TextStyle bodySmall = GoogleFonts.plusJakartaSans(fontSize: 14, height: 1.5);
+  static TextStyle caption   = GoogleFonts.plusJakartaSans(fontSize: 12, height: 1.4, fontWeight: FontWeight.w500);
+
+  // Code (DESIGN.md: Geist Mono)
+  static TextStyle code = GoogleFonts.geistMono(fontSize: 14, height: 1.5);
+}
+```
+
+#### 반응형 레이아웃
+
+```dart
+// 표준 반응형 패턴
+class ResponsiveLayout extends StatelessWidget {
+  const ResponsiveLayout({
+    super.key,
+    required this.mobile,
+    this.tablet,
+    this.desktop,
+  });
+  final Widget mobile;
+  final Widget? tablet;
+  final Widget? desktop;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth >= AppBreakpoints.tablet) {
+          return desktop ?? tablet ?? mobile;
+        }
+        if (constraints.maxWidth >= AppBreakpoints.mobile) {
+          return tablet ?? mobile;
+        }
+        return mobile;
+      },
+    );
+  }
+}
+```
+
+#### Border Radius (DESIGN.md 매핑)
+
+```dart
+// core/constants/app_radius.dart
+abstract class AppRadius {
+  static const double sm   = 4;   // inputs, badges
+  static const double md   = 8;   // cards, buttons
+  static const double lg   = 12;  // panels, dialogs
+  static const double xl   = 16;  // hero sections
+  static const double full = 9999; // avatars, pills
+}
+```
+
+#### Good 예제
+
+```dart
+// DESIGN.md 토큰 사용 — 일관된 UI
+Card(
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(AppRadius.md),
+  ),
+  color: AppColors.stone50,
+  elevation: 0,
+  child: Padding(
+    padding: const EdgeInsets.all(AppSpacing.md),
+    child: Text('노트 제목', style: AppTextStyles.h3),
+  ),
+)
+```
+
+#### Bad 예제
+
+```dart
+// 하드코딩 — DESIGN.md 무시
+Card(
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(10), // AppRadius.md(8) 사용!
+  ),
+  color: Colors.white,                       // AppColors.stone50 사용!
+  child: Padding(
+    padding: EdgeInsets.all(15),              // const + AppSpacing.md(16) 사용!
+    child: Text('노트 제목', style: TextStyle(fontSize: 20)), // AppTextStyles 사용!
+  ),
+)
+```
+
+---
+
+### 3.6 테스트 작성 패턴
+
+#### 테스트 종류
+
+| 종류 | 목적 | 도구 |
+|------|------|------|
+| Widget Test | 위젯 렌더링/인터랙션 검증 | `flutter_test` + `pumpWidget` |
+| Provider Test | 상태 로직 검증 | `ProviderContainer` + overrides |
+| Golden Test | UI 회귀 방지 (스냅샷 비교) | `matchesGoldenFile` |
+| Integration Test | 전체 앱 시나리오 | `integration_test` 패키지 |
+
+#### 테스트 네이밍
+
+```dart
+'should [행동/결과] when [조건]'
+```
+
+#### Widget Test
+
+```dart
+testWidgets('should display note title when loaded', (tester) async {
+  // given
+  final testNote = Note(id: 'note-1', title: '테스트 노트', content: '내용');
+
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [
+        noteProvider('note-1').overrideWith(
+          (ref, noteId) => Future.value(testNote),
+        ),
+      ],
+      child: const MaterialApp(home: NoteDetailScreen(noteId: 'note-1')),
+    ),
+  );
+  await tester.pumpAndSettle();
+
+  // then
+  expect(find.text('테스트 노트'), findsOneWidget);
+});
+
+testWidgets('should show error widget when fetch fails', (tester) async {
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [
+        noteListProvider.overrideWith(
+          (ref) => throw const AppException(code: 'NETWORK_ERROR', message: '네트워크 오류'),
+        ),
+      ],
+      child: const MaterialApp(home: NoteListScreen()),
+    ),
+  );
+  await tester.pumpAndSettle();
+
+  expect(find.byType(AppErrorWidget), findsOneWidget);
+  expect(find.text('재시도'), findsOneWidget);
+});
+
+testWidgets('should call retry when retry button tapped', (tester) async {
+  var invalidateCount = 0;
+
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [
+        noteListProvider.overrideWith((ref) {
+          ref.onDispose(() => invalidateCount++);
+          throw const AppException(code: 'ERROR', message: '오류');
+        }),
+      ],
+      child: const MaterialApp(home: NoteListScreen()),
+    ),
+  );
+  await tester.pumpAndSettle();
+
+  // when
+  await tester.tap(find.text('재시도'));
+  await tester.pumpAndSettle();
+
+  // then
+  expect(invalidateCount, greaterThan(0));
+});
+```
+
+#### Provider Unit Test
+
+```dart
+test('should update title when updateTitle called', () async {
+  final container = ProviderContainer(
+    overrides: [
+      noteRepositoryProvider.overrideWithValue(MockNoteRepository()),
+    ],
+  );
+  addTearDown(container.dispose);
+
+  // given
+  final notifier = container.read(noteEditorProvider('note-1').notifier);
+  await container.pump(); // 초기 로딩 대기
+
+  // when
+  notifier.updateTitle('새 제목');
+
+  // then
+  final state = container.read(noteEditorProvider('note-1'));
+  expect(state.title, '새 제목');
+  expect(state.isDirty, true);
+});
+```
+
+#### Golden Test
+
+```dart
+testWidgets('DashboardScreen golden test', (tester) async {
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [/* mock providers */],
+      child: const MaterialApp(home: DashboardScreen()),
+    ),
+  );
+  await tester.pumpAndSettle();
+
+  await expectLater(
+    find.byType(DashboardScreen),
+    matchesGoldenFile('goldens/dashboard_screen.png'),
+  );
+});
+```
+
+#### Good 예제
+
+```dart
+// 하나의 테스트 — 하나의 검증 의도
+testWidgets('should navigate to note detail when card tapped', (tester) async {
+  // given + when + then 명확
+});
+```
+
+#### Bad 예제
+
+```dart
+// 하나의 테스트에 여러 시나리오 혼합
+testWidgets('test notes', (tester) async {
+  // 생성 테스트
+  // 수정 테스트
+  // 삭제 테스트
+  // → 각각 별도 테스트로 분리
+});
+```
+
+---
+
+### 3.7 성능 규칙
+
+#### 핵심 규칙 테이블
+
+| 규칙 | Why | 적용 방법 |
+|------|-----|-----------|
+| `const` 위젯 | 동일 인스턴스 재사용 → 리빌드 방지 | 모든 정적 위젯에 const 생성자 |
+| `RepaintBoundary` | 불필요한 repaint 격리 | 애니메이션/스크롤 영역 감싸기 |
+| `ListView.builder` | lazy rendering (화면 밖 미렌더링) | 10개 이상 리스트 |
+| `CachedNetworkImage` | 이미지 중복 다운로드 방지 | 모든 네트워크 이미지 |
+| `cacheWidth/Height` | 메모리에 원본 대신 축소본 유지 | 썸네일에 항상 적용 |
+| `Isolate.run` | 무거운 연산을 별도 스레드로 | JSON 파싱, 마크다운 변환 |
+| `CanvasKit` 강제 | 웹에서 일관된 렌더링 보장 | 빌드 설정 |
+
+#### Good 예제
+
+```dart
+// const + RepaintBoundary + ListView.builder
+class NoteListView extends ConsumerWidget {
+  const NoteListView({super.key, required this.notes});
+  final List<Note> notes;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListView.builder(
+      itemCount: notes.length,
+      itemBuilder: (_, index) => RepaintBoundary(
+        child: NoteCard(noteId: notes[index].id),
+      ),
+    );
+  }
+}
+
+// CachedNetworkImage + resize
+CachedNetworkImage(
+  imageUrl: user.avatarUrl,
+  memCacheWidth: 64,   // 메모리에 64px로 축소 저장
+  memCacheHeight: 64,
+  placeholder: (_, __) => const AppSkeleton(width: 32, height: 32),
+  errorWidget: (_, __, ___) => const Icon(Icons.person, size: 32),
+)
+
+// 무거운 연산은 Isolate로 분리
+Future<List<Note>> parseNotesJson(String json) async {
+  return await Isolate.run(() {
+    final list = jsonDecode(json) as List;
+    return list.map((e) => Note.fromJson(e)).toList();
+  });
+}
+```
+
+#### Bad 예제
+
+```dart
+// Column + map — 1000개 아이템을 한번에 렌더링
+Column(
+  children: notes.map((n) => NoteCard(note: n)).toList(), // 전부 메모리에!
+)
+
+// 이미지 캐싱/리사이징 없음
+Image.network(url)  // 매번 다운로드, 원본 크기 메모리 점유
+
+// UI 스레드에서 무거운 연산
+Widget build(BuildContext context) {
+  final parsed = jsonDecode(hugeJsonString); // UI 프레임 드롭!
+  return Text(parsed['title']);
+}
+
+// const 누락 — 불필요한 리빌드 유발
+SizedBox(height: 16)                   // const SizedBox(height: 16) 이어야 함
+Padding(padding: EdgeInsets.all(8))     // const EdgeInsets.all(8) 이어야 함
+```
