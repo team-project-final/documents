@@ -1,7 +1,7 @@
 # Synapse 프로젝트 관리 문서 체계
 
 > **프로젝트명**: Synapse — 통합 학습-지식 그래프 SaaS  
-> **기간**: 2026-05-12 ~ 2026-06-06 (4주)  
+> **기간**: 2026-05-12 ~ 2026-06-15 (5주 + 발표일, 22 영업일 — 5/25 부처님오신날·6/3 지방선거 제외)  
 > **팀 구성**: 팀장 1명 + 팀원 6명
 
 ---
@@ -15,7 +15,7 @@
 ## 2. 문서 흐름
 
 ```
-SCOPE (4주 전체 책임 정의)
+SCOPE (5주 전체 책임 정의)
   ↓ 참조
 PRD (주차별 요구사항)
   ↓ 분해
@@ -32,7 +32,7 @@ HISTORY (상태 대시보드 + 날짜별 일지)
 
 | 문서 | 위치 | 역할 | 작성 시점 |
 |------|------|------|-----------|
-| SCOPE | `scope/SCOPE_{담당자}.md` | 담당자의 4주 전체 책임/경계 정의 | 프로젝트 시작 시 |
+| SCOPE | `scope/SCOPE_{담당자}.md` | 담당자의 5주 전체 책임/경계 정의 | 프로젝트 시작 시 |
 | PRD | `prd/PRD_W{N}.md` | 주차별 기능/비기능 요구사항 | 각 주차 시작 전 |
 | TASK | `task/TASK_{담당자}.md` | Step 단위 작업 정의 (필수 10필드) | PRD 확정 후 |
 | WORKFLOW | `workflow/WORKFLOW_{담당자}_W{N}.md` | Step을 기능개발 10단계로 세분화 | TASK 확정 후 |
@@ -53,8 +53,12 @@ docs/project-management/
 │   ├── SCOPE_knowledge-2.md
 │   ├── SCOPE_learning-card.md
 │   └── SCOPE_learning-ai.md
-├── prd/                                   # 주차별 PRD
-│   └── PRD_W1.md
+├── prd/                                   # 주차별 PRD (W1~W5)
+│   ├── PRD_W1.md
+│   ├── PRD_W2.md
+│   ├── PRD_W3.md  # 이벤트 발행자 + RRF + AI 자동 생성
+│   ├── PRD_W4.md  # 이벤트 소비자 + 운영
+│   └── PRD_W5.md  # E2E + 발표 준비
 ├── task/                                  # 담당자별 Task
 │   ├── TASK_team-lead.md
 │   ├── TASK_platform.md
