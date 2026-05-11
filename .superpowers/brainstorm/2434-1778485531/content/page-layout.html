@@ -1,0 +1,44 @@
+<h2>일정관리 페이지 — 핵심 뷰 구성</h2>
+<p class="subtitle">어떤 화면들이 필요한가요? 여러 개 선택 가능합니다.</p>
+
+<div class="options" data-multiselect>
+  <div class="option" data-choice="gantt" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Gantt 차트 (타임라인)</h3>
+      <p>4주 일정을 타임라인으로 시각화. 담당자별 Step이 바(bar)로 표시되어 전체 진행 한눈에 파악. <strong>프레젠테이션에 가장 효과적.</strong></p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="dashboard" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>대시보드 (요약 카드)</h3>
+      <p>전체 진행률, 주차별 완료율, 담당자별 상태 요약을 카드/차트로. 한 화면에 프로젝트 건강 상태 파악.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="kanban" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>칸반 보드</h3>
+      <p>Not Started → In Progress → Done 3열 보드. 카드를 드래그하여 상태 변경. <strong>인터랙티브 관리에 가장 직관적.</strong></p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="member" onclick="toggleSelect(this)">
+    <div class="letter">D</div>
+    <div class="content">
+      <h3>담당자별 상세 뷰</h3>
+      <p>특정 담당자를 선택하면 SCOPE → TASK → WORKFLOW → HISTORY를 한 페이지에서 탐색. 개인 작업 추적.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="weekly" onclick="toggleSelect(this)">
+    <div class="letter">E</div>
+    <div class="content">
+      <h3>주차별 뷰</h3>
+      <p>W1/W2/W3/W4 탭으로 전환. 해당 주차의 PRD 요구사항 + 담당자별 진행 상태를 한 화면에.</p>
+    </div>
+  </div>
+</div>
