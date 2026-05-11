@@ -125,3 +125,365 @@
 - **Reviewer**: —
 
 **Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+
+---
+
+## W2 (2026-05-19 ~ 2026-05-23)
+
+---
+
+## Step 4: Kafka 도메인별 토픽 설계 및 생성
+
+- **Step Name**: Kafka 토픽 설계/생성
+- **Step Goal**: 팀장이 도메인별 Kafka 토픽을 설계하고 Kafka 클러스터에 생성한다.
+- **Done When**:
+  - [ ] 도메인별 Kafka 토픽 네이밍 규칙 정의 완료
+  - [ ] 4개 서비스 도메인에 필요한 토픽 목록 확정
+  - [ ] MSK 클러스터에 전체 토픽 생성 완료
+  - [ ] 토픽 파티션/복제 설정 확인
+  - [ ] 로컬 Docker Compose Kafka에도 동일 토픽 반영
+- **Scope**:
+  - In Scope:
+    - 도메인별 토픽 설계 (platform, engagement, knowledge, learning)
+    - 토픽 네이밍 컨벤션 정의
+    - MSK 클러스터 토픽 생성 (kafka-topics.sh)
+    - Docker Compose Kafka 토픽 초기화 스크립트
+    - 토픽 설정 (파티션 수, retention, replication)
+  - Out of Scope:
+    - 이벤트 스키마 정의 (Step 5에서 처리)
+    - Consumer Group 설정
+    - Kafka Streams / KSQL
+- **Input**: 03_아키텍처_정의서 §이벤트 설계, 각 서비스 SCOPE 문서, MSK 접속 정보
+- **Instructions**:
+  1. 도메인별 이벤트 목록 정리 (platform: auth.*, engagement: gamification.*, knowledge: note.*, learning: card.*)
+  2. 토픽 네이밍 규칙 확정 ({domain}.{entity}.{action})
+  3. 토픽별 파티션 수/retention 설정 결정
+  4. MSK 클러스터에 토픽 생성
+  5. Docker Compose Kafka 초기화 스크립트 작성
+  6. 토픽 생성 확인 (kafka-topics.sh --list)
+- **Output Format**: 토픽 목록 문서 + Kafka 초기화 스크립트
+- **Constraints**:
+  - 토픽 네이밍: kebab-case ({domain}.{entity}.{action})
+  - 파티션: dev 환경 3개, retention: 7일
+  - 토픽 수 50개 이하
+- **Duration**: 1일
+- **RULE Reference**: wiki 03_아키텍처_정의서 §이벤트 설계, wiki 10_환경_설정_템플릿
+- **Assignee**: @team-lead
+- **Reviewer**: —
+
+**Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+
+---
+
+## Step 5: Schema Registry BACKWARD 호환성 정책 설정
+
+- **Step Name**: Schema Registry 호환성 정책
+- **Step Goal**: 팀장이 Schema Registry에 BACKWARD 호환성 정책을 글로벌로 강제하여 비호환 스키마 등록을 방지한다.
+- **Done When**:
+  - [ ] Schema Registry 글로벌 호환성 모드 BACKWARD 설정 완료
+  - [ ] 비호환 스키마 등록 시도 시 거부 확인
+  - [ ] 호환 스키마 등록 정상 동작 확인
+  - [ ] 팀원에게 스키마 등록 가이드 공유
+- **Scope**:
+  - In Scope:
+    - Schema Registry 글로벌 호환성 모드 설정 (BACKWARD)
+    - 호환성 검증 테스트 (호환/비호환 시나리오)
+    - 스키마 등록 가이드 작성
+    - Docker Compose Schema Registry 설정 반영
+  - Out of Scope:
+    - 개별 서비스 Avro 스키마 작성 (각 서비스 담당)
+    - FORWARD/FULL 호환성 모드
+    - Schema Registry UI
+- **Input**: Schema Registry 접속 정보, Avro 스키마 문서
+- **Instructions**:
+  1. Schema Registry 글로벌 호환성 모드 설정 (`PUT /config` → BACKWARD)
+  2. 테스트용 Avro 스키마 등록
+  3. 비호환 스키마 등록 시도 → 거부 확인
+  4. 호환 스키마 (필드 추가 + default) 등록 → 성공 확인
+  5. Docker Compose Schema Registry에 동일 설정 반영
+  6. 팀원용 스키마 등록/검증 가이드 작성
+- **Output Format**: Schema Registry 설정 문서 + 스키마 등록 가이드
+- **Constraints**:
+  - 글로벌 호환성: BACKWARD (필수)
+  - 스키마 포맷: Avro
+  - 새 필드 추가 시 default 값 필수
+- **Duration**: 1일
+- **RULE Reference**: wiki 03_아키텍처_정의서 §이벤트 설계, wiki 18_기술_스택_정의서 §Kafka
+- **Assignee**: @team-lead
+- **Reviewer**: —
+
+**Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+
+---
+
+## Step 6: Spring Cloud Gateway 라우팅 및 Rate Limit 설정
+
+- **Step Name**: Gateway 라우팅/Rate Limit
+- **Step Goal**: 팀장이 Spring Cloud Gateway에서 4개 서비스로의 라우팅과 Rate Limit을 설정한다.
+- **Done When**:
+  - [ ] Gateway → platform-svc 라우팅 동작
+  - [ ] Gateway → engagement-svc 라우팅 동작
+  - [ ] Gateway → knowledge-svc 라우팅 동작
+  - [ ] Gateway → learning-svc 라우팅 동작
+  - [ ] Rate Limit 설정 적용 (Redis 기반)
+  - [ ] Rate Limit 초과 시 429 응답 확인
+- **Scope**:
+  - In Scope:
+    - Spring Cloud Gateway 프로젝트 설정
+    - 4개 서비스 라우팅 규칙 (path prefix 기반)
+    - Redis 기반 Rate Limit (RequestRateLimiter)
+    - CORS 설정
+    - Health check 엔드포인트
+  - Out of Scope:
+    - JWT 검증 필터 (Step 7 이후)
+    - Circuit Breaker (W3)
+    - WebSocket 프록시
+- **Input**: 각 서비스 API 경로 목록, Redis 접속 정보, 03_아키텍처_정의서 §Gateway
+- **Instructions**:
+  1. Spring Cloud Gateway 프로젝트 생성 (또는 기존 프로젝트에 설정)
+  2. application.yml에 4개 서비스 라우팅 규칙 작성
+  3. Redis 기반 RequestRateLimiter 설정 (분당 60회)
+  4. CORS 설정 (허용 도메인, 메서드, 헤더)
+  5. Health check 엔드포인트 추가 (/actuator/health)
+  6. 라우팅 테스트 (각 서비스 API 호출 확인)
+  7. Rate Limit 테스트 (초과 시 429 확인)
+- **Output Format**: Gateway 설정 파일 + 라우팅 문서
+- **Constraints**:
+  - Rate Limit: 분당 60회 (사용자별, Redis key)
+  - 라우팅: /api/platform/**, /api/engagement/**, /api/knowledge/**, /api/learning/**
+  - 응답 타임아웃: 30초
+- **Duration**: 1일
+- **RULE Reference**: wiki 03_아키텍처_정의서 §Gateway, wiki 18_기술_스택_정의서 §Spring Cloud Gateway
+- **Assignee**: @team-lead
+- **Reviewer**: —
+
+**Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+
+---
+
+## W3 (2026-05-26 ~ 2026-05-30)
+
+---
+
+## Step 7: 전체 서비스 간 Kafka 이벤트 E2E 검증 및 코드 리뷰 조율
+
+- **Step Name**: Kafka 이벤트 E2E 검증/코드 리뷰
+- **Step Goal**: 팀장이 전체 서비스 간 Kafka 이벤트 흐름을 E2E로 검증하고 코드 리뷰를 조율한다.
+- **Done When**:
+  - [ ] platform → engagement 이벤트 흐름 정상 동작
+  - [ ] knowledge → learning 이벤트 흐름 정상 동작
+  - [ ] learning → engagement 이벤트 흐름 정상 동작 (card.reviewed → XP)
+  - [ ] engagement → platform 이벤트 흐름 정상 동작 (알림 트리거)
+  - [ ] 전체 서비스 코드 리뷰 1차 완료
+  - [ ] 리뷰 피드백 반영 확인
+- **Scope**:
+  - In Scope:
+    - 서비스 간 Kafka 이벤트 흐름 E2E 테스트
+    - 이벤트 스키마 호환성 검증
+    - 4개 서비스 코드 리뷰 조율
+    - 리뷰 피드백 트래킹 및 반영 확인
+    - 이벤트 흐름 다이어그램 업데이트
+  - Out of Scope:
+    - 성능 테스트 (W4)
+    - Dead Letter Queue 설정
+    - 이벤트 소싱 패턴
+- **Input**: 각 서비스 Kafka Producer/Consumer 코드, 토픽 목록, 스키마 정의
+- **Instructions**:
+  1. 서비스 간 이벤트 흐름 매트릭스 작성 (Producer → Topic → Consumer)
+  2. Docker Compose로 전체 서비스 기동
+  3. E2E 이벤트 흐름 테스트 (시나리오별)
+  4. 이벤트 유실/지연 확인
+  5. 코드 리뷰 일정 조율 (PR 단위)
+  6. 리뷰 피드백 정리 및 반영 추적
+  7. 이벤트 흐름 다이어그램 최종 업데이트
+- **Output Format**: 이벤트 흐름 매트릭스 + E2E 테스트 결과 + 코드 리뷰 피드백 목록
+- **Constraints**:
+  - 이벤트 전달 보장: at-least-once
+  - E2E 이벤트 전달 시간 < 5초
+  - 코드 리뷰 피드백 48시간 내 반영
+- **Duration**: 2일
+- **RULE Reference**: wiki 03_아키텍처_정의서 §이벤트 설계, wiki 09_Git_규칙_정의서 §코드 리뷰
+- **Assignee**: @team-lead
+- **Reviewer**: —
+
+**Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+
+---
+
+## Step 8: ArgoCD dev/staging 환경 배포 검증
+
+- **Step Name**: ArgoCD dev/staging 배포 검증
+- **Step Goal**: 팀장이 ArgoCD로 dev/staging 환경 배포를 검증한다.
+- **Done When**:
+  - [ ] dev 환경 4개 서비스 ArgoCD Sync 정상
+  - [ ] staging 환경 4개 서비스 ArgoCD Sync 정상
+  - [ ] dev → staging 프로모션 워크플로우 동작
+  - [ ] 배포 후 Health check 통과
+  - [ ] Rollback 시나리오 테스트 완료
+- **Scope**:
+  - In Scope:
+    - ArgoCD dev 환경 배포 검증
+    - ArgoCD staging 환경 배포 검증
+    - dev → staging 프로모션 프로세스
+    - 배포 후 Health check 자동화
+    - Rollback 테스트
+  - Out of Scope:
+    - Production 환경 배포
+    - Canary/Blue-Green 배포 전략
+    - 배포 알림 (Slack 연동)
+- **Input**: ArgoCD ApplicationSet, Helm Chart, ECR 이미지, K8s manifest
+- **Instructions**:
+  1. dev 환경 ArgoCD Sync 상태 확인
+  2. 4개 서비스 dev 환경 배포 테스트
+  3. staging 환경 ApplicationSet 설정 (autoSync: false)
+  4. dev → staging 이미지 태그 프로모션 테스트
+  5. staging 수동 Sync + Health check 확인
+  6. Rollback 시나리오 테스트 (이전 이미지로 복원)
+  7. 배포 가이드 문서 업데이트
+- **Output Format**: 배포 검증 체크리스트 + 배포 가이드 업데이트
+- **Constraints**:
+  - dev: autoSync true, staging: autoSync false (수동 승인)
+  - Health check 통과 후 배포 완료 처리
+  - Rollback은 3분 이내 완료
+- **Duration**: 1일
+- **RULE Reference**: wiki 14_배포_가이드, wiki 09_Git_규칙_정의서 §B3
+- **Assignee**: @team-lead
+- **Reviewer**: —
+
+**Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+
+---
+
+## W4 (2026-06-02 ~ 2026-06-06)
+
+---
+
+## Step 9: 전체 E2E 테스트 시나리오 정의 및 실행 조율
+
+- **Step Name**: E2E 테스트 시나리오 정의/조율
+- **Step Goal**: 팀장이 전체 E2E 테스트 시나리오를 정의하고 실행을 조율한다.
+- **Done When**:
+  - [ ] 전체 E2E 테스트 시나리오 목록 확정
+  - [ ] 서비스별 테스트 담당자 배정 완료
+  - [ ] 크리티컬 패스 E2E 시나리오 통과
+  - [ ] E2E 테스트 결과 리포트 작성
+  - [ ] 실패 시나리오 이슈 등록 및 할당
+- **Scope**:
+  - In Scope:
+    - E2E 테스트 시나리오 정의 (인증→기능→결제→알림)
+    - 서비스별 테스트 담당자 배정
+    - E2E 테스트 실행 조율
+    - 테스트 결과 리포트 작성
+    - 실패 시나리오 이슈 트래킹
+  - Out of Scope:
+    - 부하/성능 테스트 (Step 10)
+    - 자동화 테스트 프레임워크 구축
+    - 보안 테스트 (침투 테스트)
+- **Input**: 각 서비스 API 목록, PRD, 이벤트 흐름 매트릭스
+- **Instructions**:
+  1. 전체 E2E 시나리오 목록 작성 (회원가입→로그인→노트생성→복습→XP→알림)
+  2. 크리티컬 패스 식별 및 우선순위 지정
+  3. 서비스별 테스트 담당자 배정
+  4. E2E 테스트 실행 일정 조율
+  5. 테스트 실행 및 결과 수집
+  6. 실패 시나리오 이슈 등록 (GitHub Issues)
+  7. E2E 테스트 결과 리포트 작성
+- **Output Format**: E2E 테스트 시나리오 문서 + 테스트 결과 리포트
+- **Constraints**:
+  - 크리티컬 패스 100% 통과 필수
+  - 테스트 환경: staging
+  - 테스트 데이터 초기화 후 실행
+- **Duration**: 1일
+- **RULE Reference**: wiki 03_아키텍처_정의서 §테스트 전략, wiki 09_Git_규칙_정의서 §이슈 관리
+- **Assignee**: @team-lead
+- **Reviewer**: —
+
+**Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+
+---
+
+## Step 10: 전체 서비스 SLA 성능 검증
+
+- **Step Name**: SLA 성능 검증
+- **Step Goal**: 팀장이 전체 서비스 성능이 SLA(API P95<200ms, Kafka<5s)를 만족하는지 검증한다.
+- **Done When**:
+  - [ ] API P95 응답시간 < 200ms 확인
+  - [ ] Kafka 이벤트 전달 지연 < 5초 확인
+  - [ ] 동시 사용자 100명 기준 성능 유지 확인
+  - [ ] 성능 병목 지점 식별 및 개선 방안 도출
+  - [ ] 성능 테스트 리포트 작성
+- **Scope**:
+  - In Scope:
+    - API 성능 테스트 (P50/P95/P99 응답시간)
+    - Kafka 이벤트 전달 지연 측정
+    - 동시 사용자 부하 테스트
+    - 성능 병목 분석
+    - 성능 테스트 리포트
+  - Out of Scope:
+    - Production 규모 부하 테스트
+    - 인프라 스케일링 (Auto Scaling)
+    - CDN/캐시 최적화
+- **Input**: staging 환경 접속 정보, API 목록, SLA 기준
+- **Instructions**:
+  1. 성능 테스트 도구 설정 (k6 또는 JMeter)
+  2. API 엔드포인트별 성능 테스트 시나리오 작성
+  3. Kafka 이벤트 전달 지연 측정 스크립트 작성
+  4. 동시 사용자 부하 테스트 실행 (10/50/100명)
+  5. 성능 메트릭 수집 및 분석
+  6. 병목 지점 식별 (DB 쿼리, 네트워크, 메모리)
+  7. 성능 테스트 리포트 작성
+- **Output Format**: 성능 테스트 리포트 (메트릭 + 그래프 + 개선 방안)
+- **Constraints**:
+  - SLA: API P95 < 200ms, Kafka 이벤트 전달 < 5초
+  - 테스트 환경: staging (dev 환경 스펙 기준)
+  - 최소 3회 반복 측정 후 평균
+- **Duration**: 1일
+- **RULE Reference**: wiki 03_아키텍처_정의서 §성능 요구사항, wiki 17_스케줄_정의서
+- **Assignee**: @team-lead
+- **Reviewer**: —
+
+**Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+
+---
+
+## Step 11: Staging 최종 배포 및 모니터링 대시보드 가동
+
+- **Step Name**: Staging 최종 배포/모니터링
+- **Step Goal**: 팀장이 Staging 환경에 최종 배포하고 모니터링 대시보드를 가동한다.
+- **Done When**:
+  - [ ] Staging 환경 4개 서비스 최종 배포 완료
+  - [ ] Grafana 모니터링 대시보드 구성 완료
+  - [ ] 주요 메트릭 알림 설정 (에러율, 응답시간, Kafka lag)
+  - [ ] 모니터링 대시보드 팀 공유
+  - [ ] 운영 가이드 문서 작성
+- **Scope**:
+  - In Scope:
+    - Staging 환경 최종 배포 (ArgoCD)
+    - Grafana 대시보드 구성 (서비스별 메트릭)
+    - 알림 설정 (Slack/이메일)
+    - 모니터링 가이드 문서
+    - 운영 체크리스트
+  - Out of Scope:
+    - Production 배포
+    - APM 도구 (Datadog, New Relic)
+    - 로그 중앙화 (ELK — 별도 태스크)
+- **Input**: Staging 환경, Grafana 접속 정보, Prometheus 메트릭
+- **Instructions**:
+  1. Staging 환경 최종 이미지 배포 (ArgoCD Sync)
+  2. 배포 후 전체 서비스 Health check 확인
+  3. Grafana 대시보드 구성 (서비스별 CPU/메모리/응답시간/에러율)
+  4. Kafka 메트릭 대시보드 구성 (lag, throughput, error)
+  5. 알림 규칙 설정 (에러율 > 1%, P95 > 500ms, Kafka lag > 1000)
+  6. 팀원에게 대시보드 접근 권한 부여 및 공유
+  7. 운영 가이드 문서 작성
+- **Output Format**: Grafana 대시보드 URL + 알림 설정 + 운영 가이드
+- **Constraints**:
+  - Grafana 대시보드 로딩 < 3초
+  - 알림: 5분 이내 발송
+  - 메트릭 보존: 30일
+- **Duration**: 1일
+- **RULE Reference**: wiki 14_배포_가이드, wiki 10_환경_설정_템플릿
+- **Assignee**: @team-lead
+- **Reviewer**: —
+
+**Status**: [ ] Not Started / [ ] In Progress / [ ] Done
