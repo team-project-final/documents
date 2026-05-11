@@ -411,3 +411,654 @@ import 'dart:async';
 import 'package:synapse/features/cards/data/card_repository_impl.dart'; // 횡단!
 import '../../../core/network/dio_client.dart'; // 3단계 상대경로
 ```
+
+---
+
+## 3. 심화 패턴
+
+> Good/Bad 코드 예제 + Why 설명 포함.
+
+---
+
+### 3.1 상태관리 (Riverpod 3.0)
+
+#### Provider 의사결정 테이블
+
+| 상황 | Provider 타입 | 예시 |
+|------|--------------|------|
+| 단순 계산/변환 | `Provider` | `filteredNotesProvider` |
+| 1회성 비동기 데이터 | `FutureProvider` | `userProfileProvider` |
+| 실시간 스트림 | `StreamProvider` | `notificationsProvider` |
+| 변경 가능 상태 + 액션 | `NotifierProvider` | `noteEditorProvider` |
+| ID별 인스턴스 필요 | `.family` modifier | `noteProvider(noteId)` |
+| 화면 이탈 시 해제 | `autoDispose` | 대부분의 화면 Provider |
+
+#### autoDispose 사용 기준
+
+| 사용 | 미사용 |
+|------|--------|
+| 화면별 데이터 (상세, 편집) | 전역 상태 (인증, 테넌트) |
+| 일시적 폼 상태 | 캐시 유지가 필요한 목록 |
+| 검색 결과 | 앱 수명 동안 유지할 설정 |
+
+#### Good 예제 — @riverpod 코드 생성
+
+```dart
+// providers/note_list_provider.dart
+@riverpod
+Future<List<Note>> noteList(NoteListRef ref) async {
+  final repository = ref.watch(noteRepositoryProvider);
+  return repository.fetchNotes();
+}
+
+// providers/note_provider.dart — family (ID별 인스턴스)
+@riverpod
+Future<Note> note(NoteRef ref, String noteId) async {
+  final repository = ref.watch(noteRepositoryProvider);
+  final result = await repository.getNote(noteId);
+  return result.when(
+    success: (note) => note,
+    failure: (e) => throw e,
+  );
+}
+
+// providers/note_editor_provider.dart — Notifier (변경 가능 상태)
+@riverpod
+class NoteEditor extends _$NoteEditor {
+  @override
+  NoteEditorState build(String noteId) {
+    // 초기 상태 로딩
+    _loadNote(noteId);
+    return NoteEditorState.loading();
+  }
+
+  Future<void> _loadNote(String noteId) async {
+    final repo = ref.read(noteRepositoryProvider);
+    final result = await repo.getNote(noteId);
+    state = result.when(
+      success: (note) => NoteEditorState.loaded(
+        noteId: noteId,
+        title: note.title,
+        content: note.content,
+        tags: note.tags,
+      ),
+      failure: (e) => NoteEditorState.error(e),
+    );
+  }
+
+  void updateTitle(String title) {
+    if (state case NoteEditorState(:final loaded?)) {
+      state = loaded.copyWith(title: title, isDirty: true);
+    }
+  }
+
+  Future<void> save() async {
+    if (state case NoteEditorState(:final loaded?)) {
+      state = loaded.copyWith(saving: true);
+      final repo = ref.read(noteRepositoryProvider);
+      final result = await repo.updateNote(
+        noteId: loaded.noteId,
+        request: NoteUpdateRequest(title: loaded.title, content: loaded.content),
+      );
+      state = result.when(
+        success: (_) => loaded.copyWith(saving: false, isDirty: false),
+        failure: (e) => loaded.copyWith(saving: false, error: e),
+      );
+    }
+  }
+}
+```
+
+#### Bad 예제
+
+```dart
+// StateProvider로 복잡한 상태 관리 — 일관성 없음
+final noteTitleProvider = StateProvider<String>((ref) => '');
+final noteContentProvider = StateProvider<String>((ref) => '');
+final noteSavingProvider = StateProvider<bool>((ref) => false);
+final noteErrorProvider = StateProvider<String?>((ref) => null);
+// 4개 Provider가 각각 독립 → 상태 일관성 보장 불가
+
+// Provider 안에서 부작용(side effect) 직접 실행
+final noteProvider = Provider<Note>((ref) {
+  final dio = ref.read(dioProvider);
+  dio.post('/analytics', data: {'event': 'note_viewed'}); // 부작용!
+  return Note.empty();
+});
+```
+
+---
+
+### 3.2 라우팅 (GoRouter)
+
+#### 경로 상수 — 중앙 관리
+
+```dart
+// core/constants/app_routes.dart
+abstract class AppRoutes {
+  // Auth
+  static const login = '/login';
+  static const register = '/register';
+  static const onboarding = '/onboarding';
+
+  // Main (ShellRoute 하위)
+  static const home = '/';
+  static const notes = '/notes';
+  static const noteDetail = '/notes/:noteId';
+  static const noteEditor = '/notes/:noteId/edit';
+  static const cards = '/cards';
+  static const cardReview = '/cards/review';
+  static const graph = '/graph';
+  static const settings = '/settings';
+  static const profile = '/settings/profile';
+
+  // 헬퍼 — 파라미터 치환
+  static String noteDetailPath(String noteId) => '/notes/$noteId';
+  static String noteEditorPath(String noteId) => '/notes/$noteId/edit';
+}
+```
+
+#### GoRouter 설정
+
+```dart
+// app.dart
+final routerProvider = Provider<GoRouter>((ref) {
+  final authState = ref.watch(authStateProvider);
+
+  return GoRouter(
+    initialLocation: AppRoutes.home,
+    debugLogDiagnostics: kDebugMode,
+    redirect: (context, state) {
+      final isLoggedIn = authState.isAuthenticated;
+      final isOnboarded = authState.isOnboarded;
+      final currentPath = state.matchedLocation;
+
+      final authRoutes = [AppRoutes.login, AppRoutes.register];
+      final isOnAuthRoute = authRoutes.contains(currentPath);
+
+      // 미인증 → 로그인으로
+      if (!isLoggedIn && !isOnAuthRoute) return AppRoutes.login;
+      // 인증됨 + 로그인 페이지 → 홈으로
+      if (isLoggedIn && isOnAuthRoute) return AppRoutes.home;
+      // 인증됨 + 온보딩 미완료 → 온보딩으로
+      if (isLoggedIn && !isOnboarded && currentPath != AppRoutes.onboarding) {
+        return AppRoutes.onboarding;
+      }
+      return null; // 리다이렉트 없음
+    },
+    routes: [
+      // 인증 라우트 (ShellRoute 밖)
+      GoRoute(path: AppRoutes.login, builder: (_, __) => const LoginScreen()),
+      GoRoute(path: AppRoutes.register, builder: (_, __) => const RegisterScreen()),
+      GoRoute(path: AppRoutes.onboarding, builder: (_, __) => const OnboardingScreen()),
+
+      // 메인 ShellRoute (하단 탭 유지)
+      ShellRoute(
+        builder: (_, state, child) => MainShell(child: child),
+        routes: [
+          GoRoute(
+            path: AppRoutes.home,
+            builder: (_, __) => const DashboardScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.notes,
+            builder: (_, __) => const NoteListScreen(),
+            routes: [
+              GoRoute(
+                path: ':noteId',
+                builder: (_, state) => NoteDetailScreen(
+                  noteId: state.pathParameters['noteId']!,
+                ),
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    builder: (_, state) => NoteEditorScreen(
+                      noteId: state.pathParameters['noteId']!,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          GoRoute(path: AppRoutes.cards, builder: (_, __) => const CardListScreen()),
+          GoRoute(path: AppRoutes.graph, builder: (_, __) => const GraphScreen()),
+          GoRoute(path: AppRoutes.settings, builder: (_, __) => const SettingsScreen()),
+        ],
+      ),
+    ],
+  );
+});
+```
+
+#### Good 예제 — 네비게이션
+
+```dart
+// 상수 사용 + 타입 안전
+context.go(AppRoutes.noteDetailPath(note.id));
+context.push(AppRoutes.noteEditorPath(note.id));
+context.pop(); // 뒤로 가기
+```
+
+#### Bad 예제
+
+```dart
+// 하드코딩 문자열 경로
+context.go('/notes/${note.id}');         // 오타 위험, 리팩토링 어려움
+Navigator.push(context, MaterialPageRoute(  // GoRouter 미사용
+  builder: (_) => NoteDetailScreen(noteId: note.id),
+));
+```
+
+---
+
+### 3.3 API 통신 패턴
+
+#### 3계층 구조
+
+```
+Repository (추상) → RemoteDataSource (HTTP) → DTO → Domain Model
+```
+
+#### Repository 인터페이스 (domain/)
+
+```dart
+// features/notes/domain/note_repository.dart
+abstract class NoteRepository {
+  Future<Result<List<Note>>> fetchNotes({String? cursor, int limit = 20});
+  Future<Result<Note>> getNote(String noteId);
+  Future<Result<Note>> createNote(NoteCreateRequest request);
+  Future<Result<void>> updateNote({required String noteId, required NoteUpdateRequest request});
+  Future<Result<void>> deleteNote(String noteId);
+}
+```
+
+#### Result 타입 (에러 핸들링)
+
+```dart
+// core/error/result.dart
+sealed class Result<T> {
+  const Result();
+  factory Result.success(T data) = Success<T>;
+  factory Result.failure(AppException error) = Failure<T>;
+
+  R when<R>({
+    required R Function(T data) success,
+    required R Function(AppException error) failure,
+  });
+}
+
+class Success<T> extends Result<T> {
+  final T data;
+  const Success(this.data);
+
+  @override
+  R when<R>({required R Function(T) success, required R Function(AppException) failure}) {
+    return success(data);
+  }
+}
+
+class Failure<T> extends Result<T> {
+  final AppException error;
+  const Failure(this.error);
+
+  @override
+  R when<R>({required R Function(T) success, required R Function(AppException) failure}) {
+    return failure(error);
+  }
+}
+```
+
+#### Repository 구현 (data/)
+
+```dart
+// features/notes/data/note_repository_impl.dart
+class NoteRepositoryImpl implements NoteRepository {
+  final NoteRemoteDataSource _remote;
+  NoteRepositoryImpl(this._remote);
+
+  @override
+  Future<Result<List<Note>>> fetchNotes({String? cursor, int limit = 20}) async {
+    try {
+      final dtos = await _remote.fetchNotes(cursor: cursor, limit: limit);
+      final notes = dtos.map((dto) => dto.toDomain()).toList();
+      return Result.success(notes);
+    } on AppException catch (e) {
+      return Result.failure(e);
+    }
+  }
+
+  @override
+  Future<Result<Note>> createNote(NoteCreateRequest request) async {
+    try {
+      final dto = await _remote.createNote(request);
+      return Result.success(dto.toDomain());
+    } on AppException catch (e) {
+      return Result.failure(e);
+    }
+  }
+}
+```
+
+#### RemoteDataSource (data/)
+
+```dart
+// features/notes/data/note_remote_data_source.dart
+class NoteRemoteDataSource {
+  final Dio _dio;
+  NoteRemoteDataSource(this._dio);
+
+  Future<List<NoteDto>> fetchNotes({String? cursor, int limit = 20}) async {
+    final response = await _dio.get('/api/v1/notes', queryParameters: {
+      if (cursor != null) 'cursor': cursor,
+      'limit': limit,
+    });
+    final list = (response.data['data'] as List)
+        .map((json) => NoteDto.fromJson(json as Map<String, dynamic>))
+        .toList();
+    return list;
+  }
+
+  Future<NoteDto> createNote(NoteCreateRequest request) async {
+    final response = await _dio.post('/api/v1/notes', data: request.toJson());
+    return NoteDto.fromJson(response.data['data'] as Map<String, dynamic>);
+  }
+}
+```
+
+#### Dio 인터셉터 — 토큰 갱신 + 테넌트 헤더
+
+```dart
+// core/network/auth_interceptor.dart
+class AuthInterceptor extends Interceptor {
+  final Ref ref;
+  AuthInterceptor(this.ref);
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    final token = ref.read(authStateProvider).accessToken;
+    if (token != null) {
+      options.headers['Authorization'] = 'Bearer $token';
+    }
+    handler.next(options);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    if (err.response?.statusCode == 401) {
+      // 토큰 갱신 시도
+      final refreshed = await ref.read(authStateProvider.notifier).refreshToken();
+      if (refreshed) {
+        // 원래 요청 재시도
+        final token = ref.read(authStateProvider).accessToken;
+        err.requestOptions.headers['Authorization'] = 'Bearer $token';
+        final response = await Dio().fetch(err.requestOptions);
+        handler.resolve(response);
+        return;
+      }
+    }
+    handler.next(err);
+  }
+}
+
+// core/network/tenant_interceptor.dart
+class TenantInterceptor extends Interceptor {
+  final Ref ref;
+  TenantInterceptor(this.ref);
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    final tenantId = ref.read(tenantProvider);
+    if (tenantId != null) {
+      options.headers['X-Tenant-Id'] = tenantId;
+    }
+    handler.next(options);
+  }
+}
+```
+
+#### 에러 매핑 (DioException → AppException)
+
+```dart
+// core/error/app_exception.dart
+class AppException implements Exception {
+  final String code;
+  final String message;
+  final int? statusCode;
+
+  const AppException({required this.code, required this.message, this.statusCode});
+
+  factory AppException.fromDioError(DioException error) {
+    if (error.response?.data case {'error': {'code': String code, 'message': String msg}}) {
+      return AppException(
+        code: code,
+        message: msg,
+        statusCode: error.response?.statusCode,
+      );
+    }
+    return switch (error.type) {
+      DioExceptionType.connectionTimeout => const AppException(
+        code: 'NETWORK_TIMEOUT', message: '서버 연결 시간이 초과되었습니다.'),
+      DioExceptionType.connectionError => const AppException(
+        code: 'NETWORK_ERROR', message: '네트워크 연결을 확인해주세요.'),
+      _ => AppException(
+        code: 'UNKNOWN_ERROR', message: error.message ?? '알 수 없는 오류'),
+    };
+  }
+}
+```
+
+#### Good 예제
+
+```dart
+// Provider에서 Repository 사용 — 깔끔한 에러 흐름
+@riverpod
+Future<List<Note>> noteList(NoteListRef ref) async {
+  final repo = ref.watch(noteRepositoryProvider);
+  final result = await repo.fetchNotes();
+  return result.when(
+    success: (notes) => notes,
+    failure: (e) => throw e, // AsyncValue.error로 전파
+  );
+}
+```
+
+#### Bad 예제
+
+```dart
+// Provider에서 Dio 직접 호출 — 레이어 무시
+@riverpod
+Future<List<Note>> noteList(NoteListRef ref) async {
+  final dio = ref.read(dioProvider);
+  final response = await dio.get('/api/v1/notes'); // Repository 없이 직접!
+  return (response.data['data'] as List)
+      .map((j) => Note.fromJson(j)).toList(); // DTO 변환 없이 직접 파싱
+}
+```
+
+---
+
+### 3.4 에러/로딩 상태 처리
+
+#### AsyncValue 3상태 패턴
+
+모든 비동기 데이터는 Riverpod의 `AsyncValue`로 관리한다.
+
+```dart
+// 표준 패턴 — when으로 3상태 분기
+@override
+Widget build(BuildContext context, WidgetRef ref) {
+  final notesAsync = ref.watch(noteListProvider);
+
+  return notesAsync.when(
+    data: (notes) => notes.isEmpty
+        ? const AppEmptyWidget(message: '아직 노트가 없습니다')
+        : NoteListView(notes: notes),
+    loading: () => const NoteListSkeleton(),
+    error: (error, stack) => AppErrorWidget(
+      error: error,
+      onRetry: () => ref.invalidate(noteListProvider),
+    ),
+  );
+}
+```
+
+#### 공용 위젯
+
+```dart
+// shared/widgets/app_error_widget.dart
+class AppErrorWidget extends StatelessWidget {
+  const AppErrorWidget({super.key, required this.error, this.onRetry});
+  final Object error;
+  final VoidCallback? onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final message = error is AppException
+        ? (error as AppException).message
+        : '문제가 발생했습니다.';
+
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.error_outline, size: 48, color: AppColors.error),
+          const SizedBox(height: AppSpacing.md),
+          Text(message, style: Theme.of(context).textTheme.bodyMedium),
+          if (onRetry != null) ...[
+            const SizedBox(height: AppSpacing.lg),
+            FilledButton(
+              onPressed: onRetry,
+              child: const Text('재시도'),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+// shared/widgets/app_loading_widget.dart
+class AppLoadingWidget extends StatelessWidget {
+  const AppLoadingWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(color: AppColors.primaryAmber),
+    );
+  }
+}
+
+// shared/widgets/app_empty_widget.dart
+class AppEmptyWidget extends StatelessWidget {
+  const AppEmptyWidget({super.key, required this.message, this.icon});
+  final String message;
+  final IconData? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon ?? Icons.inbox_outlined, size: 64, color: AppColors.stone400),
+          const SizedBox(height: AppSpacing.md),
+          Text(message, style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.stone500,
+          )),
+        ],
+      ),
+    );
+  }
+}
+```
+
+#### 스켈레톤 로딩 (Shimmer)
+
+```dart
+// shared/widgets/app_skeleton.dart
+class AppSkeleton extends StatelessWidget {
+  const AppSkeleton({super.key, required this.width, required this.height, this.borderRadius});
+  final double width;
+  final double height;
+  final double? borderRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: AppColors.stone200,      // DESIGN.md Stone-200
+      highlightColor: AppColors.stone100, // DESIGN.md Stone-100
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: AppColors.stone200,
+          borderRadius: BorderRadius.circular(borderRadius ?? 4),
+        ),
+      ),
+    );
+  }
+}
+
+// 사용 — NoteCardSkeleton
+class NoteCardSkeleton extends StatelessWidget {
+  const NoteCardSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppSkeleton(width: 200, height: 20, borderRadius: 4),
+            const SizedBox(height: AppSpacing.sm),
+            AppSkeleton(width: double.infinity, height: 14, borderRadius: 4),
+            const SizedBox(height: AppSpacing.xs),
+            AppSkeleton(width: 150, height: 14, borderRadius: 4),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+#### Good 예제
+
+```dart
+// AsyncValue.when + 빈 상태 + 재시도
+noteListAsync.when(
+  data: (notes) => notes.isEmpty
+      ? const AppEmptyWidget(message: '검색 결과가 없습니다', icon: Icons.search_off)
+      : ListView.builder(
+          itemCount: notes.length,
+          itemBuilder: (_, i) => NoteCard(noteId: notes[i].id),
+        ),
+  loading: () => const NoteListSkeleton(),
+  error: (e, _) => AppErrorWidget(error: e, onRetry: () => ref.invalidate(noteListProvider)),
+);
+```
+
+#### Bad 예제
+
+```dart
+// FutureBuilder 사용 — Riverpod 미활용
+FutureBuilder<List<Note>>(
+  future: fetchNotes(), // 매 빌드마다 재호출!
+  builder: (context, snapshot) {
+    if (snapshot.hasData) return Text('${snapshot.data}');
+    if (snapshot.hasError) return Text('Error'); // 재시도 없음
+    return CircularProgressIndicator(); // const 누락
+  },
+);
+
+// 에러 무시
+final notes = ref.watch(noteListProvider);
+return notes.when(
+  data: (d) => NoteList(notes: d),
+  loading: () => Container(),      // 빈 컨테이너 — 사용자에게 피드백 없음
+  error: (_, __) => Container(),   // 에러 무시 — 디버깅 불가
+);
+```
