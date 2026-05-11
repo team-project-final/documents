@@ -1,38 +1,56 @@
-# 외부 `documents` 레포 5주 일정 적용 가이드
+# `documents` 레포 5주 일정 적용 가이드
 
-> **작성일**: 2026-05-11
-> **대상 레포**: `documents/docs/project-management/` (본 작업 환경 외부)
+> **작성일**: 2026-05-11 (v1.0) → 보정 2026-05-11 (v1.1)
+> **대상 레포**: `team-project-final/documents` 레포의 `docs/project-management/` 디렉토리
+> **본 환경 위치**: `syn/docs/project-management/` (syn 폴더 = `team-project-final/documents.git` 클론)
 > **근거 spec**: `syn/docs/superpowers/specs/2026-05-11-schedule-5week-revamp-design.md`
+
+> ⚠️ **v1.1 보정 안내**: v1.0은 documents 레포가 본 작업 환경 "외부"라고 가정했으나,
+> 실제 syn 폴더가 documents 레포 자체임이 확인되었다 (origin = team-project-final/documents.git).
+> 따라서 본 환경에서 직접 적용 가능하며, 별도 clone 단계는 필요 없다.
+> spec §6.2의 "외부 레포 부재" 진술도 같은 의미로 무효 — 실제 SoT는 본 환경의 `syn/docs/project-management/`.
 
 ## 1. 적용 순서
 
 본 작업으로 `schedule/src/data/{schedule,tasks}.json`은 이미 5주로 갱신되었다.
-외부 `documents` 레포의 분할 마크다운을 5주로 적용하면, sync 결과가 본 환경 결과와 일치하게 된다.
+이 가이드는 `documents` 레포의 분할 마크다운(SCOPE/TASK/PRD/HISTORY/WORKFLOW)도 같은 5주로 정합화하기 위한 절차다. 적용 후 sync를 돌리면 schedule 앱 데이터가 분할 MD에서 다시 생성되어 본 작업 결과와 일치해야 한다.
 
 ```bash
-# 1. 외부 documents 레포로 이동
-cd <documents-repo-path>/docs/project-management
+# 1. syn(=documents) 레포의 project-management 디렉토리로 이동
+cd "D:/workspace/final-project-syn/syn/docs/project-management"
 
 # 2. PRD 분할/이동
 git mv prd/PRD_W4.md prd/PRD_W5.md
 # (PRD_W3.md는 본문 수정, 새 PRD_W4.md는 신규 작성 — §2 참조)
+# (선택) PRD_PRESENTATION.md 신규 (6/15 발표일)
 
-# 3. TASK 7개 헤더 변환 (W3 분할, W4 → W5)
+# 3. TASK 8개 헤더 변환 (W3 분할, W4 → W5)
 #    각 TASK_*.md를 열고 spec §4.2 매핑표에 따라 ## W3 섹션을 ## W3 / ## W4로 분리,
 #    기존 ## W4 섹션을 ## W5로 헤더 변경.
+#    권장 step 추가: TASK_team-lead.md ## W5에 Step 12 (최종 발표 자료 + 시연 리허설),
+#    TASK_frontend.md ## W5에 Step 14 (발표용 데모 시나리오 정돈).
 
 # 4. SCOPE 7개 — 일정 언급 부분만 5주로 보정 (대부분 변경 없음)
 
-# 5. HISTORY 7개 — 신규 W5 step 행만 추가 (기존 행 유지)
+# 5. HISTORY 8개 — 신규 W5 step 행만 추가 (기존 행 유지)
 
-# 6. sync 실행
-cd <schedule-repo-path>
+# 6. WORKFLOW — 주차별 작업 흐름 문서가 있다면 W4 → W5 헤더 변경 + W3 분할 반영
+
+# 7. README.md (project-management) — 주차 수 4→5 등 메타 갱신
+
+# 8. sync 실행 — 외부에서 schedule 레포로 갱신을 흘려보냄
+cd "D:/workspace/final-project-syn/schedule"
 node scripts/sync-from-md.js \
-  --input <documents-repo-path>/docs/project-management \
+  --input ../syn/docs/project-management \
   --output src/data
 
-# 7. 결과 비교
-git diff src/data/  # 본 작업 결과와 0 diff면 적용 성공
+# 9. 결과 비교 — 본 작업 결과와 0 diff면 적용 성공
+git diff src/data/
+
+# 10. commit + push
+git -C "D:/workspace/final-project-syn/syn" add docs/project-management
+git -C "D:/workspace/final-project-syn/syn" commit -m "docs(project-management): 4주 → 5주 일정 적용 (PRD/TASK/HISTORY/SCOPE/WORKFLOW 일괄 갱신)"
+git -C "D:/workspace/final-project-syn/syn" push origin main
 ```
 
 ## 2. PRD 분할 diff (핵심)
