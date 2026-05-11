@@ -874,3 +874,411 @@ var event = NoteCreated.newBuilder()
     // .setTenantId(???) — 누락! 소비자가 테넌트 컨텍스트를 설정할 수 없음
     .build();
 ```
+
+---
+
+### 3.4 트랜잭션 & 동시성
+
+#### 규칙 요약
+
+| 규칙 | 설명 |
+|------|------|
+| @Transactional 위치 | **Service 레이어만** (Controller/Repository 금지) |
+| 읽기 전용 | `@Transactional(readOnly = true)` — slave DB 라우팅 |
+| 범위 최소화 | 외부 API 호출은 트랜잭션 밖에서 |
+| 낙관적 잠금 | `@Version` 필드 — 동시 수정 감지 |
+| 멱등성 | `Idempotency-Key` → DB unique constraint |
+
+#### Why
+
+- 트랜잭션 범위가 넓으면 DB 커넥션 점유 시간 증가 → 풀 고갈
+- 외부 API(Stripe, OpenAI) 호출을 트랜잭션 안에 넣으면 타임아웃 시 롤백 불가
+- 낙관적 잠금 없이 동시 수정 시 마지막 쓰기만 남음 (lost update)
+
+#### Good 예제
+
+```java
+// 클래스 레벨: readOnly (대부분의 메서드가 조회)
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class NoteService {
+    private final NoteRepository noteRepository;
+    private final NoteMapper noteMapper;
+    private final NoteKafkaPublisher kafkaPublisher;
+
+    // 조회 — readOnly 그대로
+    public NoteResponse getNote(String noteId) {
+        return noteRepository.findById(UUID.fromString(noteId))
+            .map(noteMapper::toResponse)
+            .orElseThrow(() -> new NoteNotFoundException(noteId));
+    }
+
+    // 쓰기 — 메서드 레벨에서 override
+    @Transactional
+    public NoteResponse createNote(NoteCreateRequest request) {
+        Note note = noteRepository.save(noteMapper.toEntity(request));
+        // 트랜잭션 커밋 후 이벤트 발행 (TransactionalEventListener 권장)
+        return noteMapper.toResponse(note);
+    }
+}
+```
+
+```java
+// 낙관적 잠금 — @Version
+@Entity @Table(name = "notes")
+public class Note extends BaseEntity {
+    // BaseEntity에 @Version 포함
+    private String title;
+    private String content;
+}
+
+// 동시 수정 시 OptimisticLockingFailureException 발생
+// → GlobalExceptionHandler에서 409 Conflict 반환
+@ExceptionHandler(OptimisticLockingFailureException.class)
+public ResponseEntity<ApiResponse<Void>> handleOptimisticLock(
+        OptimisticLockingFailureException e) {
+    return ResponseEntity.status(HttpStatus.CONFLICT)
+        .body(ApiResponse.error("CONCURRENT_MODIFICATION", 
+            "다른 사용자가 동시에 수정했습니다. 새로고침 후 다시 시도해주세요."));
+}
+```
+
+```java
+// 멱등성 키 패턴
+@Transactional
+public CardResponse createCardIdempotent(String idempotencyKey, CardCreateRequest request) {
+    // 1. 기존 결과 조회
+    return idempotencyRepository.findByKey(
+            TenantContext.getCurrentTenantId(), idempotencyKey)
+        .map(record -> objectMapper.readValue(record.getResponse(), CardResponse.class))
+        .orElseGet(() -> {
+            // 2. 새로 생성
+            CardResponse response = createCard(request);
+            // 3. 멱등성 레코드 저장
+            idempotencyRepository.save(new IdempotencyRecord(
+                TenantContext.getCurrentTenantId(), idempotencyKey,
+                objectMapper.writeValueAsString(response)));
+            return response;
+        });
+}
+```
+
+#### Bad 예제
+
+```java
+// 트랜잭션 안에서 외부 API 호출 — 타임아웃 시 커넥션 점유
+@Transactional
+public NoteResponse createNoteWithAI(NoteCreateRequest request) {
+    Note note = noteRepository.save(mapper.toEntity(request));
+    
+    // 외부 API — 5초 이상 걸릴 수 있음 → 트랜잭션 밖으로 이동해야 함
+    String summary = openAiClient.summarize(note.getContent()); // 여기서 타임아웃!
+    note.setSummary(summary);
+    
+    return mapper.toResponse(note);
+}
+
+// Controller에서 @Transactional — 레이어 위반
+@Transactional // Controller에 금지!
+@PostMapping("/notes")
+public ResponseEntity<?> createNote(...) { /* ... */ }
+```
+
+---
+
+### 3.5 테스트 작성 패턴
+
+#### 테스트 피라미드
+
+| 종류 | 비율 | 목적 | 도구 |
+|------|------|------|------|
+| 단위 테스트 | 75% | 비즈니스 로직 검증 | JUnit 5 + Mockito |
+| 통합 테스트 | 20% | DB/캐시/메시징 연동 검증 | @SpringBootTest + Testcontainers |
+| E2E 테스트 | 5% | 유저 시나리오 검증 | RestAssured / WebTestClient |
+
+#### 커버리지 목표
+
+- 전체: **80%** 이상
+- 신규 코드: **85%** 이상
+- CI에서 자동 체크 (jacoco)
+
+#### 테스트 네이밍
+
+```
+should_{기대결과}_when_{조건}()
+```
+
+예시: `should_throwNoteNotFound_when_invalidId()`
+
+#### 단위 테스트 패턴
+
+```java
+@ExtendWith(MockitoExtension.class)
+class NoteServiceTest {
+
+    @Mock NoteRepository noteRepository;
+    @Mock NoteMapper noteMapper;
+    @Mock ApplicationEventPublisher events;
+    @InjectMocks NoteService noteService;
+
+    @Test
+    void should_createNote_when_validRequest() {
+        // given
+        var request = new NoteCreateRequest("제목", "내용", List.of("java"));
+        var entity = Note.builder().id(UUID.randomUUID()).title("제목").build();
+        var response = new NoteResponse("id", "제목", "내용", List.of("java"), 
+            "DRAFT", Instant.now(), Instant.now());
+        
+        given(noteMapper.toEntity(request)).willReturn(entity);
+        given(noteRepository.save(entity)).willReturn(entity);
+        given(noteMapper.toResponse(entity)).willReturn(response);
+        
+        // when
+        NoteResponse result = noteService.createNote(request);
+        
+        // then
+        assertThat(result.title()).isEqualTo("제목");
+        verify(noteRepository).save(entity);
+        verify(events).publishEvent(any(NoteCreatedEvent.class));
+    }
+
+    @Test
+    void should_throwNoteNotFound_when_invalidId() {
+        // given
+        String invalidId = UUID.randomUUID().toString();
+        given(noteRepository.findById(any())).willReturn(Optional.empty());
+        
+        // when & then
+        assertThatThrownBy(() -> noteService.getNote(invalidId))
+            .isInstanceOf(NoteNotFoundException.class);
+    }
+}
+```
+
+#### 통합 테스트 패턴
+
+```java
+@SpringBootTest
+@Testcontainers
+@ActiveProfiles("test")
+class NoteIntegrationTest {
+
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine")
+        .withDatabaseName("synapse_test");
+
+    @Container
+    static GenericContainer<?> redis = new GenericContainer<>("redis:7-alpine")
+        .withExposedPorts(6379);
+
+    @DynamicPropertySource
+    static void configureProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+        registry.add("spring.data.redis.host", redis::getHost);
+        registry.add("spring.data.redis.port", () -> redis.getMappedPort(6379));
+    }
+
+    @Autowired NoteService noteService;
+    @Autowired NoteRepository noteRepository;
+
+    @BeforeEach
+    void setUp() {
+        noteRepository.deleteAll();
+        // TenantContext 설정
+        TenantContext.executeWithTenant("test-tenant", () -> null);
+    }
+
+    @Test
+    void should_persistAndRetrieveNote_when_created() {
+        // given
+        var request = new NoteCreateRequest("통합 테스트 노트", "내용", List.of());
+        
+        // when
+        NoteResponse created = noteService.createNote(request);
+        NoteResponse retrieved = noteService.getNote(created.id());
+        
+        // then
+        assertThat(retrieved.title()).isEqualTo("통합 테스트 노트");
+    }
+}
+```
+
+#### Good 예제
+
+```java
+// given-when-then 구조 + 명확한 네이밍 + 하나의 assert 의도
+@Test
+void should_returnCursorPage_when_moreThanLimitNotes() {
+    // given
+    IntStream.range(0, 25).forEach(i -> 
+        noteService.createNote(new NoteCreateRequest("노트 " + i, "", List.of())));
+    
+    // when
+    CursorPage<NoteResponse> page = noteService.listNotes(null, 20);
+    
+    // then
+    assertThat(page.data()).hasSize(20);
+    assertThat(page.hasMore()).isTrue();
+    assertThat(page.cursor()).isNotNull();
+}
+```
+
+#### Bad 예제
+
+```java
+// 테스트 이름으로 의도 파악 불가
+@Test
+void test1() { /* ... */ }
+
+// 하나의 테스트에 너무 많은 assert (무엇을 검증하는지 불명확)
+@Test
+void testNoteService() {
+    // 생성도 테스트하고, 수정도 테스트하고, 삭제도 테스트하고...
+    // → 각각 별도 메서드로 분리
+}
+
+// Mock 없이 외부 의존성 직접 호출 (단위 테스트가 아님)
+@Test
+void should_createNote() {
+    NoteService service = new NoteService(
+        new RealNoteRepository(), // 실제 DB 연결 — 단위 테스트에 부적합
+        new RealMapper());
+}
+```
+
+---
+
+### 3.6 API 구현 패턴
+
+#### 표준 응답 래핑 — ApiResponse
+
+```java
+// === shared/ApiResponse.java ===
+public record ApiResponse<T>(
+    boolean success,
+    T data,
+    Object error,
+    ApiMeta meta
+) {
+    public static <T> ApiResponse<T> success(T data) {
+        return new ApiResponse<>(true, data, null, ApiMeta.now());
+    }
+    
+    public static ApiResponse<Void> error(String code, String message) {
+        return new ApiResponse<>(false, null, 
+            new ApiError(code, message, List.of()), ApiMeta.now());
+    }
+    
+    public static ApiResponse<Void> error(String code, String message, List<String> details) {
+        return new ApiResponse<>(false, null, 
+            new ApiError(code, message, details), ApiMeta.now());
+    }
+}
+
+public record ApiMeta(Instant timestamp, String requestId) {
+    public static ApiMeta now() {
+        return new ApiMeta(Instant.now(), MDC.get("requestId"));
+    }
+}
+
+public record ApiError(String code, String message, List<String> details) {}
+```
+
+#### 커서 기반 페이지네이션
+
+```java
+// === shared/CursorPage.java ===
+public record CursorPage<T>(
+    List<T> data,
+    String cursor,
+    boolean hasMore,
+    long totalCount
+) {}
+
+// === Repository 구현 ===
+@Repository
+public class NoteQueryRepository {
+    private final EntityManager em;
+    
+    public List<Note> findByCursor(String cursor, int limit) {
+        var query = em.createQuery(
+            "SELECT n FROM Note n " +
+            (cursor != null ? "WHERE n.id < :cursor " : "") +
+            "ORDER BY n.createdAt DESC, n.id DESC", Note.class);
+        
+        if (cursor != null) {
+            query.setParameter("cursor", UUID.fromString(cursor));
+        }
+        return query.setMaxResults(limit).getResultList();
+    }
+}
+```
+
+#### Swagger/OpenAPI 어노테이션
+
+```java
+@Tag(name = "Notes", description = "노트 CRUD API")
+@RestController
+@RequestMapping("/api/v1/notes")
+@RequiredArgsConstructor
+public class NoteController {
+
+    @Operation(summary = "노트 생성", description = "새 노트를 생성합니다. Markdown 지원.")
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "201", description = "생성 성공"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "400", description = "검증 실패"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "403", description = "할당량 초과")
+    })
+    @PostMapping
+    public ResponseEntity<ApiResponse<NoteResponse>> createNote(
+            @RequestHeader(value = "Idempotency-Key", required = false) String idempotencyKey,
+            @Valid @RequestBody NoteCreateRequest request) {
+        NoteResponse response = noteService.createNote(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(ApiResponse.success(response));
+    }
+
+    @Operation(summary = "노트 목록 조회", description = "커서 기반 페이지네이션으로 노트 목록 조회")
+    @GetMapping
+    public ResponseEntity<ApiResponse<CursorPage<NoteResponse>>> listNotes(
+            @Parameter(description = "이전 페이지 마지막 ID") 
+            @RequestParam(required = false) String cursor,
+            @Parameter(description = "페이지 크기 (기본 20, 최대 100)")
+            @RequestParam(defaultValue = "20") @Max(100) int limit) {
+        return ResponseEntity.ok(ApiResponse.success(noteService.listNotes(cursor, limit)));
+    }
+}
+```
+
+#### Good 예제
+
+```java
+// 일관된 패턴: Controller는 위임만, 응답은 항상 ApiResponse 래핑
+@DeleteMapping("/{noteId}")
+public ResponseEntity<ApiResponse<Void>> deleteNote(@PathVariable String noteId) {
+    noteService.deleteNote(noteId);
+    return ResponseEntity.ok(ApiResponse.success(null));
+}
+```
+
+#### Bad 예제
+
+```java
+// 비일관적 응답 — ApiResponse 미사용
+@GetMapping("/{id}")
+public Note getNote(@PathVariable String id) {
+    return noteRepository.findById(UUID.fromString(id)).orElse(null); // null 반환!
+}
+
+// Map 반환 — 타입 안전하지 않음
+@PostMapping
+public Map<String, Object> createNote(@RequestBody Map<String, Object> body) {
+    return Map.of("status", "ok", "id", "some-id"); // 구조 보장 없음
+}
+```
