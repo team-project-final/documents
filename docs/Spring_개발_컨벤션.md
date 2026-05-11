@@ -435,3 +435,442 @@ max_line_length = 120
 
 - **IntelliJ**: `google-java-format` 플러그인 + Save Actions (format on save)
 - **VS Code**: `Extension Pack for Java` + `google-java-format` formatter
+
+---
+
+## 3. 심화 패턴
+
+> Good/Bad 코드 예제 + Why 설명 포함. 시니어는 패턴 확인, 주니어는 학습용.
+
+---
+
+### 3.1 예외 처리 패턴
+
+#### 예외 계층 구조
+
+```
+RuntimeException
+└── BusinessException (code: ErrorCode, message: String)
+    ├── AuthException
+    │   ├── TokenExpiredException
+    │   └── InsufficientPermissionException
+    ├── NoteException
+    │   ├── NoteNotFoundException
+    │   └── NoteQuotaExceededException
+    ├── CardException
+    │   └── CardReviewIntervalException
+    └── BillingException
+        └── PaymentFailedException
+```
+
+#### Why
+
+- **단일 GlobalExceptionHandler**에서 모든 예외를 일관된 API 응답으로 변환
+- **ErrorCode enum**으로 FE가 코드 기반으로 에러를 처리 가능
+- **도메인별 예외 분리**로 catch 블록에서 세밀한 처리 가능
+
+#### 핵심 코드
+
+```java
+// === shared/exception/BusinessException.java ===
+@Getter
+public class BusinessException extends RuntimeException {
+    private final ErrorCode errorCode;
+    
+    public BusinessException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
+    }
+    
+    public BusinessException(ErrorCode errorCode, String customMessage) {
+        super(customMessage);
+        this.errorCode = errorCode;
+    }
+    
+    public HttpStatus getHttpStatus() {
+        return errorCode.getHttpStatus();
+    }
+}
+
+// === 도메인별 예외 ===
+public class NoteNotFoundException extends BusinessException {
+    public NoteNotFoundException(String noteId) {
+        super(ErrorCode.NOTE_NOT_FOUND, 
+              "노트를 찾을 수 없습니다: " + noteId);
+    }
+}
+
+// === shared/exception/GlobalExceptionHandler.java ===
+@RestControllerAdvice
+@Slf4j
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiResponse<Void>> handleBusiness(BusinessException e) {
+        log.warn("비즈니스 예외 [code={}, message={}]", 
+            e.getErrorCode().name(), e.getMessage());
+        return ResponseEntity.status(e.getHttpStatus())
+            .body(ApiResponse.error(e.getErrorCode().name(), e.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Void>> handleValidation(
+            MethodArgumentNotValidException e) {
+        List<String> details = e.getBindingResult().getFieldErrors().stream()
+            .map(f -> f.getField() + ": " + f.getDefaultMessage())
+            .toList();
+        return ResponseEntity.badRequest()
+            .body(ApiResponse.error("VALIDATION_FAILED", "입력값 검증 실패", details));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Void>> handleUnexpected(Exception e) {
+        log.error("예상치 못한 오류", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(ApiResponse.error("INTERNAL_ERROR", "서버 내부 오류가 발생했습니다."));
+    }
+}
+```
+
+#### Good 예제 — 사용법
+
+```java
+@Service
+public class NoteService {
+    public NoteResponse getNote(String noteId) {
+        return noteRepository.findById(UUID.fromString(noteId))
+            .map(noteMapper::toResponse)
+            .orElseThrow(() -> new NoteNotFoundException(noteId));
+    }
+    
+    @Transactional
+    public NoteResponse createNote(NoteCreateRequest request) {
+        long count = noteRepository.countByTenantId(TenantContext.getCurrentTenantId());
+        if (count >= quotaService.getNoteLimit()) {
+            throw new NoteQuotaExceededException();
+        }
+        // ...
+    }
+}
+```
+
+#### Bad 예제
+
+```java
+// 범용 RuntimeException — 에러 코드 없음, FE 처리 불가
+throw new RuntimeException("노트를 찾을 수 없습니다");
+
+// ResponseStatusException — ErrorCode 체계 우회
+throw new ResponseStatusException(HttpStatus.NOT_FOUND, "not found");
+
+// try-catch에서 예외 삼킴
+try {
+    noteRepository.save(note);
+} catch (Exception e) {
+    // 무시 — 에러가 사라짐
+}
+```
+
+---
+
+### 3.2 멀티테넌시 적용 패턴
+
+#### Why
+
+Synapse는 멀티테넌트 SaaS이므로, 모든 데이터 접근에서 **테넌트 격리**가 보장되어야 한다. 격리 실패 = 다른 조직의 데이터 노출 = 심각한 보안 사고.
+
+#### TenantContext (Java 21 ScopedValue)
+
+```java
+// === shared/tenant/TenantContext.java ===
+public final class TenantContext {
+    private static final ScopedValue<String> TENANT_ID = ScopedValue.newInstance();
+    
+    private TenantContext() {}
+    
+    public static String getCurrentTenantId() {
+        if (!TENANT_ID.isBound()) {
+            throw new IllegalStateException("TenantContext가 설정되지 않았습니다");
+        }
+        return TENANT_ID.get();
+    }
+    
+    public static <T> T executeWithTenant(String tenantId, Callable<T> task) 
+            throws Exception {
+        return ScopedValue.callWhere(TENANT_ID, tenantId, task);
+    }
+}
+
+// === config/TenantFilter.java ===
+@Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class TenantFilter extends OncePerRequestFilter {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, 
+            HttpServletResponse response, FilterChain chain) throws Exception {
+        String tenantId = request.getHeader("X-Tenant-Id");
+        if (tenantId == null) {
+            response.sendError(400, "X-Tenant-Id 헤더 필수");
+            return;
+        }
+        ScopedValue.runWhere(TenantContext.TENANT_ID, tenantId, 
+            () -> chain.doFilter(request, response));
+    }
+}
+```
+
+#### Hibernate @TenantId 자동 필터링
+
+```java
+// === shared/BaseEntity.java ===
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
+@Getter
+public abstract class BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+    
+    @TenantId
+    @Column(name = "tenant_id", nullable = false, updatable = false)
+    private String tenantId;
+    
+    @Version
+    private Long version;
+    
+    @CreatedDate
+    @Column(name = "created_at", updatable = false)
+    private Instant createdAt;
+    
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private Instant updatedAt;
+}
+```
+
+#### Redis 캐시 키 규칙
+
+```java
+// 패턴: tenant:{tenantId}:{domain}:{key}
+@Cacheable(
+    cacheNames = "notes",
+    key = "'tenant:' + T(com.synapse.knowledge.shared.TenantContext).getCurrentTenantId() "
+        + "+ ':note:' + #noteId"
+)
+public NoteResponse getNote(String noteId) {
+    return noteRepository.findById(UUID.fromString(noteId))
+        .map(noteMapper::toResponse)
+        .orElseThrow(() -> new NoteNotFoundException(noteId));
+}
+
+// 캐시 무효화
+@CacheEvict(
+    cacheNames = "notes",
+    key = "'tenant:' + T(TenantContext).getCurrentTenantId() + ':note:' + #noteId"
+)
+@Transactional
+public NoteResponse updateNote(String noteId, NoteUpdateRequest request) { /* ... */ }
+```
+
+#### Kafka 이벤트에 tenantId 포함
+
+```java
+// Avro 스키마에 tenantId 필수 필드
+// note-created-v1.avsc
+{
+  "type": "record",
+  "name": "NoteCreated",
+  "namespace": "com.synapse.knowledge.event",
+  "fields": [
+    {"name": "noteId", "type": "string"},
+    {"name": "tenantId", "type": "string"},  // 필수!
+    {"name": "title", "type": "string"},
+    {"name": "timestamp", "type": {"type": "long", "logicalType": "timestamp-millis"}}
+  ]
+}
+```
+
+#### Good 예제
+
+```java
+// @TenantId 적용 Entity — 모든 쿼리 자동 필터링
+@Entity @Table(name = "notes")
+public class Note extends BaseEntity {
+    // tenantId는 BaseEntity에서 @TenantId로 자동 관리
+    private String title;
+    private String content;
+}
+
+// Repository — 별도 WHERE 불필요 (Hibernate가 자동 추가)
+public interface NoteRepository extends JpaRepository<Note, UUID> {
+    List<Note> findAllByOrderByUpdatedAtDesc(); // tenant_id 자동 필터링됨
+}
+```
+
+#### Bad 예제
+
+```java
+// 수동 WHERE — 누락 시 전체 테넌트 데이터 노출
+@Query("SELECT n FROM Note n WHERE n.tenantId = :tenantId")
+List<Note> findAllByTenantId(@Param("tenantId") String tenantId);
+// 이 패턴은 개발자가 tenantId 전달을 잊으면 보안 사고 발생
+
+// 캐시 키에 tenantId 누락
+@Cacheable(key = "'note:' + #noteId")  // 다른 테넌트의 캐시 반환 위험!
+public NoteResponse getNote(String noteId) { /* ... */ }
+```
+
+---
+
+### 3.3 이벤트 발행/구독 패턴
+
+#### 두 가지 이벤트 채널
+
+| 범위 | 방식 | 용도 |
+|------|------|------|
+| 모듈 내부 (같은 서비스) | Spring ApplicationEvent | note → graph 알림 |
+| 서비스 간 (크로스) | Kafka + Avro | knowledge → learning 알림 |
+
+#### 이벤트 네이밍 규칙
+
+- Kafka 토픽: `{도메인}.{동사}.{버전}` (예: `knowledge.note.created.v1`)
+- Event 클래스: `{도메인}{동사}Event` (예: `NoteCreatedEvent`)
+
+#### 모듈 내부 이벤트 (Spring Modulith)
+
+```java
+// === 이벤트 정의 ===
+public record NoteCreatedEvent(
+    UUID noteId,
+    String tenantId,
+    String title,
+    Instant occurredAt
+) {
+    public NoteCreatedEvent(UUID noteId, String tenantId, String title) {
+        this(noteId, tenantId, title, Instant.now());
+    }
+}
+
+// === 발행 (note 모듈) ===
+@Service
+@RequiredArgsConstructor
+public class NoteService {
+    private final ApplicationEventPublisher events;
+    
+    @Transactional
+    public NoteResponse createNote(NoteCreateRequest request) {
+        Note note = noteRepository.save(mapper.toEntity(request));
+        events.publishEvent(new NoteCreatedEvent(
+            note.getId(), note.getTenantId(), note.getTitle()));
+        return mapper.toResponse(note);
+    }
+}
+
+// === 구독 (graph 모듈 — 같은 서비스 내) ===
+@Component
+@RequiredArgsConstructor
+public class GraphNoteListener {
+    private final GraphService graphService;
+    
+    @ApplicationModuleListener
+    public void onNoteCreated(NoteCreatedEvent event) {
+        graphService.createNodeForNote(event.noteId(), event.title());
+    }
+}
+```
+
+#### 크로스 서비스 이벤트 (Kafka + Avro)
+
+```java
+// === Avro 스키마 정의 (synapse-shared 레포) ===
+// schemas/knowledge/note-created-v1.avsc
+{
+  "type": "record",
+  "name": "NoteCreated",
+  "namespace": "com.synapse.event.knowledge",
+  "fields": [
+    {"name": "noteId", "type": "string"},
+    {"name": "tenantId", "type": "string"},
+    {"name": "title", "type": "string"},
+    {"name": "tags", "type": {"type": "array", "items": "string"}},
+    {"name": "timestamp", "type": {"type": "long", "logicalType": "timestamp-millis"}}
+  ]
+}
+
+// === 발행 (knowledge-svc) ===
+@Component
+@RequiredArgsConstructor
+public class NoteKafkaPublisher {
+    private final KafkaTemplate<String, SpecificRecord> kafkaTemplate;
+    
+    public void publishNoteCreated(Note note) {
+        var event = NoteCreated.newBuilder()
+            .setNoteId(note.getId().toString())
+            .setTenantId(note.getTenantId())
+            .setTitle(note.getTitle())
+            .setTags(note.getTags())
+            .setTimestamp(Instant.now().toEpochMilli())
+            .build();
+        
+        // 키 = tenantId (같은 테넌트 이벤트는 같은 파티션)
+        kafkaTemplate.send("knowledge.note.created.v1", 
+            note.getTenantId(), event);
+    }
+}
+
+// === 구독 (learning-svc) ===
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class NoteCreatedConsumer {
+    private final CardSuggestionService cardSuggestionService;
+    
+    @KafkaListener(
+        topics = "knowledge.note.created.v1",
+        groupId = "learning-svc-note-consumer"
+    )
+    public void consume(NoteCreated event) {
+        log.info("노트 생성 이벤트 수신 [noteId={}, tenantId={}]",
+            event.getNoteId(), event.getTenantId());
+        
+        TenantContext.executeWithTenant(event.getTenantId(), () -> {
+            cardSuggestionService.suggestCardsForNote(event.getNoteId());
+            return null;
+        });
+    }
+}
+```
+
+#### Schema Registry 규칙
+
+| 규칙 | 설명 |
+|------|------|
+| 호환성 모드 | **BACKWARD** (기본값) |
+| 필드 추가 | 허용 (default 값 필수) |
+| 필드 삭제 | 금지 (소비자가 읽기 실패) |
+| 필드 타입 변경 | 금지 (새 토픽 버전 생성) |
+| 새 버전 토픽 | `knowledge.note.created.v2` |
+
+#### Good 예제
+
+```java
+// 이벤트에 필요한 정보만 포함 (Entity 전체 전달 금지)
+events.publishEvent(new NoteCreatedEvent(note.getId(), note.getTenantId(), note.getTitle()));
+```
+
+#### Bad 예제
+
+```java
+// Entity를 이벤트로 전달 — 결합도 높음 + 직렬화 문제
+events.publishEvent(note); // Entity 직접 전달 금지
+
+// Kafka에 JSON 직렬화 — 스키마 진화 불가
+kafkaTemplate.send("notes", objectMapper.writeValueAsString(note));
+// Avro + Schema Registry를 사용해야 함
+
+// 이벤트에 tenantId 누락
+var event = NoteCreated.newBuilder()
+    .setNoteId(note.getId().toString())
+    // .setTenantId(???) — 누락! 소비자가 테넌트 컨텍스트를 설정할 수 없음
+    .build();
+```
