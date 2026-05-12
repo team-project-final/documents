@@ -1,6 +1,7 @@
 # TASK: @learning-card-owner
 
 > **담당 서비스**: learning-card-svc
+> **GitHub Repository**: [synapse-learning-svc](https://github.com/team-project-final/synapse-learning-svc) (`learning-card` 모듈)
 > **주차**: W1 (2026-05-12 ~ 2026-05-16)
 > **관련 문서**: [SCOPE](../scope/SCOPE_learning-card.md) | [PRD_W1](../prd/PRD_W1.md) | [WORKFLOW](../workflow/WORKFLOW_learning-card_W1.md) | [HISTORY](../history/HISTORY_learning-card.md)
 

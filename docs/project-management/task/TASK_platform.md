@@ -1,6 +1,7 @@
 # TASK: @platform-owner
 
 > **담당 서비스**: platform-svc (auth / user / notification / admin)  
+> **GitHub Repository**: [synapse-platform-svc](https://github.com/team-project-final/synapse-platform-svc)  
 > **주차**: W1 (2026-05-12 ~ 2026-05-16)  
 > **관련 문서**: [SCOPE](../scope/SCOPE_platform.md) | [PRD_W1](../prd/PRD_W1.md) | [WORKFLOW](../workflow/WORKFLOW_platform_W1.md) | [HISTORY](../history/HISTORY_platform.md)
 

@@ -8,6 +8,7 @@
 | 역할 | 트랙 A (1명) |
 | 담당 서비스 | synapse-platform-svc |
 | 담당 모듈 | auth, audit, billing, notification |
+| GitHub Repository | [synapse-platform-svc](https://github.com/team-project-final/synapse-platform-svc) |
 
 ## 4주 전체 책임 범위
 

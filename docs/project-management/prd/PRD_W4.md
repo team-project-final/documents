@@ -7,6 +7,7 @@
 | 기간 | 2026-06-01 (월) ~ 2026-06-05 (금) (4 영업일, 6/3 제9회 전국동시지방선거 제외) |
 | 목표 | notification 발송 (FCM/SES) / audit Kafka 소비 / 관리자·Admin 모더레이션 / 통합 검증 |
 | 전주 결과 | W3에서 모든 producer 토픽 발행 + gamification 완성 + 검색 RRF + AI 자동 생성 안정화 |
+| GitHub Repositories | [synapse-platform-svc](https://github.com/team-project-final/synapse-platform-svc) · [synapse-engagement-svc](https://github.com/team-project-final/synapse-engagement-svc) · [synapse-knowledge-svc](https://github.com/team-project-final/synapse-knowledge-svc) · [synapse-learning-svc](https://github.com/team-project-final/synapse-learning-svc) · [synapse-frontend](https://github.com/team-project-final/synapse-frontend) · [synapse-shared](https://github.com/team-project-final/synapse-shared) |
 
 ## 2. 기능 요구사항
 

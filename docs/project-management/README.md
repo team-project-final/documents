@@ -222,6 +222,23 @@ View + Test (Smoke 1건 이상 필수)
 
 ---
 
+## 9. GitHub Repositories
+
+| 레포지토리 | 가시성 | 용도 | 담당 |
+|------------|:------:|------|------|
+| [synapse-platform-svc](https://github.com/team-project-final/synapse-platform-svc) | public | auth · audit · billing · notification | @platform-owner |
+| [synapse-engagement-svc](https://github.com/team-project-final/synapse-engagement-svc) | public | community · gamification | @engagement-owner |
+| [synapse-knowledge-svc](https://github.com/team-project-final/synapse-knowledge-svc) | public | note · graph · chunking | @knowledge-owner-1, @knowledge-owner-2 |
+| [synapse-learning-svc](https://github.com/team-project-final/synapse-learning-svc) | public | card · srs (Java) + ai (Python) | @learning-card-owner, @learning-ai-owner |
+| [synapse-frontend](https://github.com/team-project-final/synapse-frontend) | public | Flutter (web/mobile) | 전체 협업 |
+| [synapse-shared](https://github.com/team-project-final/synapse-shared) | public | Avro 스키마 + 공통 라이브러리 | @team-lead |
+| [synapse-mirror](https://github.com/team-project-final/synapse-mirror) | private | Tier 1 자동 미러 (읽기 전용) | 자동 (Actions) |
+| [synapse-gitops](https://github.com/team-project-final/synapse-gitops) | private | K8s manifest + ArgoCD ApplicationSet | @team-lead |
+| [syn](https://github.com/team-project-final/syn) | public | 부트스트랩 스크립트 + 스펙 + 플랜 | @team-lead |
+| [documents](https://github.com/team-project-final/documents) | public | 프로젝트 관리 문서 (본 레포) | 전체 |
+
+---
+
 ## 참조 문서
 
 | 문서 | 위치 |

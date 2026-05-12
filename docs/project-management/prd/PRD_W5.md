@@ -8,6 +8,7 @@
 | 발표 | 2026-06-15 (월) — 최종 발표·시연·제출 (코드 동결) |
 | 목표 | E2E 테스트, 버그 수정, P1 기능 마무리, Staging 배포, 발표 자료/리허설 |
 | 전주 결과 | W4에서 이벤트 소비자 (notification/audit/admin) 통합 검증 완성 |
+| GitHub Repositories | [synapse-platform-svc](https://github.com/team-project-final/synapse-platform-svc) · [synapse-engagement-svc](https://github.com/team-project-final/synapse-engagement-svc) · [synapse-knowledge-svc](https://github.com/team-project-final/synapse-knowledge-svc) · [synapse-learning-svc](https://github.com/team-project-final/synapse-learning-svc) · [synapse-frontend](https://github.com/team-project-final/synapse-frontend) · [synapse-shared](https://github.com/team-project-final/synapse-shared) |
 
 ## 2. 기능 요구사항
 

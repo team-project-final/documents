@@ -7,6 +7,7 @@
 | 기간 | 2026-05-26 (화) ~ 2026-05-29 (금) (4 영업일, 5/25 부처님오신날 제외) |
 | 목표 | 모든 producer 토픽 발행 / gamification 완성 / 검색 RRF / AI 카드 자동 생성 안정화 |
 | 전주 결과 | W2에서 SRS 복습, 그래프, 검색 BM25, 공유, AI 골격, billing/notification 기초 완성 |
+| GitHub Repositories | [synapse-platform-svc](https://github.com/team-project-final/synapse-platform-svc) · [synapse-engagement-svc](https://github.com/team-project-final/synapse-engagement-svc) · [synapse-knowledge-svc](https://github.com/team-project-final/synapse-knowledge-svc) · [synapse-learning-svc](https://github.com/team-project-final/synapse-learning-svc) · [synapse-frontend](https://github.com/team-project-final/synapse-frontend) · [synapse-shared](https://github.com/team-project-final/synapse-shared) |
 
 ## 2. 기능 요구사항
 

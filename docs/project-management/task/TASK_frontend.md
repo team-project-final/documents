@@ -1,6 +1,7 @@
 # TASK: @frontend-owner
 
 > **담당 서비스**: frontend (Flutter Web)
+> **GitHub Repository**: [synapse-frontend](https://github.com/team-project-final/synapse-frontend)
 > **주차**: W1 (2026-05-12 ~ 2026-05-16)
 > **관련 문서**: [SCOPE](../scope/SCOPE_frontend.md) | [PRD_W1](../prd/PRD_W1.md) | [WORKFLOW](../workflow/WORKFLOW_frontend_W1.md) | [HISTORY](../history/HISTORY_frontend.md)
 

@@ -8,6 +8,7 @@
 | 역할 | 트랙 C-2 (2명 중 1명) |
 | 담당 서비스 | synapse-knowledge-svc |
 | 담당 모듈 | chunking, 검색, Spring Modulith 검증 |
+| GitHub Repository | [synapse-knowledge-svc](https://github.com/team-project-final/synapse-knowledge-svc) |
 
 ## 4주 전체 책임 범위
 

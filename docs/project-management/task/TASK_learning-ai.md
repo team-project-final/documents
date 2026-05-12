@@ -1,6 +1,7 @@
 # TASK: @learning-ai-owner
 
 > **담당 서비스**: learning-ai-svc
+> **GitHub Repository**: [synapse-learning-svc](https://github.com/team-project-final/synapse-learning-svc) (`learning-ai` 모듈)
 > **주차**: W1 (2026-05-12 ~ 2026-05-16)
 > **관련 문서**: [SCOPE](../scope/SCOPE_learning-ai.md) | [PRD_W1](../prd/PRD_W1.md) | [WORKFLOW](../workflow/WORKFLOW_learning-ai_W1.md) | [HISTORY](../history/HISTORY_learning-ai.md)
 

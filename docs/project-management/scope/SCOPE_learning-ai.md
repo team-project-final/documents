@@ -8,6 +8,7 @@
 | 역할 | 트랙 D-2 (2명 중 1명) |
 | 담당 서비스 | synapse-learning-svc / learning-ai |
 | 담당 모듈 | ai (Python / FastAPI) |
+| GitHub Repository | [synapse-learning-svc](https://github.com/team-project-final/synapse-learning-svc) (`learning-ai` 모듈) |
 
 ## 4주 전체 책임 범위
 

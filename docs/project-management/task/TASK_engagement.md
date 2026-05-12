@@ -1,6 +1,7 @@
 # TASK: @engagement-owner
 
 > **담당 서비스**: engagement-svc (community / gamification)  
+> **GitHub Repository**: [synapse-engagement-svc](https://github.com/team-project-final/synapse-engagement-svc)  
 > **주차**: W1 (2026-05-12 ~ 2026-05-16)  
 > **관련 문서**: [SCOPE](../scope/SCOPE_engagement.md) | [PRD_W1](../prd/PRD_W1.md) | [WORKFLOW](../workflow/WORKFLOW_engagement_W1.md) | [HISTORY](../history/HISTORY_engagement.md)
 

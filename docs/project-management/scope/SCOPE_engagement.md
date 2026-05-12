@@ -8,6 +8,7 @@
 | 역할 | 트랙 B (1명) |
 | 담당 서비스 | synapse-engagement-svc |
 | 담당 모듈 | community, gamification |
+| GitHub Repository | [synapse-engagement-svc](https://github.com/team-project-final/synapse-engagement-svc) |
 
 ## 4주 전체 책임 범위
 

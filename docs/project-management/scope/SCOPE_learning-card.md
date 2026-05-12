@@ -8,6 +8,7 @@
 | 역할 | 트랙 D-1 (2명 중 1명) |
 | 담당 서비스 | synapse-learning-svc / learning-card |
 | 담당 모듈 | card, srs (Java) |
+| GitHub Repository | [synapse-learning-svc](https://github.com/team-project-final/synapse-learning-svc) (`learning-card` 모듈) |
 
 ## 4주 전체 책임 범위
 
