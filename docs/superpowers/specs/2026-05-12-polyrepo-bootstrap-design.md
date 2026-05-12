@@ -1,7 +1,7 @@
 # 폴리레포 부트스트랩 설계서 — team-project-final 실 GitHub 셋업
 
 > **작성일**: 2026-05-12 (W1 시작일)
-> **상태**: Proposed (사용자 리뷰 → 승인 → writing-plans로 구현 계획 전개)
+> **상태**: Completed (2026-05-12 부트스트랩 실행 완료, 8개 레포 동작 검증)
 > **선행 결정**: `09_Git_규칙_정의서` v2.0 (4-서비스 폴리레포 + 미러 + GitOps + Schema Registry 확정)
 > **목적**: 09 v2.0 §C1 Day 1 셋업 체크리스트를 실제 `team-project-final` org에 실행하는 부트스트랩 계획 정의
 
@@ -725,3 +725,4 @@ ADR 작성은 별도 PR(`feature/INFRA-003-adr-006-007`)로.
 | 버전 | 날짜 | 작성자 | 변경 내용 |
 |---|---|---|---|
 | v1.0 | 2026-05-12 | Synapse Team | 초안 작성. 09 v2.0 §C1 Day 1 체크리스트 중 GitHub/워크플로/첫 코드 그룹을 실행하는 부트스트랩 계획. 3-Phase 검증 게이트 + 멱등 스크립트 3개 + 자동 보고서 commit. |
+| v1.0-completed | 2026-05-12 | Synapse Team | Phase 1/2/3 실행 완료. reports/phase{1,2,3}-2026-05-12.md 추가. private 레포(mirror/gitops) branch protection은 GitHub Free plan 제한으로 skip. enforce_admins는 public 6개에만 적용. mirror.yml 버그 수정 (git add -A before diff). |
