@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WORKFLOW Guide - AWS 인프라 프로비저닝</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --text: #202428;
+      --muted: #5b6673;
+      --line: #d8dee4;
+      --accent: #0a66c2;
+      --accent-soft: #eaf3ff;
+      --good: #1a7f37;
+      --warn: #9a6700;
+      --danger: #cf222e;
+      --code-bg: #0d1117;
+      --code: #e6edf3;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.58;
+    }
+
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 34px 42px 24px;
+    }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 28px 24px 48px;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.25;
+    }
+
+    h1 { font-size: 30px; letter-spacing: 0; }
+    h2 { font-size: 22px; margin-bottom: 14px; }
+    h3 { font-size: 17px; margin-bottom: 8px; }
+
+    p { margin: 8px 0 0; }
+    ul, ol { margin: 8px 0 0; padding-left: 22px; }
+    li { margin: 5px 0; }
+
+    code, .mono {
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font-size: 0.94em;
+    }
+
+    pre {
+      margin: 12px 0 0;
+      padding: 15px;
+      overflow: auto;
+      border-radius: 8px;
+      background: var(--code-bg);
+      color: var(--code);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 10px 11px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f3f5f7;
+      font-weight: 700;
+    }
+
+    .meta {
+      margin-top: 11px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .metric, .section, .callout, .step {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .metric {
+      padding: 15px;
+      min-height: 96px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .section {
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .callout {
+      padding: 15px;
+      margin-top: 12px;
+      background: var(--accent-soft);
+      border-color: #b6d7ff;
+    }
+
+    .callout.warn {
+      background: #fff8e6;
+      border-color: #eac54f;
+    }
+
+    .callout.danger {
+      background: #fff1f1;
+      border-color: #ffb3b8;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #eef2f6;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge.good { background: #dafbe1; color: var(--good); }
+    .badge.warn { background: #fff1c2; color: var(--warn); }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      padding: 16px;
+    }
+
+    .step-head {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 16px;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .checklist li::before {
+      content: "□";
+      color: var(--muted);
+      margin-right: 8px;
+    }
+
+    .diagram {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfd;
+      padding: 14px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+      white-space: pre;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 920px) {
+      header { padding: 26px 18px 20px; }
+      main { padding: 20px 16px 36px; }
+      .hero-grid, .section-grid, .checklist { grid-template-columns: 1fr; }
+      h1 { font-size: 25px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>WORKFLOW Guide - AWS 인프라 프로비저닝</h1>
+    <div class="meta">
+      대상: 처음 Synapse 인프라 작업을 맡은 개발자 · 기준 문서:
+      <span class="mono">documents.wiki/18_기술_스택_정의서.md</span>,
+      <span class="mono">PRD_W1</span>,
+      <span class="mono">TASK_team-lead</span>,
+      <span class="mono">WORKFLOW_team-lead_W1</span>
+    </div>
+    <div class="hero-grid" aria-label="작업 요약">
+      <div class="metric"><strong>2일</strong><span>Duration 기준</span></div>
+      <div class="metric"><strong>P0</strong><span>PRD_W1 FR-TL-002</span></div>
+      <div class="metric"><strong>5 x 3</strong><span>ApplicationSet 서비스 x 환경</span></div>
+      <div class="metric"><strong>0/34</strong><span>초기 체크리스트 상태</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <h2>1. 먼저 이해할 것</h2>
+      <p>
+        이 작업은 dev 환경에 필요한 AWS 관리형 인프라와 ArgoCD 배포 기반을 만드는 작업이다.
+        목표는 운영급 최종 인프라가 아니라, 팀원이 4개 백엔드 서비스와 learning-ai 컨테이너를 EKS 위에 올려
+        통합 개발을 시작할 수 있는 최소 배포 기반을 확보하는 것이다.
+      </p>
+
+      <div class="callout">
+        <strong>완료 기준</strong>
+        <p>
+          <span class="mono">kubectl get nodes</span>에서 EKS 노드가 Ready이고,
+          RDS PostgreSQL 16, MSK Kafka, ElastiCache Redis 7, OpenSearch 8.x, ArgoCD 대시보드에
+          내부 네트워크 기준으로 접속 가능해야 한다.
+        </p>
+      </div>
+
+      <div class="callout warn">
+        <strong>범위 제한</strong>
+        <p>
+          TASK 기준 Scope는 dev 환경 전용 최소 사양이며 월 $200 이내 비용 제한이 있다.
+          Production Multi-AZ 고가용성, 모니터링 대시보드, 본격 비용 최적화는 이 Step의 범위가 아니다.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>2. 문서에서 확인할 근거</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>문서</th>
+              <th>확인할 내용</th>
+              <th>작업에 반영할 결정</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">18_기술_스택_정의서</span></td>
+              <td>EKS, RDS, ElastiCache, MSK, OpenSearch, ECR, ArgoCD ApplicationSet, Schema Registry</td>
+              <td>AWS 관리형 서비스와 GitOps 배포 구조를 기본값으로 사용</td>
+            </tr>
+            <tr>
+              <td><span class="mono">PRD_W1</span></td>
+              <td>FR-TL-002: EKS 클러스터 가동 + RDS/Redis/MSK/OpenSearch 접속 가능</td>
+              <td>접속 테스트 결과를 수용 기준으로 관리</td>
+            </tr>
+            <tr>
+              <td><span class="mono">TASK_team-lead</span></td>
+              <td>EKS 3 node, RDS db.t3.medium, MSK 3 broker, Redis cache.t3.micro, OpenSearch 1 node dev</td>
+              <td>초기 리소스 크기를 최소 사양으로 고정</td>
+            </tr>
+            <tr>
+              <td><span class="mono">WORKFLOW_team-lead_W1</span></td>
+              <td>1.1 ~ 1.8 체크리스트, 1.6/1.9/1.10 N/A</td>
+              <td>요구사항 분석, 보안 1/2차 검토, 구현, 접속 테스트 순서로 진행</td>
+            </tr>
+            <tr>
+              <td><span class="mono">09_Git_규칙_정의서 / 보충 문서</span></td>
+              <td>synapse-gitops, ECR, ArgoCD ApplicationSet, Schema Registry 운영 흐름</td>
+              <td>매니페스트는 GitOps 레포에 두고 ArgoCD가 동기화하게 구성</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>3. 목표 아키텍처</h2>
+      <div class="diagram">Developer / GitHub Actions
+        |
+        | docker build + ECR push + gitops image tag update
+        v
+AWS ECR  ---->  synapse-gitops repo  ---->  ArgoCD ApplicationSet
+                                             |
+                                             v
+                                      EKS dev cluster
+                                      ├── platform-svc
+                                      ├── engagement-svc
+                                      ├── knowledge-svc
+                                      ├── learning-card
+                                      └── learning-ai
+
+Private subnets / VPC internal access
+├── RDS PostgreSQL 16
+├── MSK Kafka 3.x
+├── Schema Registry
+├── ElastiCache Redis 7
+└── OpenSearch 8.x</div>
+
+      <div class="callout">
+        <strong>ApplicationSet 기준</strong>
+        <p>
+          18번 기술 스택은 <span class="mono">platform-svc</span>,
+          <span class="mono">engagement-svc</span>,
+          <span class="mono">knowledge-svc</span>,
+          <span class="mono">learning-card</span>,
+          <span class="mono">learning-ai</span> 5개 배포 대상과
+          <span class="mono">dev</span>, <span class="mono">staging</span>, <span class="mono">prod</span>
+          3개 환경을 matrix generator로 관리한다고 정의한다.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>4. 리소스 스펙 초안</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>구성 요소</th>
+              <th>dev 기준 스펙</th>
+              <th>설계 포인트</th>
+              <th>접속 확인</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>EKS</td>
+              <td>Managed node group 3 nodes</td>
+              <td>서비스 5개와 ArgoCD를 올릴 최소 용량. 노드는 private subnet 우선.</td>
+              <td><span class="mono">kubectl get nodes</span></td>
+            </tr>
+            <tr>
+              <td>RDS PostgreSQL</td>
+              <td>PostgreSQL 16, <span class="mono">db.t3.medium</span></td>
+              <td>스토리지 암호화, private subnet, EKS 보안 그룹에서만 접근 허용.</td>
+              <td><span class="mono">psql</span> 또는 앱 health check</td>
+            </tr>
+            <tr>
+              <td>MSK Kafka</td>
+              <td>Kafka 3.x, 3 broker</td>
+              <td>TLS 통신, private broker, Schema Registry 연동 경로 확보.</td>
+              <td><span class="mono">kafka-broker-api-versions.sh</span></td>
+            </tr>
+            <tr>
+              <td>Schema Registry</td>
+              <td>Confluent 7.x 호환</td>
+              <td>MSK와 같은 VPC 내부에서 접근. W2에서 BACKWARD 정책 강제 예정.</td>
+              <td><span class="mono">GET /subjects</span></td>
+            </tr>
+            <tr>
+              <td>ElastiCache Redis</td>
+              <td>Redis 7, <span class="mono">cache.t3.micro</span></td>
+              <td>AUTH 토큰, in-transit encryption, 앱 서브넷 접근 제한.</td>
+              <td><span class="mono">redis-cli --tls ping</span></td>
+            </tr>
+            <tr>
+              <td>OpenSearch</td>
+              <td>OpenSearch 8.x, 1 node dev</td>
+              <td>dev 검색 검증용. nori 분석기 사용 가능 여부를 생성 전 확인.</td>
+              <td><span class="mono">GET /_cluster/health</span></td>
+            </tr>
+            <tr>
+              <td>ArgoCD</td>
+              <td>EKS 내부 설치 + ApplicationSet</td>
+              <td>dev autoSync, staging/prod manual sync 전제.</td>
+              <td>대시보드 로그인, app sync 상태</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>5. 네트워크와 보안 원칙</h2>
+      <div class="section-grid">
+        <div>
+          <h3>VPC 설계</h3>
+          <ul>
+            <li>서비스 워커 노드와 데이터 계층은 private subnet에 둔다.</li>
+            <li>외부 접근은 Cloudflare/Gateway/Ingress 등 공개 진입점으로 제한한다.</li>
+            <li>RDS, MSK, Redis, OpenSearch는 VPC 내부 통신만 허용한다.</li>
+            <li>NAT Gateway 비용이 부담되면 dev 범위에서 엔드포인트와 비용을 별도 검토한다.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Security Group</h3>
+          <ul>
+            <li>EKS 노드 SG → RDS 5432 허용</li>
+            <li>EKS 노드 SG → Redis 6379 허용</li>
+            <li>EKS 노드 SG → MSK broker port 허용</li>
+            <li>EKS 노드 SG → OpenSearch HTTPS 허용</li>
+            <li>관리자 접속은 VPN, bastion, SSM 중 하나로 제한</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout danger">
+        <strong>금지</strong>
+        <p>
+          RDS, Redis, MSK, OpenSearch를 인터넷에 직접 공개하지 않는다.
+          임시 테스트를 위해 퍼블릭 접근을 열었다면 작업 완료 전 닫고 보안 검토 결과에 기록한다.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>6. 진행 순서</h2>
+      <div class="timeline">
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 1. TASK 시작</h3>
+            <span class="badge">1.1</span>
+          </div>
+          <ul class="checklist">
+            <li>Step Goal / Done When / Scope / Input을 TASK_team-lead에서 확인한다.</li>
+            <li>PRD_W1의 FR-TL-002를 이 작업의 P0 수용 기준으로 표시한다.</li>
+            <li>Duration 2일을 기준으로 구현 범위를 dev 최소 인프라로 제한한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 2. 요구사항 분석</h3>
+            <span class="badge">1.2</span>
+          </div>
+          <ul class="checklist">
+            <li>EKS/RDS/MSK/ElastiCache/OpenSearch 스펙을 표로 확정한다.</li>
+            <li>ApplicationSet의 5서비스 x 3환경 matrix를 확정한다.</li>
+            <li>VPC, private subnet, route table, security group 초안을 작성한다.</li>
+            <li>Instructions 초안을 TASK 또는 인프라 README에 반영한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 3. Security 1차 검토</h3>
+            <span class="badge">1.3</span>
+          </div>
+          <ul class="checklist">
+            <li>VPC 내부 통신만 허용하는지 확인한다.</li>
+            <li>보안 그룹 인바운드/아웃바운드 규칙을 리소스별로 적는다.</li>
+            <li>IAM Role/Policy는 최소 권한 원칙으로 작성한다.</li>
+            <li>검토 결과를 TASK Constraints에 반영한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 4. 인프라 아키텍처 설계</h3>
+            <span class="badge">1.4</span>
+          </div>
+          <ul class="checklist">
+            <li>EKS 3 node 구성을 설계한다.</li>
+            <li>RDS PostgreSQL 16 <span class="mono">db.t3.medium</span> 구성을 설계한다.</li>
+            <li>MSK Kafka 3.x 3 broker와 Schema Registry 배치를 설계한다.</li>
+            <li>Redis 7 <span class="mono">cache.t3.micro</span>와 OpenSearch 1 node dev 구성을 설계한다.</li>
+            <li>설계 후 실제 예상 소요를 보고 Duration final을 갱신한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 5. Security 2차 검토</h3>
+            <span class="badge">1.5</span>
+          </div>
+          <ul class="checklist">
+            <li>RDS at-rest 암호화와 SSL 접속 정책을 확인한다.</li>
+            <li>MSK TLS 통신 설정을 확인한다.</li>
+            <li>ElastiCache AUTH 토큰과 in-transit encryption을 확인한다.</li>
+            <li>검토 결과를 TASK Constraints에 반영한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 6. Terraform/eksctl 구현</h3>
+            <span class="badge">1.7</span>
+          </div>
+          <ul class="checklist">
+            <li>선택한 도구를 하나로 고정한다. 재현성 기준으로는 Terraform을 우선 검토한다.</li>
+            <li>EKS, RDS, MSK, Redis, OpenSearch를 순서대로 생성한다.</li>
+            <li>ArgoCD를 설치하고 ApplicationSet 5서비스 x 3환경을 구성한다.</li>
+            <li>생성된 엔드포인트와 시크릿은 문서에는 플레이스홀더로만 기록한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 7. 접속 테스트</h3>
+            <span class="badge">1.8</span>
+          </div>
+          <ul class="checklist">
+            <li><span class="mono">kubectl get nodes</span>에서 Ready를 확인한다.</li>
+            <li>RDS, MSK, Redis, OpenSearch 접속 테스트 로그를 남긴다.</li>
+            <li>ArgoCD 대시보드 접근과 ApplicationSet 렌더링을 확인한다.</li>
+            <li>팀원 접근 권한 부여와 권한 범위를 확인한다.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>7. 구현 산출물 예시</h2>
+      <div class="section-grid">
+        <div>
+          <h3>Terraform 디렉터리</h3>
+          <pre><code>infra/aws/dev/
+├── main.tf
+├── variables.tf
+├── outputs.tf
+├── vpc.tf
+├── eks.tf
+├── rds.tf
+├── msk.tf
+├── redis.tf
+├── opensearch.tf
+└── argocd.tf</code></pre>
+        </div>
+        <div>
+          <h3>접속 정보 문서</h3>
+          <pre><code>docs/infra/dev-access.md
+├── cluster name
+├── region
+├── kubectl setup
+├── internal endpoints placeholder
+├── required IAM groups
+├── smoke test commands
+└── troubleshooting</code></pre>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <strong>시크릿 관리</strong>
+        <p>
+          실제 DB 비밀번호, Redis AUTH 토큰, ArgoCD admin password, AWS access key를 문서나 Git에 남기지 않는다.
+          공유 문서에는 <span class="mono">&lt;RDS_ENDPOINT&gt;</span>, <span class="mono">&lt;REDIS_AUTH_TOKEN&gt;</span> 같은 플레이스홀더만 둔다.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>8. ApplicationSet 골격</h2>
+      <p>
+        실제 repo URL, namespace, path는 <span class="mono">synapse-gitops</span> 구조에 맞춘다.
+        dev는 자동 동기화, staging/prod는 수동 승인을 전제로 둔다.
+      </p>
+      <pre><code>apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: synapse-services
+  namespace: argocd
+spec:
+  generators:
+    - matrix:
+        generators:
+          - list:
+              elements:
+                - service: platform-svc
+                - service: engagement-svc
+                - service: knowledge-svc
+                - service: learning-card
+                - service: learning-ai
+          - list:
+              elements:
+                - env: dev
+                  autoSync: "true"
+                - env: staging
+                  autoSync: "false"
+                - env: prod
+                  autoSync: "false"
+  template:
+    metadata:
+      name: '{{service}}-{{env}}'
+    spec:
+      project: synapse
+      source:
+        repoURL: https://github.com/team-project-final/synapse-gitops.git
+        targetRevision: main
+        path: apps/{{service}}/overlays/{{env}}
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: synapse-{{env}}
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true</code></pre>
+      <div class="callout warn">
+        <strong>주의</strong>
+        <p>
+          위 YAML은 구조 설명용이다. <span class="mono">autoSync: false</span> 환경에서 자동 sync 블록을 조건부로 제거하려면
+          실제 ApplicationSet 템플릿 기능과 팀의 ArgoCD 버전에 맞춰 별도 검증한다.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>9. Smoke Test 명령</h2>
+      <div class="section-grid">
+        <div>
+          <h3>Kubernetes</h3>
+          <pre><code>aws eks update-kubeconfig --name synapse-dev --region ap-northeast-2
+kubectl get nodes
+kubectl get pods -A
+kubectl get applications -n argocd</code></pre>
+        </div>
+        <div>
+          <h3>Data Services</h3>
+          <pre><code>psql "host=&lt;RDS_ENDPOINT&gt; port=5432 dbname=&lt;DB&gt; user=&lt;USER&gt; sslmode=require"
+redis-cli -h &lt;REDIS_ENDPOINT&gt; -p 6379 --tls -a &lt;TOKEN&gt; ping
+curl -k https://&lt;OPENSEARCH_ENDPOINT&gt;/_cluster/health
+kafka-broker-api-versions.sh --bootstrap-server &lt;MSK_BOOTSTRAP&gt;</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>10. PR 또는 작업 보고서에 포함할 산출물</h2>
+      <ul>
+        <li>인프라 구성도 또는 리소스 목록</li>
+        <li>VPC / subnet / route / security group 설계표</li>
+        <li>Terraform 또는 eksctl 설정 파일</li>
+        <li>ArgoCD ApplicationSet YAML</li>
+        <li>접속 정보 문서 또는 <span class="mono">.env.example</span> 업데이트</li>
+        <li>RDS/MSK/Redis/OpenSearch/ArgoCD smoke test 로그</li>
+        <li>팀원 접근 권한 부여 내역</li>
+        <li>비용 제한과 남은 리스크</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>11. 최종 체크리스트</h2>
+      <ul class="checklist">
+        <li>TASK Step Goal / Done When / Scope / Input 확인</li>
+        <li>PRD_W1 FR-TL-002 확인</li>
+        <li>Duration 2일 기준 범위 확정</li>
+        <li>EKS/RDS/MSK/Redis/OpenSearch 스펙 확정</li>
+        <li>ApplicationSet 5서비스 x 3환경 요건 확인</li>
+        <li>VPC/서브넷/보안그룹 설계 완료</li>
+        <li>VPC 내부 통신만 허용</li>
+        <li>IAM 최소 권한 적용</li>
+        <li>RDS at-rest/in-transit 암호화 확인</li>
+        <li>MSK TLS 통신 확인</li>
+        <li>Redis AUTH 토큰 확인</li>
+        <li>Terraform 또는 eksctl 구현 완료</li>
+        <li>kubectl nodes Ready 확인</li>
+        <li>RDS 접속 테스트 완료</li>
+        <li>MSK 브로커 접속 테스트 완료</li>
+        <li>Redis 접속 테스트 완료</li>
+        <li>OpenSearch 접속 테스트 완료</li>
+        <li>ArgoCD 대시보드 접근 테스트 완료</li>
+        <li>팀원 접근 권한 부여 확인</li>
+        <li>1.6 / 1.9 / 1.10은 인프라 작업으로 N/A 처리</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

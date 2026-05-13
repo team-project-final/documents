@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WORKFLOW Guide - Flutter 프로젝트 기본 구조 생성</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --text: #202428;
+      --muted: #5b6673;
+      --line: #d8dee4;
+      --accent: #d97706;
+      --accent-soft: #fff7ed;
+      --warn-bg: #fff8e6;
+      --warn-line: #eac54f;
+      --danger-bg: #fff1f1;
+      --danger-line: #ffb3b8;
+      --code-bg: #0d1117;
+      --code: #e6edf3;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.58;
+    }
+
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 34px 42px 24px;
+    }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 28px 24px 48px;
+    }
+
+    h1, h2, h3 { margin: 0; line-height: 1.25; }
+    h1 { font-size: 30px; letter-spacing: 0; }
+    h2 { font-size: 22px; margin-bottom: 14px; }
+    h3 { font-size: 17px; margin-bottom: 8px; }
+    p { margin: 8px 0 0; }
+    ul, ol { margin: 8px 0 0; padding-left: 22px; }
+    li { margin: 5px 0; }
+
+    code, .mono {
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font-size: 0.94em;
+    }
+
+    pre {
+      margin: 12px 0 0;
+      padding: 15px;
+      overflow: auto;
+      border-radius: 8px;
+      background: var(--code-bg);
+      color: var(--code);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td {
+      padding: 10px 11px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #f3f5f7; font-weight: 700; }
+
+    .meta { margin-top: 11px; color: var(--muted); font-size: 14px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .metric, .section, .callout, .step {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .metric { padding: 15px; min-height: 96px; }
+    .metric strong { display: block; font-size: 24px; margin-bottom: 6px; }
+    .metric span { color: var(--muted); font-size: 13px; }
+    .section { padding: 20px; margin-bottom: 18px; }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .callout {
+      padding: 14px 16px;
+      margin: 14px 0 0;
+      border-left: 5px solid var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .callout.warn {
+      border-left-color: var(--warn-line);
+      background: var(--warn-bg);
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger-line);
+      background: var(--danger-bg);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .step { padding: 16px; }
+    .step .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      margin-right: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #eef2f6;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .diagram {
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      white-space: pre;
+      overflow: auto;
+      padding: 16px;
+      border-radius: 8px;
+      background: #f3f5f7;
+      border: 1px solid var(--line);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 860px) {
+      header { padding: 26px 22px 20px; }
+      main { padding: 22px 16px 36px; }
+      .hero-grid, .section-grid, .steps { grid-template-columns: 1fr; }
+      h1 { font-size: 25px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>WORKFLOW Guide - Flutter 프로젝트 기본 구조 생성</h1>
+    <p class="meta">처음 프로젝트를 접한 개발자가 W1 Step 1을 시작할 때 따라가는 실행 가이드</p>
+    <div class="hero-grid">
+      <div class="metric"><strong>1일</strong><span>골격 생성 기준 Duration</span></div>
+      <div class="metric"><strong>3개</strong><span>core / features / shared 루트</span></div>
+      <div class="metric"><strong>3개</strong><span>/, /login, /dashboard 라우트</span></div>
+      <div class="metric"><strong>0/34</strong><span>WORKFLOW Step 1 체크 항목</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <h2>이 문서의 목적</h2>
+      <p>
+        이 문서는 <span class="mono">frontend-owner</span>가 Flutter Web 프로젝트의 기본 구조를 생성하고,
+        <span class="mono">ProviderScope</span>, <span class="mono">GoRouter</span>, <span class="mono">ThemeData</span>가 적용된
+        빈 화면 라우팅까지 확인하는 절차를 설명한다.
+      </p>
+      <div class="callout">
+        <strong>Done When</strong>
+        <p>
+          <span class="mono">flutter run -d chrome</span>으로 앱이 실행되고,
+          <span class="mono">/</span>, <span class="mono">/login</span>, <span class="mono">/dashboard</span> 라우팅 전환이 동작하며,
+          <span class="mono">DESIGN.md</span> 기반 ThemeData가 적용되면 완료로 본다.
+        </p>
+      </div>
+      <div class="callout warn">
+        <strong>착수 전 확인</strong>
+        <p>
+          TASK는 Flutter 3.24+ / Dart 3.5+, Riverpod 2.x를 기준으로 한다.
+          wiki 18번 기술 문서의 버전 매핑에는 Flutter 3.41.x / Dart 3.8+ 및 Riverpod 3.x 언급도 있으므로
+          실제 <span class="mono">pubspec.yaml</span> 작성 전 팀 기준 버전을 확정한다.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>기준 문서</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>문서</th>
+            <th>확인할 내용</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="mono">TASK_frontend.md</span></td>
+            <td>Flutter 프로젝트 기본 구조, ProviderScope, GoRouter, ThemeData, 1일 Duration</td>
+          </tr>
+          <tr>
+            <td><span class="mono">WORKFLOW_frontend_W1.md</span></td>
+            <td>Step 1의 1.1~1.10 체크리스트, 폴더 구조, 라우트, Widget/Smoke Test</td>
+          </tr>
+          <tr>
+            <td><span class="mono">DESIGN.md</span></td>
+            <td>Warm Intellectual 방향, Warm Amber, Plus Jakarta Sans, Fraunces, spacing, breakpoint</td>
+          </tr>
+          <tr>
+            <td><span class="mono">18_기술_스택_정의서.md</span></td>
+            <td>Flutter, Dart, Riverpod, GoRouter, google_fonts, flutter_test 기준</td>
+          </tr>
+          <tr>
+            <td><span class="mono">03_프로젝트_아키텍처_정의서.md</span></td>
+            <td>Flutter Web client layer, Riverpod state layer, GoRouter navigation layer</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>목표 구조</h2>
+      <div class="diagram">synapse-frontend/
+├── pubspec.yaml
+├── .env.example
+├── lib/
+│   ├── main.dart
+│   ├── app/
+│   │   ├── app.dart
+│   │   └── router.dart
+│   ├── core/
+│   │   ├── config/
+│   │   │   └── app_config.dart
+│   │   └── theme/
+│   │       └── app_theme.dart
+│   ├── features/
+│   │   ├── home/
+│   │   │   └── home_page.dart
+│   │   ├── auth/
+│   │   │   └── login_page.dart
+│   │   └── dashboard/
+│   │       └── dashboard_page.dart
+│   └── shared/
+│       └── widgets/
+└── test/
+    └── app_routing_test.dart</div>
+    </section>
+
+    <section class="section">
+      <h2>WORKFLOW 진행 순서</h2>
+      <div class="steps">
+        <div class="step">
+          <h3><span class="num">1</span>TASK 시작</h3>
+          <ul>
+            <li>Step Goal, Done When, Scope, Input을 확인한다.</li>
+            <li>PRD_W1 프로젝트 골격 요구사항을 확인한다.</li>
+            <li>Duration 1일을 확인한다.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <h3><span class="num">2</span>요구사항 분석</h3>
+          <ul>
+            <li>Flutter 3.24+ / Dart 3.5+ 구조를 확인한다.</li>
+            <li>Riverpod + GoRouter + Material 3 + google_fonts 의존성을 확정한다.</li>
+            <li>DESIGN.md의 ColorScheme, Typography 기준을 반영한다.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <h3><span class="num">3</span>Security 1차 검토</h3>
+          <ul>
+            <li>골격 단계이므로 인증은 구현하지 않는다.</li>
+            <li>권한 종류는 없다.</li>
+            <li>프론트엔드 앱이므로 공개 API는 만들지 않는다.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <h3><span class="num">4</span>ERD 설계</h3>
+          <ul>
+            <li>프론트엔드 단계라 ERD는 비해당이다.</li>
+            <li><span class="mono">lib/core</span>, <span class="mono">lib/features</span>, <span class="mono">lib/shared</span> 구조를 만든다.</li>
+            <li><span class="mono">/</span>, <span class="mono">/login</span>, <span class="mono">/dashboard</span> 라우트를 정의한다.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <h3><span class="num">5</span>Security 2차 검토</h3>
+          <ul>
+            <li>민감 정보 암호화는 비해당으로 둔다.</li>
+            <li><span class="mono">.env</span>와 API base URL 관리 위치를 정한다.</li>
+            <li>코드 내 시크릿 하드코딩 금지를 확인한다.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <h3><span class="num">6</span>DTO / Entity 설계</h3>
+          <ul>
+            <li>DTO와 Entity는 만들지 않는다.</li>
+            <li>빈 Scaffold 페이지만 생성한다.</li>
+            <li>GoRouter와 ThemeData를 앱에 연결한다.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <h3><span class="num">7</span>Repository 구현</h3>
+          <ul>
+            <li><span class="mono">pubspec.yaml</span>에 의존성을 추가한다.</li>
+            <li><span class="mono">ProviderScope</span>로 앱 최상위를 감싼다.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <h3><span class="num">8</span>Service + Test</h3>
+          <ul>
+            <li>GoRouter 설정을 구현한다.</li>
+            <li>ThemeData의 ColorScheme + Typography를 구현한다.</li>
+            <li>라우팅 전환 Widget 테스트를 작성한다.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <h3><span class="num">9</span>Controller + Test</h3>
+          <ul>
+            <li><span class="mono">flutter run -d chrome</span> 실행을 확인한다.</li>
+            <li>라우팅 전환과 DESIGN.md 테마 적용을 확인한다.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <h3><span class="num">10</span>View + Test</h3>
+          <ul>
+            <li>각 라우트 빈 화면 렌더링을 확인한다.</li>
+            <li>Smoke Test 1건을 남긴다.</li>
+            <li>RULE Reference를 TASK에 반영한다.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>구현 예시</h2>
+      <h3>프로젝트 생성과 의존성</h3>
+      <pre><code>flutter create --platforms web synapse_frontend
+cd synapse_frontend
+
+flutter pub add flutter_riverpod go_router google_fonts
+flutter pub get</code></pre>
+
+      <h3>pubspec.yaml 핵심 의존성</h3>
+      <pre><code>dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.6.1
+  go_router: ^14.0.0
+  google_fonts: ^6.1.0</code></pre>
+
+      <h3>main.dart</h3>
+      <pre><code>import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'app/app.dart';
+
+void main() {
+  runApp(const ProviderScope(child: SynapseApp()));
+}</code></pre>
+
+      <h3>app.dart</h3>
+      <pre><code>import 'package:flutter/material.dart';
+import '../core/theme/app_theme.dart';
+import 'router.dart';
+
+class SynapseApp extends StatelessWidget {
+  const SynapseApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      title: 'Synapse',
+      theme: AppTheme.light(),
+      routerConfig: appRouter,
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}</code></pre>
+
+      <h3>router.dart</h3>
+      <pre><code>import 'package:go_router/go_router.dart';
+import '../features/home/home_page.dart';
+import '../features/auth/login_page.dart';
+import '../features/dashboard/dashboard_page.dart';
+
+final appRouter = GoRouter(
+  routes: [
+    GoRoute(path: '/', builder: (_, __) => const HomePage()),
+    GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
+    GoRoute(path: '/dashboard', builder: (_, __) => const DashboardPage()),
+  ],
+);</code></pre>
+
+      <h3>ThemeData</h3>
+      <pre><code>import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class AppTheme {
+  static ThemeData light() {
+    const seed = Color(0xFFD97706);
+
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: seed,
+        brightness: Brightness.light,
+      ),
+      textTheme: GoogleFonts.plusJakartaSansTextTheme(),
+      scaffoldBackgroundColor: const Color(0xFFFAFAF9),
+    );
+  }
+}</code></pre>
+
+      <h3>빈 Scaffold 페이지</h3>
+      <pre><code>import 'package:flutter/material.dart';
+
+class DashboardPage extends StatelessWidget {
+  const DashboardPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(child: Text('Dashboard')),
+    );
+  }
+}</code></pre>
+
+      <h3>.env.example</h3>
+      <pre><code>API_BASE_URL=http://localhost:8080
+APP_ENV=local</code></pre>
+      <div class="callout danger">
+        <strong>시크릿 금지</strong>
+        <p>
+          <span class="mono">.env.example</span>에는 placeholder만 둔다.
+          OAuth client secret, API key, 토큰은 프론트엔드 코드와 저장소에 넣지 않는다.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>검증 명령</h2>
+      <pre><code># 정적 분석
+flutter analyze
+
+# Widget 테스트
+flutter test
+
+# Chrome 실행
+flutter run -d chrome
+
+# 웹 빌드 확인
+flutter build web
+
+# 라우트 수동 확인
+# http://localhost:&lt;port&gt;/
+# http://localhost:&lt;port&gt;/login
+# http://localhost:&lt;port&gt;/dashboard</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>PR에 포함할 산출물</h2>
+      <ul>
+        <li><span class="mono">synapse-frontend/</span> 프로젝트 구조</li>
+        <li><span class="mono">pubspec.yaml</span> 의존성 추가 내역</li>
+        <li><span class="mono">ProviderScope</span>, <span class="mono">GoRouter</span>, <span class="mono">ThemeData</span> 코드</li>
+        <li><span class="mono">/</span>, <span class="mono">/login</span>, <span class="mono">/dashboard</span> 빈 Scaffold 페이지</li>
+        <li><span class="mono">.env.example</span>과 API base URL 관리 기준</li>
+        <li><span class="mono">flutter test</span>, <span class="mono">flutter run -d chrome</span> 결과</li>
+        <li>라우팅 동작 스크린샷과 DESIGN.md 테마 적용 확인</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>최종 체크리스트</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>상태</th>
+            <th>항목</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="badge">TASK</span></td><td>Step Goal / Done When / Scope / Input 확인</td></tr>
+          <tr><td><span class="badge">TASK</span></td><td>PRD_W1 프로젝트 골격 요구사항 확인</td></tr>
+          <tr><td><span class="badge">TASK</span></td><td>Duration 1일 확인</td></tr>
+          <tr><td><span class="badge">분석</span></td><td>Flutter 3.24+ / Dart 3.5+ 프로젝트 구조 분석</td></tr>
+          <tr><td><span class="badge">분석</span></td><td>Riverpod + GoRouter + Material 3 의존성 확인</td></tr>
+          <tr><td><span class="badge">분석</span></td><td>DESIGN.md 테마 규격 확인</td></tr>
+          <tr><td><span class="badge">Security</span></td><td>인증 없음, 권한 없음, 공개 API 없음</td></tr>
+          <tr><td><span class="badge">설계</span></td><td>폴더 구조와 라우트 구조 정의</td></tr>
+          <tr><td><span class="badge">구현</span></td><td>ProviderScope 최상위 래핑</td></tr>
+          <tr><td><span class="badge">구현</span></td><td>GoRouter, ThemeData, 빈 Scaffold 페이지 생성</td></tr>
+          <tr><td><span class="badge">검증</span></td><td>Widget 테스트와 Smoke Test 통과</td></tr>
+          <tr><td><span class="badge">검증</span></td><td><span class="mono">flutter run -d chrome</span> 동작 확인</td></tr>
+          <tr><td><span class="badge">마감</span></td><td>RULE Reference를 TASK에 반영</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

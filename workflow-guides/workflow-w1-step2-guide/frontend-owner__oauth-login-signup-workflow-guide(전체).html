@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WORKFLOW Guide - W1 Step 2 - 로그인/회원가입 화면 및 OAuth 인증</title>
+  <style>
+    :root { color-scheme: light; --bg:#f7f8fa; --panel:#fff; --text:#202428; --muted:#5b6673; --line:#d8dee4; --accent:#0a66c2; --accent-soft:#eaf3ff; --warn-bg:#fff8e6; --warn-line:#eac54f; --code-bg:#0d1117; --code:#e6edf3; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif; background:var(--bg); color:var(--text); line-height:1.58; }
+    header { background:var(--panel); border-bottom:1px solid var(--line); padding:34px 42px 24px; }
+    main { max-width:1240px; margin:0 auto; padding:28px 24px 48px; }
+    h1,h2,h3 { margin:0; line-height:1.25; } h1{font-size:30px;} h2{font-size:22px; margin-bottom:14px;} h3{font-size:17px; margin-bottom:8px;} p{margin:8px 0 0;} ul{margin:8px 0 0; padding-left:22px;} li{margin:5px 0;}
+    code,.mono { font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace; font-size:.94em; }
+    pre { margin:12px 0 0; padding:15px; overflow:auto; border-radius:8px; background:var(--code-bg); color:var(--code); font-size:13px; line-height:1.55; }
+    table { width:100%; border-collapse:collapse; font-size:14px; } th,td{padding:10px 11px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top;} th{background:#f3f5f7; font-weight:700;}
+    .meta{margin-top:11px; color:var(--muted); font-size:14px;} .hero-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:20px;}
+    .metric,.section,.callout,.step-card{background:var(--panel); border:1px solid var(--line); border-radius:8px;} .metric{padding:15px; min-height:96px;} .metric strong{display:block; font-size:24px; margin-bottom:6px;} .metric span{color:var(--muted); font-size:13px;} .section{padding:20px; margin-bottom:18px;}
+    .callout{padding:14px 16px; margin:14px 0 0; border-left:5px solid var(--accent); background:var(--accent-soft);} .callout.warn{border-left-color:var(--warn-line); background:var(--warn-bg);}
+    .steps{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px;} .step-card{padding:16px;} .badge{display:inline-block; padding:2px 8px; border-radius:999px; background:#eef2f6; color:#334155; font-size:12px; font-weight:700;}
+    @media (max-width:860px){ header{padding:26px 22px 20px;} main{padding:22px 16px 36px;} .hero-grid,.steps{grid-template-columns:1fr;} h1{font-size:25px;} }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>WORKFLOW Guide - W1 Step 2: 로그인/회원가입 화면 및 OAuth 인증</h1>
+    <p class="meta">담당: <span class="mono">@frontend-owner</span> (전체) · 영역: frontend Flutter Web</p>
+    <div class="hero-grid">
+      <div class="metric"><strong>W1</strong><span>2026-05-12 ~ 2026-05-16</span></div>
+      <div class="metric"><strong>Step 2</strong><span>로그인/회원가입 화면 및 OAuth 인증</span></div>
+      <div class="metric"><strong>2일</strong><span>Duration 기준</span></div>
+      <div class="metric"><strong></strong><span>체크리스트 항목</span></div>
+    </div>
+  </header>
+  <main>
+    <section class="section">
+      <h2>이 문서의 목적</h2>
+      <p>이 가이드는 처음 프로젝트를 접한 개발자가 <span class="mono">WORKFLOW_frontend_W1.md</span>의 W1 Step  바로 진행할 수 있도록 원본 workflow 체크리스트를 실행 순서로 재구성한 문서다.</p>
+      <div class="callout"><strong>Done When 기준</strong><p>아래 체크리스트가 완료되고, 관련 테스트·빌드·실행 확인 결과가 PR 산출물에 포함되면 Step  완료로 판단한다.</p></div>
+    </section>
+    <section class="section">
+      <h2>기준 문서</h2>
+      <table><thead><tr><th>문서</th><th>확인할 내용</th></tr></thead><tbody>
+        <tr><td><span class="mono">WORKFLOW_frontend_W1.md</span></td><td>W1 Step 2 체크리스트와 완료 조건</td></tr>
+        <tr><td><span class="mono">TASK_frontend.md</span></td><td>Step Goal, Scope, Instructions, Constraints, Output Format</td></tr>
+        <tr><td><span class="mono">PRD_W1.md</span></td><td>1주차 요구사항과 기능 범위</td></tr>
+        <tr><td><span class="mono">공통 개발 규칙 / wiki 03 / wiki 18</span></td><td>아키텍처, 기술 스택, 보안·테스트 기준</td></tr>
+      </tbody></table>
+    </section>
+    <section class="section"><h2>진행 체크리스트</h2><div class="steps">
+<div class="step-card">
+  <h3>1.1 TASK 시작</h3>
+  <ul>
+    <li>Step Goal / Done When / Scope / Input 확인</li>
+    <li>PRD_W1 해당 요구사항 확인 (FR-AU-xxx 인증 화면)</li>
+    <li>Duration 산정 확인 (2일)</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>1.2 요구사항 분석</h3>
+  <ul>
+    <li>로그인 화면 UI 요소 정의 (이메일/비밀번호 폼 + OAuth 버튼)</li>
+    <li>회원가입 화면 UI 요소 정의 (이메일/비밀번호/확인 폼)</li>
+    <li>OAuth 2.0 + PKCE 플로우 분석</li>
+    <li>Instructions 초안 → TASK 문서 반영</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>1.3 Security 1차 검토</h3>
+  <ul>
+    <li>인증 필요 여부: No (인증 화면 자체는 공개)</li>
+    <li>권한 종류: 없음 (인증 전 화면)</li>
+    <li>공개 API 여부: Yes (인증 화면)</li>
+    <li>토큰 저장: SecureStorage만 허용 (localStorage 금지)</li>
+    <li>결과 → TASK Constraints 반영</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>1.4 ERD 설계</h3>
+  <ul>
+    <li>프론트엔드 — ERD 해당 없음</li>
+    <li>인증 상태 모델 설계 (AuthState: unauthenticated/loading/authenticated)</li>
+    <li>토큰 저장 구조 설계 (access_token, refresh_token)</li>
+    <li>Duration(final) 갱신</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>1.5 Security 2차 검토</h3>
+  <ul>
+    <li>토큰 SecureStorage 전용 저장 확인</li>
+    <li>비밀번호 입력 마스킹 확인</li>
+    <li>platform-svc 베이스 URL 환경변수 관리</li>
+    <li>결과 → TASK Constraints 반영</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>1.6 DTO / Entity 설계 (API First)</h3>
+  <ul>
+    <li>LoginRequest 모델 정의 (email, password)</li>
+    <li>SignupRequest 모델 정의 (email, password, confirmPassword)</li>
+    <li>AuthToken 모델 정의 (accessToken, refreshToken, expiresIn)</li>
+    <li>AuthState Provider 설계</li>
+    <li>Output Format → TASK 반영</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>1.7 Repository 구현</h3>
+  <ul>
+    <li>AuthRepository 클래스 작성 (HTTP client + platform-svc 연동)</li>
+    <li>SecureStorage 토큰 저장/조회/삭제 구현</li>
+    <li>flutter_secure_storage 의존성 추가</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>1.8 Service + Test</h3>
+  <ul>
+    <li>AuthNotifier (Riverpod StateNotifier) 구현</li>
+    <li>OAuth 콜백 처리 및 토큰 수신 로직</li>
+    <li>GoRouter redirect guard 구현 (미인증 시 /login 이동)</li>
+    <li>Unit 테스트 (AuthNotifier 상태 전이)</li>
+    <li>테스트 통과 확인</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>1.9 Controller + Test</h3>
+  <ul>
+    <li>로그인 페이지 Widget 구현 (폼 + OAuth 버튼)</li>
+    <li>회원가입 페이지 Widget 구현 (폼 + 유효성 검증)</li>
+    <li>폼 유효성 검증 (비밀번호 8자+, 영문+숫자+특수문자)</li>
+    <li>로딩 상태 및 에러 상태 UI 구현</li>
+    <li>Widget 테스트 (폼 제출, 에러 표시)</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>1.10 View + Test</h3>
+  <ul>
+    <li>로그인 화면 렌더링 + OAuth 버튼 동작 확인</li>
+    <li>회원가입 화면 렌더링 + 유효성 검증 확인</li>
+    <li>Smoke Test 1건 (로그인 → 대시보드 이동)</li>
+    <li>RULE Reference → TASK 반영</li>
+  </ul>
+</div>
+
+    </div></section>
+    <section class="section"><h2>실행 포인트</h2><p>아래 항목은 PR 전에 산출물이나 로그로 확인하기 좋은 핵심 작업이다.</p>
+<ul>
+<li>Step Goal / Done When / Scope / Input 확인</li>
+<li>PRD_W1 해당 요구사항 확인 (FR-AU-xxx 인증 화면)</li>
+<li>Duration 산정 확인 (2일)</li>
+<li>로그인 화면 UI 요소 정의 (이메일/비밀번호 폼 + OAuth 버튼)</li>
+<li>회원가입 화면 UI 요소 정의 (이메일/비밀번호/확인 폼)</li>
+<li>인증 상태 모델 설계 (AuthState: unauthenticated/loading/authenticated)</li>
+<li>토큰 저장 구조 설계 (access_token, refresh_token)</li>
+<li>토큰 SecureStorage 전용 저장 확인</li>
+<li>비밀번호 입력 마스킹 확인</li>
+<li>LoginRequest 모델 정의 (email, password)</li>
+<li>SignupRequest 모델 정의 (email, password, confirmPassword)</li>
+<li>AuthToken 모델 정의 (accessToken, refreshToken, expiresIn)</li>
+</ul>
+
+    </section>
+    <section class="section">
+      <h2>검증과 산출물</h2>
+      <table><thead><tr><th>구분</th><th>확인 내용</th></tr></thead><tbody>
+        <tr><td><span class="badge">요구사항</span></td><td>Step Goal / Done When / Scope / Input이 TASK와 일치하는지 확인한다.</td></tr>
+        <tr><td><span class="badge">보안</span></td><td>인증, 권한, 공개 API, 시크릿, 접근 제어 판단 결과를 TASK Constraints에 반영한다.</td></tr>
+        <tr><td><span class="badge">구현</span></td><td>Step 2 범위 안의 코드, 설정, 문서만 포함하고 후속 Step 작업을 섞지 않는다.</td></tr>
+        <tr><td><span class="badge">테스트</span></td><td>workflow에 명시된 단위/통합/위젯/스모크/빌드 검증을 실행하고 결과를 남긴다.</td></tr>
+        <tr><td><span class="badge">PR</span></td><td>Output Format에 맞춰 코드, 설정, 테스트 로그, 스크린샷 또는 API 응답 예시를 첨부한다.</td></tr>
+      </tbody></table>
+      <div class="callout warn"><strong>범위 관리</strong><p>Step  Out of Scope 항목은 PR 설명에 명시하고, 필요한 경우 후속 Step 또는 별도 이슈로 연결한다.</p></div>
+    </section>
+    <section class="section"><h2>원본 경로</h2><pre><code>documents/docs/project-management/workflow/WORKFLOW_frontend_W1.md
+documents/docs/project-management/task/TASK_frontend.md</code></pre></section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WORKFLOW Guide - learning-card 프로젝트 초기 설정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --text: #202428;
+      --muted: #5b6673;
+      --line: #d8dee4;
+      --accent: #0a66c2;
+      --accent-soft: #eaf3ff;
+      --warn-bg: #fff8e6;
+      --warn-line: #eac54f;
+      --danger-bg: #fff1f1;
+      --danger-line: #ffb3b8;
+      --code-bg: #0d1117;
+      --code: #e6edf3;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.58;
+    }
+
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 34px 42px 24px;
+    }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 28px 24px 48px;
+    }
+
+    h1, h2, h3 { margin: 0; line-height: 1.25; }
+    h1 { font-size: 30px; letter-spacing: 0; }
+    h2 { font-size: 22px; margin-bottom: 14px; }
+    h3 { font-size: 17px; margin-bottom: 8px; }
+    p { margin: 8px 0 0; }
+    ul, ol { margin: 8px 0 0; padding-left: 22px; }
+    li { margin: 5px 0; }
+
+    code, .mono {
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font-size: 0.94em;
+    }
+
+    pre {
+      margin: 12px 0 0;
+      padding: 15px;
+      overflow: auto;
+      border-radius: 8px;
+      background: var(--code-bg);
+      color: var(--code);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td {
+      padding: 10px 11px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #f3f5f7; font-weight: 700; }
+
+    .meta { margin-top: 11px; color: var(--muted); font-size: 14px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .metric, .section, .callout, .step {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .metric { padding: 15px; min-height: 96px; }
+    .metric strong { display: block; font-size: 24px; margin-bottom: 6px; }
+    .metric span { color: var(--muted); font-size: 13px; }
+    .section { padding: 20px; margin-bottom: 18px; }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .callout {
+      padding: 15px;
+      margin-top: 12px;
+      background: var(--accent-soft);
+      border-color: #b6d7ff;
+    }
+    .callout.warn { background: var(--warn-bg); border-color: var(--warn-line); }
+    .callout.danger { background: var(--danger-bg); border-color: var(--danger-line); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #eef2f6;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .timeline { display: grid; gap: 12px; }
+    .step { padding: 16px; }
+    .step-head {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 16px;
+      padding-left: 0;
+      list-style: none;
+    }
+    .checklist li::before {
+      content: "□";
+      color: var(--muted);
+      margin-right: 8px;
+    }
+
+    .diagram {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfd;
+      padding: 14px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+      white-space: pre;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 920px) {
+      header { padding: 26px 18px 20px; }
+      main { padding: 20px 16px 36px; }
+      .hero-grid, .section-grid, .checklist { grid-template-columns: 1fr; }
+      h1 { font-size: 25px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>WORKFLOW Guide - learning-card 프로젝트 초기 설정</h1>
+    <div class="meta">
+      대상: 처음 <span class="mono">learning-card</span> 모듈을 맡은 개발자 · 기준 문서:
+      <span class="mono">documents.wiki/18_기술_스택_정의서.md</span>,
+      <span class="mono">PRD_W1</span>,
+      <span class="mono">TASK_learning-card</span>,
+      <span class="mono">WORKFLOW_learning-card_W1</span>
+    </div>
+    <div class="hero-grid" aria-label="작업 요약">
+      <div class="metric"><strong>0.5일</strong><span>Duration 기준</span></div>
+      <div class="metric"><strong>2개</strong><span>card / srs 모듈</span></div>
+      <div class="metric"><strong>Java 21</strong><span>Spring Boot 4.x</span></div>
+      <div class="metric"><strong>0/33</strong><span>초기 체크리스트 상태</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <h2>1. 먼저 이해할 것</h2>
+      <p>
+        이 작업은 덱/카드 CRUD나 SM-2 알고리즘을 구현하는 단계가 아니라,
+        <strong>learning-card 서비스가 빌드되고 Modulith 검증과 Health endpoint가 동작하는 골격</strong>을 만드는 단계다.
+        이후 card 모듈과 srs 모듈이 독립적으로 커질 수 있도록 패키지 경계를 먼저 고정한다.
+      </p>
+
+      <div class="callout">
+        <strong>완료 기준</strong>
+        <p>
+          <span class="mono">./gradlew build</span> 성공,
+          <span class="mono">ApplicationModules.verify()</span> 통과,
+          <span class="mono">/actuator/health</span> 응답,
+          Docker 이미지 빌드 성공, docker compose에서 learning-card 서비스 실행 확인이다.
+        </p>
+      </div>
+
+      <div class="callout warn">
+        <strong>착수 전 포트 확인</strong>
+        <p>
+          TASK_learning-card는 포트 <span class="mono">8082</span>를 지정한다.
+          반면 환경 설정/배포 문서에는 <span class="mono">synapse-learning-card</span>가
+          <span class="mono">8084</span>로 등장한다. 실제 구현 전 팀 공통 포트를 확정하고 TASK 또는 환경 문서에 반영한다.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>2. 문서에서 확인할 근거</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>문서</th>
+              <th>확인할 내용</th>
+              <th>작업에 반영할 결정</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">18_기술_스택_정의서</span></td>
+              <td>Java 21, Spring Boot 4, Spring Modulith 1.x, Actuator, Testcontainers</td>
+              <td>Gradle Kotlin DSL과 Spring Boot BOM 기준으로 의존성 구성</td>
+            </tr>
+            <tr>
+              <td><span class="mono">03_프로젝트_아키텍처_정의서</span></td>
+              <td>learning-svc 안의 <span class="mono">learning-card</span>: card / srs Java 모듈</td>
+              <td>두 모듈을 Spring Modulith application module로 분리</td>
+            </tr>
+            <tr>
+              <td><span class="mono">PRD_W1</span></td>
+              <td>learning-card는 W1에 카드/덱 CRUD와 SM-2 기반 구현을 시작해야 함</td>
+              <td>Step 1에서는 후속 구현이 들어갈 안전한 골격만 만든다</td>
+            </tr>
+            <tr>
+              <td><span class="mono">TASK_learning-card</span></td>
+              <td>Spring Boot 4 프로젝트, Modulith 설정, card/srs 패키지, Health endpoint, Dockerfile</td>
+              <td>Done When을 빌드 + Modulith verify + Health endpoint로 고정</td>
+            </tr>
+            <tr>
+              <td><span class="mono">WORKFLOW_learning-card_W1</span></td>
+              <td>1.1 ~ 1.10 체크리스트</td>
+              <td>요구사항 분석, 보안 검토, 모듈 골격, 테스트, Docker 순서로 진행</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>3. 목표 패키지 구조</h2>
+      <p>
+        기본 패키지는 예시로 <span class="mono">com.synapse.learningcard</span>를 사용한다.
+        실제 생성된 Spring Initializr group/package에 맞게 치환한다.
+      </p>
+      <div class="diagram">learning-card/
+├── build.gradle.kts
+├── Dockerfile
+├── src/main/java/com/synapse/learningcard/
+│   ├── LearningCardApplication.java
+│   ├── card/
+│   │   ├── package-info.java
+│   │   ├── CardController.java
+│   │   └── CardService.java
+│   └── srs/
+│       ├── package-info.java
+│       ├── SrsController.java
+│       └── SrsService.java
+├── src/main/resources/
+│   └── application.yml
+└── src/test/java/com/synapse/learningcard/
+    └── ApplicationModulesTest.java</div>
+
+      <div class="callout">
+        <strong>골격 단계 원칙</strong>
+        <p>
+          Controller와 Service는 빈 클래스 또는 최소 Health 외 확인 가능한 수준만 만든다.
+          Entity, Repository, Flyway 마이그레이션, 비즈니스 API는 Step 2 이후에 추가한다.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>4. 모듈 역할 정의</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>모듈</th>
+              <th>W1 이후 책임</th>
+              <th>골격 단계 산출물</th>
+              <th>의존성 기준</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">card</span></td>
+              <td>Deck/Card CRUD, 카드 조회, 수동 카드 관리, 이후 Kafka 이벤트 발행 지점</td>
+              <td><span class="mono">package-info.java</span>, 빈 <span class="mono">CardService</span>, 빈 <span class="mono">CardController</span></td>
+              <td>초기에는 srs에 직접 의존하지 않음</td>
+            </tr>
+            <tr>
+              <td><span class="mono">srs</span></td>
+              <td>SM-2 계산, 복습 세션, due date 계산, 복습 통계 기반</td>
+              <td><span class="mono">package-info.java</span>, 빈 <span class="mono">SrsService</span>, 빈 <span class="mono">SrsController</span></td>
+              <td>초기에는 card public API만 필요 시 허용</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>5. 진행 순서</h2>
+      <div class="timeline">
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 1. TASK 시작</h3>
+            <span class="badge">1.1</span>
+          </div>
+          <ul class="checklist">
+            <li>Step Goal / Done When / Scope / Input을 TASK_learning-card에서 확인한다.</li>
+            <li>PRD_W1의 프로젝트 골격 및 learning-card 요구사항을 확인한다.</li>
+            <li>Duration 0.5일 기준으로 비즈니스 로직을 제외한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 2. 요구사항 분석</h3>
+            <span class="badge">1.2</span>
+          </div>
+          <ul class="checklist">
+            <li>Spring Boot 4 + Modulith 프로젝트 구조를 분석한다.</li>
+            <li>card/srs 2개 모듈 역할을 표로 정의한다.</li>
+            <li>팀 공통 Gradle 설정과 포트 정책을 확인한다.</li>
+            <li>Instructions 초안을 TASK 또는 PR 설명에 반영한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 3. Security 1차 검토</h3>
+            <span class="badge">1.3</span>
+          </div>
+          <ul class="checklist">
+            <li>골격만 생성하므로 인증 필요 여부는 No로 기록한다.</li>
+            <li>권한 종류는 없음으로 기록한다.</li>
+            <li>공개 API는 기능 API가 아니라 Health endpoint만으로 기록한다.</li>
+            <li>결과를 TASK Constraints에 반영한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 4. ERD 설계</h3>
+            <span class="badge">1.4</span>
+          </div>
+          <ul class="checklist">
+            <li>골격 단계라 ERD는 해당 없음으로 처리한다.</li>
+            <li>card/srs 모듈별 패키지 구조도를 작성한다.</li>
+            <li>실제 작업량을 보고 Duration final을 갱신한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 5. Security 2차 검토</h3>
+            <span class="badge">1.5</span>
+          </div>
+          <ul class="checklist">
+            <li>민감 정보 암호화는 비해당으로 기록한다.</li>
+            <li>Soft Delete 정책은 Step 2 CRUD부터 다루므로 비해당으로 기록한다.</li>
+            <li>행 단위 접근 제어도 골격 단계에서는 불필요로 기록한다.</li>
+            <li>결과를 TASK Constraints에 반영한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 6. DTO / Entity 설계</h3>
+            <span class="badge">1.6</span>
+          </div>
+          <ul class="checklist">
+            <li>골격 단계라 빈 Controller/Service 클래스만 생성한다.</li>
+            <li>각 모듈에 <span class="mono">package-info.java</span>와 <span class="mono">@ApplicationModule</span>을 설정한다.</li>
+            <li>Output Format에 구조도, 빌드 로그, Health 응답을 반영한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 7. Repository 구현</h3>
+            <span class="badge">1.7</span>
+          </div>
+          <ul class="checklist">
+            <li>Repository는 골격 단계에서 해당 없음으로 처리한다.</li>
+            <li><span class="mono">ApplicationModulesTest</span> 구조 검증 테스트를 작성한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 8. Service + Test</h3>
+            <span class="badge">1.8</span>
+          </div>
+          <ul class="checklist">
+            <li>card, srs 모듈에 빈 Service 클래스를 생성한다.</li>
+            <li><span class="mono">ApplicationModulesTest</span> 통과를 확인한다.</li>
+            <li><span class="mono">./gradlew build</span> 성공을 확인한다.</li>
+            <li><span class="mono">/actuator/health</span> 응답을 확인한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 9. Controller + Docker</h3>
+            <span class="badge">1.9</span>
+          </div>
+          <ul class="checklist">
+            <li>card, srs 모듈에 빈 Controller 클래스를 생성한다.</li>
+            <li>multi-stage Dockerfile을 작성한다.</li>
+            <li>Docker 이미지 빌드 성공을 확인한다.</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="step-head">
+            <h3>Step 10. View + Test</h3>
+            <span class="badge">1.10</span>
+          </div>
+          <ul class="checklist">
+            <li>Flutter 화면 연동은 해당 없음으로 처리한다.</li>
+            <li>docker compose에서 learning-card-svc 실행을 확인한다.</li>
+            <li>RULE Reference를 TASK 또는 PR 설명에 반영한다.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>6. Gradle 설정 예시</h2>
+      <pre><code>plugins {
+    java
+    id("org.springframework.boot") version "4.0.0"
+    id("io.spring.dependency-management") version "1.1.7"
+}
+
+group = "com.synapse"
+version = "0.1.0"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.modulith:spring-modulith-starter-core")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.modulith:spring-modulith-starter-test")
+}
+
+tasks.withType&lt;Test&gt; {
+    useJUnitPlatform()
+}</code></pre>
+      <div class="callout warn">
+        <strong>버전 확인</strong>
+        <p>
+          18번 기술 스택 문서는 Spring Modulith 1.x와 Spring Boot 4.x 호환을 명시한다.
+          실제 플러그인/의존성 버전은 팀 공통 Gradle 설정이나 Boot BOM에 맞춘다.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>7. Modulith 코드 예시</h2>
+      <div class="section-grid">
+        <div>
+          <h3>card/package-info.java</h3>
+          <pre><code>@ApplicationModule(
+    allowedDependencies = {}
+)
+package com.synapse.learningcard.card;
+
+import org.springframework.modulith.ApplicationModule;</code></pre>
+        </div>
+        <div>
+          <h3>srs/package-info.java</h3>
+          <pre><code>@ApplicationModule(
+    allowedDependencies = {
+        "card"
+    }
+)
+package com.synapse.learningcard.srs;
+
+import org.springframework.modulith.ApplicationModule;</code></pre>
+        </div>
+      </div>
+
+      <div class="section-grid" style="margin-top:16px;">
+        <div>
+          <h3>ApplicationModulesTest</h3>
+          <pre><code>package com.synapse.learningcard;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.modulith.core.ApplicationModules;
+
+class ApplicationModulesTest {
+
+    @Test
+    void verifiesModularStructure() {
+        ApplicationModules modules =
+            ApplicationModules.of(LearningCardApplication.class);
+
+        modules.verify();
+    }
+}</code></pre>
+        </div>
+        <div>
+          <h3>application.yml</h3>
+          <pre><code>server:
+  port: 8082
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>8. 빈 클래스 예시</h2>
+      <div class="section-grid">
+        <div>
+          <h3>CardService / SrsService</h3>
+          <pre><code>@Service
+public class CardService {
+}
+
+@Service
+public class SrsService {
+}</code></pre>
+        </div>
+        <div>
+          <h3>CardController / SrsController</h3>
+          <pre><code>@RestController
+@RequestMapping("/api/v1/cards")
+public class CardController {
+}
+
+@RestController
+@RequestMapping("/api/v1/srs")
+public class SrsController {
+}</code></pre>
+        </div>
+      </div>
+      <div class="callout">
+        <strong>왜 빈 클래스인가</strong>
+        <p>
+          이 Step은 패키지 스캔, 모듈 인식, 빌드, Health, Docker 구동을 검증하기 위한 것이다.
+          실제 API 메서드는 Step 2, SM-2 로직은 Step 3에서 추가한다.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>9. Docker와 Compose 예시</h2>
+      <div class="section-grid">
+        <div>
+          <h3>Dockerfile</h3>
+          <pre><code>FROM eclipse-temurin:21-jdk AS build
+WORKDIR /workspace
+COPY gradlew settings.gradle.kts build.gradle.kts ./
+COPY gradle ./gradle
+COPY src ./src
+RUN ./gradlew bootJar --no-daemon
+
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY --from=build /workspace/build/libs/*.jar app.jar
+EXPOSE 8082
+ENTRYPOINT ["java", "-jar", "app.jar"]</code></pre>
+        </div>
+        <div>
+          <h3>docker-compose.yml 추가</h3>
+          <pre><code>services:
+  learning-card-svc:
+    build:
+      context: ./learning-card
+    container_name: synapse-learning-card
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>10. 검증 명령</h2>
+      <div class="section-grid">
+        <div>
+          <h3>로컬 빌드</h3>
+          <pre><code>cd synapse-learning-svc/learning-card
+./gradlew test
+./gradlew build
+./gradlew bootRun
+curl http://localhost:8082/actuator/health</code></pre>
+        </div>
+        <div>
+          <h3>Docker</h3>
+          <pre><code>docker build -t synapse-learning-card:local .
+docker run --rm -p 8082:8082 synapse-learning-card:local
+curl http://localhost:8082/actuator/health
+docker compose up learning-card-svc</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>11. PR에 포함할 산출물</h2>
+      <ul>
+        <li><span class="mono">learning-card</span> 프로젝트 디렉토리 구조</li>
+        <li><span class="mono">build.gradle.kts</span> Spring Boot 4, Actuator, Modulith 의존성</li>
+        <li><span class="mono">card</span>, <span class="mono">srs</span> 패키지와 <span class="mono">package-info.java</span></li>
+        <li>빈 <span class="mono">CardService</span>, <span class="mono">SrsService</span>, <span class="mono">CardController</span>, <span class="mono">SrsController</span></li>
+        <li><span class="mono">ApplicationModulesTest</span></li>
+        <li><span class="mono">./gradlew build</span> 성공 로그</li>
+        <li><span class="mono">/actuator/health</span> 응답 캡처 또는 로그</li>
+        <li><span class="mono">Dockerfile</span>과 Docker 이미지 빌드 결과</li>
+        <li>docker compose에서 learning-card-svc 실행 확인</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>12. 최종 체크리스트</h2>
+      <ul class="checklist">
+        <li>TASK Step Goal / Done When / Scope / Input 확인</li>
+        <li>PRD_W1 프로젝트 골격 요구사항 확인</li>
+        <li>Duration 0.5일 기준 범위 확정</li>
+        <li>Spring Boot 4 + Modulith 구조 분석</li>
+        <li>card/srs 모듈 역할 정의</li>
+        <li>팀 공통 Gradle 설정 확인</li>
+        <li>인증 필요 여부 No 기록</li>
+        <li>공개 API는 Health endpoint만 기록</li>
+        <li>ERD 해당 없음 처리</li>
+        <li>모듈별 패키지 구조도 작성</li>
+        <li>민감 정보 암호화 비해당 처리</li>
+        <li>Soft Delete / RLS 비해당 처리</li>
+        <li>빈 Controller/Service 클래스 생성</li>
+        <li>package-info.java + @ApplicationModule 설정</li>
+        <li>Repository 해당 없음 처리</li>
+        <li>ApplicationModulesTest 작성</li>
+        <li>ApplicationModulesTest 통과 확인</li>
+        <li>./gradlew build 성공 확인</li>
+        <li>/actuator/health 확인</li>
+        <li>Dockerfile 작성</li>
+        <li>Docker 이미지 빌드 성공 확인</li>
+        <li>Flutter 화면 연동 N/A 처리</li>
+        <li>docker compose learning-card-svc 실행 확인</li>
+        <li>RULE Reference를 TASK 또는 PR 설명에 반영</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
