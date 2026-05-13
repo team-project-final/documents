@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WORKFLOW Guide - W3 Step 6 - gamification 완성 — 배지 수여 + 레벨 시스템 + 스트릭 추적 + 리더보드</title>
+  <style>
+    :root { --bg:#f7f8fb; --text:#172033; --muted:#5f6b7a; --line:#d9e0ea; --panel:#ffffff; --accent:#2563eb; --accent2:#0f766e; --warn:#b45309; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial, 'Noto Sans KR', sans-serif; color:var(--text); background:var(--bg); line-height:1.6; }
+    main { max-width:1120px; margin:0 auto; padding:40px 24px 64px; }
+    .hero { border-bottom:2px solid var(--line); padding-bottom:24px; margin-bottom:24px; }
+    .eyebrow { color:var(--accent2); font-weight:700; font-size:14px; }
+    h1 { margin:8px 0 12px; font-size:32px; line-height:1.25; }
+    h2 { margin:0 0 12px; font-size:21px; }
+    p { margin:8px 0; }
+    .meta { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:20px; }
+    .metric, .section { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:18px; }
+    .metric strong { display:block; font-size:22px; }
+    .metric span { color:var(--muted); font-size:13px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0; }
+    .section { margin:16px 0; }
+    ul { margin:8px 0 0; padding-left:22px; }
+    li { margin:6px 0; }
+    table { width:100%; border-collapse:collapse; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    th, td { border-bottom:1px solid var(--line); padding:11px 12px; text-align:left; vertical-align:top; }
+    th { background:#eef4ff; }
+    code, .mono { font-family:Consolas, 'Courier New', monospace; font-size:.95em; }
+    pre { white-space:pre-wrap; background:#111827; color:#f8fafc; padding:16px; border-radius:8px; overflow:auto; }
+    .callout { border-left:4px solid var(--accent); }
+    .warning { border-left:4px solid var(--warn); }
+    @media (max-width:800px) { main { padding:28px 16px 48px; } .meta, .grid { grid-template-columns:1fr; } h1 { font-size:26px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Week 3 · Step 6 · engagement-owner (한승완)</div>
+      <h1>WORKFLOW Guide - W3 Step 6: gamification 완성 — 배지 수여 + 레벨 시스템 + 스트릭 추적 + 리더보드</h1>
+      <p>처음 프로젝트를 접한 개발자가 <span class="mono">WORKFLOW_engagement_W3.md</span>의 체크리스트를 바로 실행할 수 있도록 목표 확인, 요구사항 분석, 보안 검토, 설계, 구현, 테스트, 결과 정리 순서로 재구성한 가이드다.</p>
+      <div class="meta">
+        <div class="metric"><strong>46</strong><span>원본 체크 항목</span></div>
+        <div class="metric"><strong>10</strong><span>진행 섹션</span></div>
+        <div class="metric"><strong>W3</strong><span>대상 주차</span></div>
+        <div class="metric"><strong>Step 6</strong><span>대상 단계</span></div>
+      </div>
+    </header>
+
+    <section class="section callout">
+      <h2>진행 기준</h2>
+      <p>TASK 문서의 Step Goal, Done When, Scope, Input을 먼저 확인하고 PRD_W3 요구사항과 불일치하는 항목은 TASK Constraints에 반영한다. 구현 전 API, 이벤트, 저장 구조를 고정하고 테스트 통과 및 문서 반영까지 완료 기준으로 삼는다.</p>
+    </section>
+
+    <div class="grid">
+      <section class="section warning">
+        <h2>보안/권한 체크</h2>
+        <ul><li>인증 필요 여부: Yes (로그인 사용자)</li>
+<li>권한 종류: 본인 데이터만 조회 (리더보드는 공개)</li>
+<li>XP 조작 방지: 서버 사이드 검증만 허용</li>
+<li>결과 → TASK Constraints 반영</li>
+<li>리더보드 사용자 정보 최소 노출 (닉네임 + 아바타만)</li>
+<li>XP/레벨 수정 API 관리자 전용</li>
+<li>스트릭 자동 리셋 로직 서버 사이드 전용</li>
+<li>결과 → TASK Constraints 반영</li></ul>
+      </section>
+      <section class="section">
+        <h2>설계 우선순위</h2>
+        <ul><li>badges 테이블 설계 (id, name, description, icon_url, condition_type, condition_value)</li>
+<li>user_badges 테이블 설계 (id, user_id, badge_id, earned_at)</li>
+<li>user_streaks 테이블 설계 (id, user_id, current_streak, longest_streak, last_activity_date)</li>
+<li>인덱스 설계 (user_id on user_badges, user_id on user_streaks)</li>
+<li>Duration(final) 갱신</li>
+<li>Badge Entity 작성</li>
+<li>UserBadge Entity 작성</li>
+<li>UserStreak Entity 작성</li>
+<li>BadgeResponse DTO 정의</li>
+<li>LeaderboardEntryResponse DTO 정의 (rank, userId, nickname, xp, level)</li></ul>
+      </section>
+    </div>
+
+    <section class="section">
+      <h2>참조 문서</h2>
+      <table>
+        <thead><tr><th>문서</th><th>확인할 내용</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">WORKFLOW_engagement_W3.md</span></td><td>W3 Step 6 원본 체크리스트와 완료 조건</td></tr>
+          <tr><td><span class="mono">PRD_W3.md</span></td><td>해당 주차 요구사항, 보안/운영 제약, 산출물 기준</td></tr>
+          <tr><td><span class="mono">TASK_*.md</span></td><td>Instructions, Constraints, Output Format, Done When 반영 위치</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>1.1 TASK 시작</h2>
+      <ul><li>Step Goal / Done When / Scope / Input 확인</li>
+<li>PRD_W3 해당 요구사항 확인 (gamification 완성)</li>
+<li>Duration 산정 확인</li></ul>
+    </section><section class="section">
+      <h2>1.2 요구사항 분석</h2>
+      <ul><li>배지 수여 조건 정의 (복습 횟수, 연속 스트릭, 레벨 달성 등)</li>
+<li>레벨 시스템 설계 (XP 기반 레벨 구간 정의)</li>
+<li>스트릭 추적 로직 분석 (연속 복습 일수 계산)</li>
+<li>리더보드 정렬 기준 (XP 총합, 주간/월간 필터)</li>
+<li>Instructions 초안 → TASK 문서 반영</li></ul>
+    </section><section class="section">
+      <h2>1.3 Security 1차 검토</h2>
+      <ul><li>인증 필요 여부: Yes (로그인 사용자)</li>
+<li>권한 종류: 본인 데이터만 조회 (리더보드는 공개)</li>
+<li>XP 조작 방지: 서버 사이드 검증만 허용</li>
+<li>결과 → TASK Constraints 반영</li></ul>
+    </section><section class="section">
+      <h2>1.4 ERD 설계</h2>
+      <ul><li>badges 테이블 설계 (id, name, description, icon_url, condition_type, condition_value)</li>
+<li>user_badges 테이블 설계 (id, user_id, badge_id, earned_at)</li>
+<li>user_streaks 테이블 설계 (id, user_id, current_streak, longest_streak, last_activity_date)</li>
+<li>인덱스 설계 (user_id on user_badges, user_id on user_streaks)</li>
+<li>Duration(final) 갱신</li></ul>
+    </section><section class="section">
+      <h2>1.5 Security 2차 검토</h2>
+      <ul><li>리더보드 사용자 정보 최소 노출 (닉네임 + 아바타만)</li>
+<li>XP/레벨 수정 API 관리자 전용</li>
+<li>스트릭 자동 리셋 로직 서버 사이드 전용</li>
+<li>결과 → TASK Constraints 반영</li></ul>
+    </section><section class="section">
+      <h2>1.6 DTO / Entity 설계 (API First)</h2>
+      <ul><li>Badge Entity 작성</li>
+<li>UserBadge Entity 작성</li>
+<li>UserStreak Entity 작성</li>
+<li>BadgeResponse DTO 정의</li>
+<li>LeaderboardEntryResponse DTO 정의 (rank, userId, nickname, xp, level)</li>
+<li>UserGamificationResponse DTO 정의 (xp, level, streak, badges)</li>
+<li>Output Format → TASK 반영</li></ul>
+    </section><section class="section">
+      <h2>1.7 Repository 구현</h2>
+      <ul><li>BadgeRepository 인터페이스 작성</li>
+<li>UserBadgeRepository 인터페이스 작성 (findByUserId)</li>
+<li>UserStreakRepository 인터페이스 작성 (findByUserId)</li>
+<li>리더보드 쿼리 (상위 N명, XP 기준 정렬)</li></ul>
+    </section><section class="section">
+      <h2>1.8 Service + Test</h2>
+      <ul><li>BadgeService 구현 (배지 조건 평가 → 수여)</li>
+<li>LevelService 구현 (XP → 레벨 계산, 레벨업 판정)</li>
+<li>StreakService 구현 (일일 활동 기록, 연속 일수 계산, 자정 리셋)</li>
+<li>LeaderboardService 구현 (XP 기준 랭킹 조회)</li>
+<li>단위 테스트 작성 (각 서비스별 Mockito)</li>
+<li>테스트 통과 확인</li></ul>
+    </section><section class="section">
+      <h2>1.9 Controller + Test</h2>
+      <ul><li>GET /gamification/me 엔드포인트 구현 (내 XP, 레벨, 스트릭, 배지)</li>
+<li>GET /gamification/leaderboard 엔드포인트 구현 (주간/월간/전체)</li>
+<li>GET /gamification/badges 엔드포인트 구현 (전체 배지 목록)</li>
+<li>슬라이스 테스트 (@WebMvcTest)</li>
+<li>테스트 통과 확인</li></ul>
+    </section><section class="section">
+      <h2>1.10 View + Test (해당 시)</h2>
+      <ul><li>Flutter 화면 연동: 해당 없음 (프론트 별도)</li>
+<li>Swagger API 문서 확인</li>
+<li>RULE Reference → TASK 반영</li></ul>
+    </section>
+
+    <section class="section">
+      <h2>완료 전 점검</h2>
+      <ul>
+        <li>원본 WORKFLOW의 모든 체크 항목이 TASK 또는 구현 산출물에 대응되는지 확인한다.</li>
+        <li>보안 1차/2차 검토 결과가 Constraints에 남아 있는지 확인한다.</li>
+        <li>해당 단계에 필요한 단위, 슬라이스, 통합, E2E 테스트 통과 여부를 기록한다.</li>
+        <li>Swagger, 이벤트 스키마, 운영 가이드 등 문서 산출물이 있으면 RULE Reference에 연결한다.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>원본 경로</h2>
+      <pre><code>documents/docs/project-management/workflow/WORKFLOW_engagement_W3.md</code></pre>
+    </section>
+  </main>
+</body>
+</html>

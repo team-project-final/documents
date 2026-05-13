@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WORKFLOW Guide - W3 Step 6 - AI 카드 자동 생성 — note.created Kafka 소비 → LLM → Card 생성 → learning-card API 호출</title>
+  <style>
+    :root { --bg:#f7f8fb; --text:#172033; --muted:#5f6b7a; --line:#d9e0ea; --panel:#ffffff; --accent:#2563eb; --accent2:#0f766e; --warn:#b45309; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial, 'Noto Sans KR', sans-serif; color:var(--text); background:var(--bg); line-height:1.6; }
+    main { max-width:1120px; margin:0 auto; padding:40px 24px 64px; }
+    .hero { border-bottom:2px solid var(--line); padding-bottom:24px; margin-bottom:24px; }
+    .eyebrow { color:var(--accent2); font-weight:700; font-size:14px; }
+    h1 { margin:8px 0 12px; font-size:32px; line-height:1.25; }
+    h2 { margin:0 0 12px; font-size:21px; }
+    p { margin:8px 0; }
+    .meta { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:20px; }
+    .metric, .section { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:18px; }
+    .metric strong { display:block; font-size:22px; }
+    .metric span { color:var(--muted); font-size:13px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0; }
+    .section { margin:16px 0; }
+    ul { margin:8px 0 0; padding-left:22px; }
+    li { margin:6px 0; }
+    table { width:100%; border-collapse:collapse; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    th, td { border-bottom:1px solid var(--line); padding:11px 12px; text-align:left; vertical-align:top; }
+    th { background:#eef4ff; }
+    code, .mono { font-family:Consolas, 'Courier New', monospace; font-size:.95em; }
+    pre { white-space:pre-wrap; background:#111827; color:#f8fafc; padding:16px; border-radius:8px; overflow:auto; }
+    .callout { border-left:4px solid var(--accent); }
+    .warning { border-left:4px solid var(--warn); }
+    @media (max-width:800px) { main { padding:28px 16px 48px; } .meta, .grid { grid-template-columns:1fr; } h1 { font-size:26px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Week 3 · Step 6 · learning-ai-owner (김나경)</div>
+      <h1>WORKFLOW Guide - W3 Step 6: AI 카드 자동 생성 — note.created Kafka 소비 → LLM → Card 생성 → learning-card API 호출</h1>
+      <p>처음 프로젝트를 접한 개발자가 <span class="mono">WORKFLOW_learning-ai_W3.md</span>의 체크리스트를 바로 실행할 수 있도록 목표 확인, 요구사항 분석, 보안 검토, 설계, 구현, 테스트, 결과 정리 순서로 재구성한 가이드다.</p>
+      <div class="meta">
+        <div class="metric"><strong>43</strong><span>원본 체크 항목</span></div>
+        <div class="metric"><strong>10</strong><span>진행 섹션</span></div>
+        <div class="metric"><strong>W3</strong><span>대상 주차</span></div>
+        <div class="metric"><strong>Step 6</strong><span>대상 단계</span></div>
+      </div>
+    </header>
+
+    <section class="section callout">
+      <h2>진행 기준</h2>
+      <p>TASK 문서의 Step Goal, Done When, Scope, Input을 먼저 확인하고 PRD_W3 요구사항과 불일치하는 항목은 TASK Constraints에 반영한다. 구현 전 API, 이벤트, 저장 구조를 고정하고 테스트 통과 및 문서 반영까지 완료 기준으로 삼는다.</p>
+    </section>
+
+    <div class="grid">
+      <section class="section warning">
+        <h2>보안/권한 체크</h2>
+        <ul><li>인증 필요 여부: No (내부 Kafka 소비 + 서비스 간 호출)</li>
+<li>LLM API 키 관리 (External Secrets)</li>
+<li>서비스 간 인증 (ServiceAccount JWT 또는 내부 토큰)</li>
+<li>결과 → TASK Constraints 반영</li>
+<li>LLM으로 전송되는 노트 내용 민감정보 필터링</li>
+<li>LLM 응답 검증 (유효한 Q&amp;A 포맷인지 확인)</li>
+<li>비용 제어 (사용자당 일일 호출 제한)</li>
+<li>결과 → TASK Constraints 반영</li></ul>
+      </section>
+      <section class="section">
+        <h2>설계 우선순위</h2>
+        <ul><li>NoteCreatedEvent DTO 정의 (Kafka 소비용)</li>
+<li>LlmCardGenerationRequest DTO 정의 (noteContent, maxCards)</li>
+<li>LlmCardGenerationResponse DTO 정의 (cards[]: question, answer, difficulty)</li>
+<li>CardCreateRequest DTO 정의 (learning-card API 호출용)</li>
+<li>Output Format → TASK 반영</li></ul>
+      </section>
+    </div>
+
+    <section class="section">
+      <h2>참조 문서</h2>
+      <table>
+        <thead><tr><th>문서</th><th>확인할 내용</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">WORKFLOW_learning-ai_W3.md</span></td><td>W3 Step 6 원본 체크리스트와 완료 조건</td></tr>
+          <tr><td><span class="mono">PRD_W3.md</span></td><td>해당 주차 요구사항, 보안/운영 제약, 산출물 기준</td></tr>
+          <tr><td><span class="mono">TASK_*.md</span></td><td>Instructions, Constraints, Output Format, Done When 반영 위치</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>1.1 TASK 시작</h2>
+      <ul><li>Step Goal / Done When / Scope / Input 확인</li>
+<li>PRD_W3 해당 요구사항 확인 (AI 카드 자동 생성)</li>
+<li>Duration 산정 확인</li></ul>
+    </section><section class="section">
+      <h2>1.2 요구사항 분석</h2>
+      <ul><li>note.created Kafka 이벤트 스키마 분석 (noteId, userId, title, content)</li>
+<li>LLM 프롬프트 설계 (노트 내용 → Q&amp;A 카드 생성, 최대 5장)</li>
+<li>learning-card API 호출 스펙 분석 (POST /cards bulk create)</li>
+<li>생성 실패 시 재시도/DLQ 전략 정의</li>
+<li>Instructions 초안 → TASK 문서 반영</li></ul>
+    </section><section class="section">
+      <h2>1.3 Security 1차 검토</h2>
+      <ul><li>인증 필요 여부: No (내부 Kafka 소비 + 서비스 간 호출)</li>
+<li>LLM API 키 관리 (External Secrets)</li>
+<li>서비스 간 인증 (ServiceAccount JWT 또는 내부 토큰)</li>
+<li>결과 → TASK Constraints 반영</li></ul>
+    </section><section class="section">
+      <h2>1.4 아키텍처 설계</h2>
+      <ul><li>파이프라인 설계 (note.created 소비 → 노트 내용 조회 → LLM 호출 → 카드 생성 API)</li>
+<li>LLM 모델 선택 (GPT-4o / Claude 등) + 토큰 제한 설정</li>
+<li>프롬프트 템플릿 설계 (시스템 프롬프트 + 노트 내용 + 출력 포맷)</li>
+<li>비동기 처리 설계 (Kafka 소비 → 별도 스레드풀에서 LLM 호출)</li>
+<li>Duration(final) 갱신</li></ul>
+    </section><section class="section">
+      <h2>1.5 Security 2차 검토</h2>
+      <ul><li>LLM으로 전송되는 노트 내용 민감정보 필터링</li>
+<li>LLM 응답 검증 (유효한 Q&amp;A 포맷인지 확인)</li>
+<li>비용 제어 (사용자당 일일 호출 제한)</li>
+<li>결과 → TASK Constraints 반영</li></ul>
+    </section><section class="section">
+      <h2>1.6 DTO / Entity 설계 (API First)</h2>
+      <ul><li>NoteCreatedEvent DTO 정의 (Kafka 소비용)</li>
+<li>LlmCardGenerationRequest DTO 정의 (noteContent, maxCards)</li>
+<li>LlmCardGenerationResponse DTO 정의 (cards[]: question, answer, difficulty)</li>
+<li>CardCreateRequest DTO 정의 (learning-card API 호출용)</li>
+<li>Output Format → TASK 반영</li></ul>
+    </section><section class="section">
+      <h2>1.7 Client 구현</h2>
+      <ul><li>NoteApiClient 구현 (knowledge-svc에서 노트 내용 조회)</li>
+<li>LlmClient 구현 (OpenAI/Anthropic API 호출, 프롬프트 전송, 응답 파싱)</li>
+<li>CardApiClient 구현 (learning-card-svc POST /cards 호출)</li></ul>
+    </section><section class="section">
+      <h2>1.8 Service + Test</h2>
+      <ul><li>AiCardKafkaConsumer 구현 (note.created 토픽 소비)</li>
+<li>AiCardGenerationService 구현 (노트 조회 → LLM 호출 → 응답 파싱 → 카드 생성)</li>
+<li>프롬프트 템플릿 관리 (외부 설정 파일)</li>
+<li>실패 시 재시도 (3회) + DLQ 전송</li>
+<li>일일 호출 제한 (Redis 카운터, 사용자당 최대 N회)</li>
+<li>단위 테스트 작성 (LLM 응답 모킹)</li>
+<li>테스트 통과 확인</li></ul>
+    </section><section class="section">
+      <h2>1.9 E2E 검증</h2>
+      <ul><li>Docker Compose 환경에서 note.created 이벤트 발행 → 카드 자동 생성 확인</li>
+<li>생성된 카드 품질 검수 (Q&amp;A 포맷, 한국어/영어 지원)</li>
+<li>실패 시 DLQ 적재 확인</li>
+<li>LLM 응답 시간 측정 (&lt; 10초 기준)</li></ul>
+    </section><section class="section">
+      <h2>1.10 결과 정리</h2>
+      <ul><li>프롬프트 템플릿 문서화</li>
+<li>비용 추정 (일일 예상 LLM API 호출 비용)</li>
+<li>RULE Reference → TASK 반영</li></ul>
+    </section>
+
+    <section class="section">
+      <h2>완료 전 점검</h2>
+      <ul>
+        <li>원본 WORKFLOW의 모든 체크 항목이 TASK 또는 구현 산출물에 대응되는지 확인한다.</li>
+        <li>보안 1차/2차 검토 결과가 Constraints에 남아 있는지 확인한다.</li>
+        <li>해당 단계에 필요한 단위, 슬라이스, 통합, E2E 테스트 통과 여부를 기록한다.</li>
+        <li>Swagger, 이벤트 스키마, 운영 가이드 등 문서 산출물이 있으면 RULE Reference에 연결한다.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>원본 경로</h2>
+      <pre><code>documents/docs/project-management/workflow/WORKFLOW_learning-ai_W3.md</code></pre>
+    </section>
+  </main>
+</body>
+</html>

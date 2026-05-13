@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WORKFLOW Guide - W3 Step 7 - 검색 정확도 측정 — 테스트 쿼리 세트 → 정확도 리포트</title>
+  <style>
+    :root { --bg:#f7f8fb; --text:#172033; --muted:#5f6b7a; --line:#d9e0ea; --panel:#ffffff; --accent:#2563eb; --accent2:#0f766e; --warn:#b45309; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial, 'Noto Sans KR', sans-serif; color:var(--text); background:var(--bg); line-height:1.6; }
+    main { max-width:1120px; margin:0 auto; padding:40px 24px 64px; }
+    .hero { border-bottom:2px solid var(--line); padding-bottom:24px; margin-bottom:24px; }
+    .eyebrow { color:var(--accent2); font-weight:700; font-size:14px; }
+    h1 { margin:8px 0 12px; font-size:32px; line-height:1.25; }
+    h2 { margin:0 0 12px; font-size:21px; }
+    p { margin:8px 0; }
+    .meta { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:20px; }
+    .metric, .section { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:18px; }
+    .metric strong { display:block; font-size:22px; }
+    .metric span { color:var(--muted); font-size:13px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0; }
+    .section { margin:16px 0; }
+    ul { margin:8px 0 0; padding-left:22px; }
+    li { margin:6px 0; }
+    table { width:100%; border-collapse:collapse; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    th, td { border-bottom:1px solid var(--line); padding:11px 12px; text-align:left; vertical-align:top; }
+    th { background:#eef4ff; }
+    code, .mono { font-family:Consolas, 'Courier New', monospace; font-size:.95em; }
+    pre { white-space:pre-wrap; background:#111827; color:#f8fafc; padding:16px; border-radius:8px; overflow:auto; }
+    .callout { border-left:4px solid var(--accent); }
+    .warning { border-left:4px solid var(--warn); }
+    @media (max-width:800px) { main { padding:28px 16px 48px; } .meta, .grid { grid-template-columns:1fr; } h1 { font-size:26px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Week 3 · Step 7 · knowledge-owner-2 (박은서)</div>
+      <h1>WORKFLOW Guide - W3 Step 7: 검색 정확도 측정 — 테스트 쿼리 세트 → 정확도 리포트</h1>
+      <p>처음 프로젝트를 접한 개발자가 <span class="mono">WORKFLOW_knowledge-2_W3.md</span>의 체크리스트를 바로 실행할 수 있도록 목표 확인, 요구사항 분석, 보안 검토, 설계, 구현, 테스트, 결과 정리 순서로 재구성한 가이드다.</p>
+      <div class="meta">
+        <div class="metric"><strong>43</strong><span>원본 체크 항목</span></div>
+        <div class="metric"><strong>10</strong><span>진행 섹션</span></div>
+        <div class="metric"><strong>W3</strong><span>대상 주차</span></div>
+        <div class="metric"><strong>Step 7</strong><span>대상 단계</span></div>
+      </div>
+    </header>
+
+    <section class="section callout">
+      <h2>진행 기준</h2>
+      <p>TASK 문서의 Step Goal, Done When, Scope, Input을 먼저 확인하고 PRD_W3 요구사항과 불일치하는 항목은 TASK Constraints에 반영한다. 구현 전 API, 이벤트, 저장 구조를 고정하고 테스트 통과 및 문서 반영까지 완료 기준으로 삼는다.</p>
+    </section>
+
+    <div class="grid">
+      <section class="section warning">
+        <h2>보안/권한 체크</h2>
+        <ul><li>테스트 데이터 민감정보 미포함 확인</li>
+<li>측정 API 관리자/개발자 전용 접근 제어</li>
+<li>테스트 쿼리 세트 저장 위치 (리포지토리 내부)</li>
+<li>결과 → TASK Constraints 반영</li>
+<li>측정 결과 외부 유출 방지 (내부 리포트만)</li>
+<li>테스트 데이터 격리 (프로덕션 데이터 미사용)</li>
+<li>측정 실행 리소스 제한 (동시 실행 제한)</li>
+<li>결과 → TASK Constraints 반영</li></ul>
+      </section>
+      <section class="section">
+        <h2>설계 우선순위</h2>
+        <ul><li>SearchTestQuery DTO 정의 (query, expectedNoteIds, relevanceScores)</li>
+<li>SearchAccuracyReport DTO 정의 (precision, recall, mrr, ndcg, details[])</li>
+<li>SearchComparisonReport DTO 정의 (semantic, bm25, hybrid 각 지표)</li>
+<li>Output Format → TASK 반영</li></ul>
+      </section>
+    </div>
+
+    <section class="section">
+      <h2>참조 문서</h2>
+      <table>
+        <thead><tr><th>문서</th><th>확인할 내용</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">WORKFLOW_knowledge-2_W3.md</span></td><td>W3 Step 7 원본 체크리스트와 완료 조건</td></tr>
+          <tr><td><span class="mono">PRD_W3.md</span></td><td>해당 주차 요구사항, 보안/운영 제약, 산출물 기준</td></tr>
+          <tr><td><span class="mono">TASK_*.md</span></td><td>Instructions, Constraints, Output Format, Done When 반영 위치</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>1.1 TASK 시작</h2>
+      <ul><li>Step Goal / Done When / Scope / Input 확인</li>
+<li>PRD_W3 해당 요구사항 확인 (검색 정확도 측정)</li>
+<li>Duration 산정 확인</li></ul>
+    </section><section class="section">
+      <h2>1.2 요구사항 분석</h2>
+      <ul><li>테스트 쿼리 세트 규모 정의 (최소 50개 쿼리)</li>
+<li>정확도 지표 정의 (Precision@K, Recall@K, MRR, NDCG)</li>
+<li>기대 결과 (ground truth) 라벨링 방법론 정의</li>
+<li>Instructions 초안 → TASK 문서 반영</li></ul>
+    </section><section class="section">
+      <h2>1.3 Security 1차 검토</h2>
+      <ul><li>테스트 데이터 민감정보 미포함 확인</li>
+<li>측정 API 관리자/개발자 전용 접근 제어</li>
+<li>테스트 쿼리 세트 저장 위치 (리포지토리 내부)</li>
+<li>결과 → TASK Constraints 반영</li></ul>
+    </section><section class="section">
+      <h2>1.4 측정 프레임워크 설계</h2>
+      <ul><li>테스트 쿼리 세트 포맷 정의 (JSON: query, expectedNoteIds[], relevanceScores[])</li>
+<li>측정 파이프라인 설계 (쿼리 실행 → 결과 수집 → 지표 계산 → 리포트 생성)</li>
+<li>비교 모드 설계 (시맨틱 only vs BM25 only vs 하이브리드 RRF)</li>
+<li>Duration(final) 갱신</li></ul>
+    </section><section class="section">
+      <h2>1.5 Security 2차 검토</h2>
+      <ul><li>측정 결과 외부 유출 방지 (내부 리포트만)</li>
+<li>테스트 데이터 격리 (프로덕션 데이터 미사용)</li>
+<li>측정 실행 리소스 제한 (동시 실행 제한)</li>
+<li>결과 → TASK Constraints 반영</li></ul>
+    </section><section class="section">
+      <h2>1.6 DTO / Entity 설계 (API First)</h2>
+      <ul><li>SearchTestQuery DTO 정의 (query, expectedNoteIds, relevanceScores)</li>
+<li>SearchAccuracyReport DTO 정의 (precision, recall, mrr, ndcg, details[])</li>
+<li>SearchComparisonReport DTO 정의 (semantic, bm25, hybrid 각 지표)</li>
+<li>Output Format → TASK 반영</li></ul>
+    </section><section class="section">
+      <h2>1.7 테스트 쿼리 세트 구축</h2>
+      <ul><li>한국어 + 영어 테스트 쿼리 50건 작성</li>
+<li>각 쿼리별 기대 결과 (ground truth) 라벨링</li>
+<li>relevance score 부여 (0: 무관, 1: 관련, 2: 매우 관련)</li>
+<li>테스트 데이터 시드 스크립트 작성</li></ul>
+    </section><section class="section">
+      <h2>1.8 Service + Test</h2>
+      <ul><li>SearchAccuracyService 구현 (테스트 쿼리 실행 → 지표 계산)</li>
+<li>PrecisionRecallCalculator 구현 (Precision@K, Recall@K 계산)</li>
+<li>MRRCalculator 구현 (Mean Reciprocal Rank 계산)</li>
+<li>NDCGCalculator 구현 (Normalized Discounted Cumulative Gain 계산)</li>
+<li>비교 리포트 생성 (시맨틱 vs BM25 vs RRF)</li>
+<li>단위 테스트 작성 (지표 계산 검증)</li>
+<li>테스트 통과 확인</li></ul>
+    </section><section class="section">
+      <h2>1.9 Controller + Test</h2>
+      <ul><li>POST /admin/search/accuracy-test 엔드포인트 구현 (측정 실행)</li>
+<li>GET /admin/search/accuracy-report 엔드포인트 구현 (결과 조회)</li>
+<li>슬라이스 테스트 (@WebMvcTest)</li>
+<li>403 Forbidden 테스트 (비관리자 접근)</li>
+<li>테스트 통과 확인</li></ul>
+    </section><section class="section">
+      <h2>1.10 결과 정리</h2>
+      <ul><li>정확도 리포트 생성 (Precision@10, MRR, NDCG 기준)</li>
+<li>시맨틱 vs BM25 vs 하이브리드 비교 분석</li>
+<li>개선 포인트 도출 (임베딩 모델 교체, 필드 가중치 튜닝 등)</li>
+<li>RULE Reference → TASK 반영</li></ul>
+    </section>
+
+    <section class="section">
+      <h2>완료 전 점검</h2>
+      <ul>
+        <li>원본 WORKFLOW의 모든 체크 항목이 TASK 또는 구현 산출물에 대응되는지 확인한다.</li>
+        <li>보안 1차/2차 검토 결과가 Constraints에 남아 있는지 확인한다.</li>
+        <li>해당 단계에 필요한 단위, 슬라이스, 통합, E2E 테스트 통과 여부를 기록한다.</li>
+        <li>Swagger, 이벤트 스키마, 운영 가이드 등 문서 산출물이 있으면 RULE Reference에 연결한다.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>원본 경로</h2>
+      <pre><code>documents/docs/project-management/workflow/WORKFLOW_knowledge-2_W3.md</code></pre>
+    </section>
+  </main>
+</body>
+</html>
