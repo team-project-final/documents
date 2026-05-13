@@ -33,13 +33,13 @@
     </div>
   </header>
   <main>
-    <section class="section callout work-understanding">
-      <h2>작업 이해</h2>
-      <p>이 작업은 체크리스트를 단순히 순서대로 처리하는 것이 아니라, 먼저 해당 Step이 어떤 사용자 가치와 시스템 책임을 검증하거나 구현하려는지 이해한 뒤 진행해야 한다. 시작 전에 PRD, TASK, WORKFLOW의 목표와 완료 기준을 연결해서 읽고, 이번 Step의 산출물이 이전 주차 결과물과 다음 Step에 어떤 영향을 주는지 확인한다.</p>
-      <p>처음 프로젝트를 접한 개발자는 기능명만 보고 바로 구현하지 말고, 담당 서비스의 경계, 입력/출력 계약, 보안 제약, 테스트 기준을 먼저 정리한다. 이해한 내용을 TASK의 Instructions 또는 Constraints에 반영한 다음 설계, 구현, 검증을 진행하는 것을 기본 흐름으로 삼는다.</p>
+    <section class="section first-understanding">
+      <h2>1. 먼저 이해할 것</h2>
+      <p>이 작업은 기능 구현보다 platform-svc 내부의 모듈 경계와 의존성 규칙을 먼저 고정하는 작업이다. 노트, 그래프, 청크, 카드, 인증 같은 실제 로직을 붙이기 전에 어떤 패키지가 공개 API이고 어떤 영역이 internal인지 정하고, 그 규칙이 테스트나 빌드에서 자동으로 깨지지 않게 검증되는 상태를 목표로 한다.</p>
+      <p>따라서 W2 Step 5을 시작할 때는 제목의 기능명만 보고 바로 코드를 작성하지 말고, 원본 WORKFLOW의 요구사항 분석, Security 검토, DTO/Entity/API 설계, 테스트 항목을 먼저 연결해서 읽는다. 그 이해를 바탕으로 TASK 문서의 Instructions, Constraints, Output Format을 갱신한 다음 구현과 검증을 진행한다.</p>
     </section>
 
-    <section class="section">
+<section class="section">
       <h2>이 문서의 목적</h2>
       <p>이 가이드는 처음 프로젝트를 접한 개발자가 <span class="mono">WORKFLOW_platform_W2.md</span>의 W2 Step  바로 진행할 수 있도록 원본 workflow 체크리스트를 실행 순서로 재구성한 문서다.</p>
       <div class="callout"><strong>Done When 기준</strong><p>아래 체크리스트가 완료되고, 관련 테스트·빌드·실행 확인 결과가 PR 산출물에 포함되면 Step  완료로 판단한다.</p></div>
