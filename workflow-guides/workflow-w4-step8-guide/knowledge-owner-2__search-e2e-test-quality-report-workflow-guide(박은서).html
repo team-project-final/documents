@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WORKFLOW Guide - W4 Step 8 - 검색 E2E 테스트 + 정확도 리포트</title>
+  <style>
+    :root { --bg:#f7f8fb; --text:#172033; --muted:#5f6b7a; --line:#d9e0ea; --panel:#ffffff; --accent:#2563eb; --accent2:#0f766e; --warn:#b45309; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial, 'Noto Sans KR', sans-serif; color:var(--text); background:var(--bg); line-height:1.6; }
+    main { max-width:1120px; margin:0 auto; padding:40px 24px 64px; }
+    .hero { border-bottom:2px solid var(--line); padding-bottom:24px; margin-bottom:24px; }
+    .eyebrow { color:var(--accent2); font-weight:700; font-size:14px; }
+    h1 { margin:8px 0 12px; font-size:32px; line-height:1.25; }
+    h2 { margin:0 0 12px; font-size:21px; }
+    p { margin:8px 0; }
+    .meta { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:20px; }
+    .metric, .section { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:18px; }
+    .metric strong { display:block; font-size:22px; }
+    .metric span { color:var(--muted); font-size:13px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0; }
+    .section { margin:16px 0; }
+    ul { margin:8px 0 0; padding-left:22px; }
+    li { margin:6px 0; }
+    table { width:100%; border-collapse:collapse; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    th, td { border-bottom:1px solid var(--line); padding:11px 12px; text-align:left; vertical-align:top; }
+    th { background:#eef4ff; }
+    code, .mono { font-family:Consolas, 'Courier New', monospace; font-size:.95em; }
+    pre { white-space:pre-wrap; background:#111827; color:#f8fafc; padding:16px; border-radius:8px; overflow:auto; }
+    .callout { border-left:4px solid var(--accent); }
+    .warning { border-left:4px solid var(--warn); }
+    @media (max-width:800px) { main { padding:28px 16px 48px; } .meta, .grid { grid-template-columns:1fr; } h1 { font-size:26px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Week 4 · Step 8 · knowledge-owner-2 (박은서)</div>
+      <h1>WORKFLOW Guide - W4 Step 8: 검색 E2E 테스트 + 정확도 리포트</h1>
+      <p>처음 프로젝트를 접한 개발자가 <span class="mono">WORKFLOW_knowledge-2_W4.md</span>의 체크리스트를 기준으로 릴리즈 전 검증, 안정화, 배포 준비 작업을 순서대로 진행할 수 있게 재구성한 가이드다.</p>
+      <div class="meta">
+        <div class="metric"><strong>13</strong><span>원본 체크 항목</span></div>
+        <div class="metric"><strong>6</strong><span>진행 섹션</span></div>
+        <div class="metric"><strong>W4</strong><span>대상 주차</span></div>
+        <div class="metric"><strong>Step 8</strong><span>대상 단계</span></div>
+      </div>
+    </header>
+
+    <section class="section callout">
+      <h2>진행 기준</h2>
+      <p>W4는 기능 추가보다 E2E 검증, 버그 수정, 성능/배포 안정화가 중심이다. TASK의 Done When과 PRD_W4 완료 기준을 먼저 확인하고, 실패 케이스는 재현 절차와 수정 결과를 함께 남긴다.</p>
+    </section>
+
+    <div class="grid">
+      <section class="section warning">
+        <h2>위험/릴리즈 체크</h2>
+        <ul><li>릴리즈 전 인증/권한, 성능, 장애 대응, 롤백 기준을 확인한다.</li></ul>
+      </section>
+      <section class="section">
+        <h2>검증 우선순위</h2>
+        <ul><li>검색 E2E 시나리오 작성 (BM25+시맨틱 RRF)</li>
+<li>테스트 데이터 준비</li>
+<li>검색 E2E 테스트 실행</li>
+<li>정확도 리포트 산출</li>
+<li>실패 항목 기록</li>
+<li>P0/P1/P2 분류</li>
+<li>P0 즉시 수정 대상 확정</li>
+<li>P0 버그 수정</li>
+<li>수정 코드 리뷰 + 테스트</li>
+<li>수정 후 전체 테스트 재실행</li></ul>
+      </section>
+    </div>
+
+    <section class="section">
+      <h2>참조 문서</h2>
+      <table>
+        <thead><tr><th>문서</th><th>확인할 내용</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">WORKFLOW_knowledge-2_W4.md</span></td><td>W4 Step 8 원본 체크리스트와 완료 조건</td></tr>
+          <tr><td><span class="mono">PRD_W4.md</span></td><td>릴리즈 검증, 성능, 안정화, 배포 관련 요구사항</td></tr>
+          <tr><td><span class="mono">TASK_*.md</span></td><td>검증 결과, 버그 수정 내역, RULE Reference 반영 위치</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>8.1 E2E 시나리오 정의</h2>
+      <ul><li>검색 E2E 시나리오 작성 (BM25+시맨틱 RRF)</li>
+<li>테스트 데이터 준비</li></ul>
+    </section><section class="section">
+      <h2>8.2 E2E 테스트 실행</h2>
+      <ul><li>검색 E2E 테스트 실행</li>
+<li>정확도 리포트 산출</li>
+<li>실패 항목 기록</li></ul>
+    </section><section class="section">
+      <h2>8.3 버그 트리아지</h2>
+      <ul><li>P0/P1/P2 분류</li>
+<li>P0 즉시 수정 대상 확정</li></ul>
+    </section><section class="section">
+      <h2>8.4 버그 수정</h2>
+      <ul><li>P0 버그 수정</li>
+<li>수정 코드 리뷰 + 테스트</li></ul>
+    </section><section class="section">
+      <h2>8.5 회귀 테스트</h2>
+      <ul><li>수정 후 전체 테스트 재실행</li>
+<li>커버리지 80% 이상 확인</li></ul>
+    </section><section class="section">
+      <h2>8.6 문서 업데이트</h2>
+      <ul><li>API 문서 최신화</li>
+<li>HISTORY 완료 기록</li></ul>
+    </section>
+
+    <section class="section">
+      <h2>완료 전 점검</h2>
+      <ul>
+        <li>원본 WORKFLOW의 모든 체크 항목이 테스트 결과, 수정 커밋, 운영 문서 중 하나로 추적되는지 확인한다.</li>
+        <li>실패 케이스는 재현 절차, 원인, 수정 후 검증 결과를 TASK 또는 HISTORY에 남긴다.</li>
+        <li>릴리즈 영향이 있는 변경은 롤백 기준과 모니터링 지표를 함께 확인한다.</li>
+        <li>RULE Reference, Swagger, 대시보드, 리포트 등 최종 산출물 링크를 정리한다.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>원본 경로</h2>
+      <pre><code>documents/docs/project-management/workflow/WORKFLOW_knowledge-2_W4.md</code></pre>
+    </section>
+  </main>
+</body>
+</html>
