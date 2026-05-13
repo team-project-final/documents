@@ -1,5 +1,6 @@
 // build/lib/render-week.mjs
 import { renderShell, esc } from './render-shell.mjs';
+import { BASE_PATH } from './base-path.mjs';
 
 export function renderWeekHubs(guides) {
   const weeks = [...new Set(guides.map(g => g.week))].sort();
@@ -11,7 +12,7 @@ export function renderWeekHubs(guides) {
       const items = list.map(g =>
         `<li><a href="${g.url}">${esc(g.title)}</a><span class="meta">· ${esc(g.roleLabel)} · ${esc(g.authorName || '-')}</span></li>`
       ).join('');
-      return `<section><h3><a href="/w${week}/step${step}/">Step ${step}</a> <span class="meta">(${list.length}개)</span></h3><ul class="guide-list">${items}</ul></section>`;
+      return `<section><h3><a href="${BASE_PATH}/w${week}/step${step}/">Step ${step}</a> <span class="meta">(${list.length}개)</span></h3><ul class="guide-list">${items}</ul></section>`;
     }).join('');
     const content = `
       <section class="home-hero"><h1>Week ${week}</h1><p class="subtitle">${weekGuides.length}개 가이드 · ${steps.length}개 step</p></section>

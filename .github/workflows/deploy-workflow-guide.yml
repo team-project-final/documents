@@ -32,6 +32,7 @@ jobs:
         working-directory: build
         env:
           GITHUB_SHA: ${{ github.sha }}
+          BASE_PATH: /workflow-guide
       - uses: actions/upload-artifact@v4
         with:
           name: dist

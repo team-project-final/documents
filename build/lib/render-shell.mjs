@@ -2,6 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { BASE_PATH } from './base-path.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const shellPath = join(__dirname, '..', 'templates', 'layout-shell.html');
@@ -17,5 +18,6 @@ export function renderShell({ title, pageKind, breadcrumb, content, navList = ''
     .replace(/\{\{PAGE_KIND\}\}/g, pageKind)
     .replace(/\{\{BREADCRUMB\}\}/g, esc(breadcrumb))
     .replace(/\{\{NAV_LIST\}\}/g, navList)
+    .replace(/\{\{BASE\}\}/g, BASE_PATH)
     .replace(/\{\{CONTENT\}\}/g, content);
 }

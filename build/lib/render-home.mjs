@@ -1,6 +1,7 @@
 // build/lib/render-home.mjs
 import { ROLE_MAP } from './parse-metadata.mjs';
 import { renderShell, esc } from './render-shell.mjs';
+import { BASE_PATH } from './base-path.mjs';
 
 const ROLES = Object.keys(ROLE_MAP);
 const WEEKS = [1, 2, 3, 4, 5];
@@ -25,7 +26,7 @@ function renderMatrix(guides) {
     const cells = WEEKS.map(week => {
       const count = countByRoleWeek(guides, role, week);
       if (count === 0) return `<td class="matrix-cell-empty">—</td>`;
-      return `<td class="matrix-cell-has"><a href="/members/${role}.html#w${week}"><strong>${count}</strong><span>guides</span></a></td>`;
+      return `<td class="matrix-cell-has"><a href="${BASE_PATH}/members/${role}.html#w${week}"><strong>${count}</strong><span>guides</span></a></td>`;
     }).join('');
     return `<tr><th scope="row">${esc(ROLE_MAP[role].label)}</th>${cells}</tr>`;
   }).join('');

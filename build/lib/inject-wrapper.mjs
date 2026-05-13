@@ -1,5 +1,6 @@
 // build/lib/inject-wrapper.mjs
 import * as cheerio from 'cheerio';
+import { BASE_PATH } from './base-path.mjs';
 
 export function scopeStyleSheet(css) {
   // 콤마/공백 기반 토큰화로 body/header/main/footer 셀렉터를 스코프.
@@ -22,8 +23,9 @@ export function injectWrapper(html, guide) {
   });
 
   // 2) <head>에 외부 자산 링크 주입
-  if ($('link[href="/assets/styles.css"]').length === 0) {
-    $('head').append('\n  <link rel="stylesheet" href="/assets/styles.css">');
+  const stylesHref = `${BASE_PATH}/assets/styles.css`;
+  if ($(`link[href="${stylesHref}"]`).length === 0) {
+    $('head').append(`\n  <link rel="stylesheet" href="${stylesHref}">`);
   }
   if ($('link[rel="stylesheet"][href*="fonts.googleapis.com"]').length === 0) {
     $('head').append(
@@ -42,7 +44,7 @@ export function injectWrapper(html, guide) {
 
   $('body').append(`
     <header class="site-header">
-      <a class="site-brand" href="/">Synapse Workflow Guide</a>
+      <a class="site-brand" href="${BASE_PATH}/">Synapse Workflow Guide</a>
       <div class="site-breadcrumb">${breadcrumb}</div>
       <input class="site-search" type="search" placeholder="검색…" aria-label="가이드 검색" data-search-input>
     </header>

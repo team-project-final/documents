@@ -38,7 +38,8 @@ async function getFuse() {
     const res = await fetch(url);
     if (!res.ok) throw new Error('failed to fetch search.json');
     const data = await res.json();
-    const mod = await import('/assets/fuse.min.mjs');
+    const fuseUrl = new URL('./fuse.min.mjs', import.meta.url).href;
+    const mod = await import(fuseUrl);
     const Fuse = mod.default || mod.Fuse;
     fuseInstance = new Fuse(data.guides, {
       keys: [

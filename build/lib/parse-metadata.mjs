@@ -1,6 +1,7 @@
 // build/lib/parse-metadata.mjs
 import { basename, dirname, posix } from 'node:path';
 import { slugifyFilename, extractAuthorFromFilename } from './slugify.mjs';
+import { BASE_PATH } from './base-path.mjs';
 
 export const ROLE_MAP = {
   'team-lead':           { label: 'Team Lead',     handle: '@team-lead',           track: '인프라/Gateway' },
@@ -57,6 +58,6 @@ export function parseGuide({ rootDir, absPath, html }) {
     title,
     sourcePath,
     outputPath,
-    url: '/' + outputPath,
+    url: BASE_PATH + '/' + outputPath,
   };
 }

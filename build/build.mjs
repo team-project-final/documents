@@ -14,6 +14,7 @@ import { render404 } from './lib/render-404.mjs';
 import { buildSearchIndex } from './lib/build-search-index.mjs';
 import { copyAssets } from './lib/copy-assets.mjs';
 import { copyFuseRuntime } from './lib/fetch-fuse.mjs';
+import { BASE_PATH } from './lib/base-path.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -96,8 +97,8 @@ async function main() {
   writeFileMkdir(join(DIST, search.outputPath), search.content);
 
   const fingerprintSnippet =
-    `<link rel="prefetch" as="fetch" href="/${search.outputPath}" crossorigin>` +
-    `<meta name="search-url" data-search-url="/${search.outputPath}">`;
+    `<link rel="prefetch" as="fetch" href="${BASE_PATH}/${search.outputPath}" crossorigin>` +
+    `<meta name="search-url" data-search-url="${BASE_PATH}/${search.outputPath}">`;
   injectSearchFingerprint(DIST, fingerprintSnippet);
 
   copyAssets({ srcDir: ASSETS_SRC, distDir: DIST });
