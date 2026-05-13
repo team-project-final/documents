@@ -183,6 +183,26 @@
   </header>
 
   <main>
+    <section class="section first-understanding">
+      <h2>1. 먼저 이해할 것</h2>
+      <div class="section-grid">
+        <div>
+          <h3>서비스 역할</h3>
+          <p>
+            <span class="mono">knowledge-svc</span>는 노트, 위키링크, 지식 그래프, 검색/청킹의 중심 서비스다.
+            W1 Step 1에서는 기능을 만들지 않고, 이후 CRUD/그래프/검색 작업이 들어올 수 있는 모듈 경계와 빌드 기반만 만든다.
+          </p>
+        </div>
+        <div>
+          <h3>골격 단계의 보안 판단</h3>
+          <p>
+            인증과 권한은 아직 구현하지 않는다. 외부 공개 API는 비즈니스 API가 아니라
+            <span class="mono">/actuator/health</span>만 허용한다. 민감 정보, Soft Delete, 행 단위 접근 제어는 다음 기능 단계에서 다룬다.
+          </p>
+        </div>
+      </div>
+    </section>
+
 <section class="section">
       <h2>이 문서의 목적</h2>
       <p>
@@ -247,28 +267,7 @@
         </tbody>
       </table>
     </section>
-
-    <section class="section">
-      <h2>먼저 이해할 것</h2>
-      <div class="section-grid">
-        <div>
-          <h3>서비스 역할</h3>
-          <p>
-            <span class="mono">knowledge-svc</span>는 노트, 위키링크, 지식 그래프, 검색/청킹의 중심 서비스다.
-            W1 Step 1에서는 기능을 만들지 않고, 이후 CRUD/그래프/검색 작업이 들어올 수 있는 모듈 경계와 빌드 기반만 만든다.
-          </p>
-        </div>
-        <div>
-          <h3>골격 단계의 보안 판단</h3>
-          <p>
-            인증과 권한은 아직 구현하지 않는다. 외부 공개 API는 비즈니스 API가 아니라
-            <span class="mono">/actuator/health</span>만 허용한다. 민감 정보, Soft Delete, 행 단위 접근 제어는 다음 기능 단계에서 다룬다.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
+<section class="section">
       <h2>목표 패키지 구조</h2>
       <div class="diagram">synapse-knowledge-svc/
 ├── build.gradle.kts

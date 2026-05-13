@@ -183,6 +183,26 @@
   </header>
 
   <main>
+    <section class="section first-understanding">
+      <h2>1. 먼저 이해할 것</h2>
+      <div class="section-grid">
+        <div>
+          <h3>서비스 역할</h3>
+          <p>
+            <span class="mono">platform-svc</span>는 인증, 사용자, 알림, 운영 관리의 기반 서비스다.
+            W1 Step 1에서는 OAuth, JWT, DB, 외부 서비스 연동을 만들지 않고, 후속 구현을 받을 수 있는 모듈 구조와 빌드 기반만 만든다.
+          </p>
+        </div>
+        <div>
+          <h3>골격 단계의 보안 판단</h3>
+          <p>
+            인증 서비스이지만 이번 단계에서는 인증을 구현하지 않는다. 공개 API는 비즈니스 API가 아니라
+            <span class="mono">/actuator/health</span> 확인만 허용한다. 민감 정보, Soft Delete, 행 단위 접근 제어는 후속 기능 단계에서 다룬다.
+          </p>
+        </div>
+      </div>
+    </section>
+
 <section class="section">
       <h2>이 문서의 목적</h2>
       <p>
@@ -242,28 +262,7 @@
         </tbody>
       </table>
     </section>
-
-    <section class="section">
-      <h2>먼저 이해할 것</h2>
-      <div class="section-grid">
-        <div>
-          <h3>서비스 역할</h3>
-          <p>
-            <span class="mono">platform-svc</span>는 인증, 사용자, 알림, 운영 관리의 기반 서비스다.
-            W1 Step 1에서는 OAuth, JWT, DB, 외부 서비스 연동을 만들지 않고, 후속 구현을 받을 수 있는 모듈 구조와 빌드 기반만 만든다.
-          </p>
-        </div>
-        <div>
-          <h3>골격 단계의 보안 판단</h3>
-          <p>
-            인증 서비스이지만 이번 단계에서는 인증을 구현하지 않는다. 공개 API는 비즈니스 API가 아니라
-            <span class="mono">/actuator/health</span> 확인만 허용한다. 민감 정보, Soft Delete, 행 단위 접근 제어는 후속 기능 단계에서 다룬다.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
+<section class="section">
       <h2>목표 패키지 구조</h2>
       <div class="diagram">synapse-platform-svc/
 ├── build.gradle.kts

@@ -183,6 +183,26 @@
   </header>
 
   <main>
+    <section class="section first-understanding">
+      <h2>1. 먼저 이해할 것</h2>
+      <div class="section-grid">
+        <div>
+          <h3>서비스 역할</h3>
+          <p>
+            <span class="mono">engagement-svc</span>는 커뮤니티 그룹과 게임화 경험을 담당한다.
+            W1 Step 1에서는 기능을 만들지 않고, 이후 그룹 CRUD, 멤버 관리, 공유, 신고, XP/레벨/배지 기능이 들어갈 수 있는 모듈 기반만 만든다.
+          </p>
+        </div>
+        <div>
+          <h3>골격 단계의 보안 판단</h3>
+          <p>
+            인증과 권한은 아직 구현하지 않는다. 공개 API는 비즈니스 API가 아니라
+            <span class="mono">/actuator/health</span> 확인만 허용한다. Soft Delete와 행 단위 접근 제어는 후속 기능 단계에서 다룬다.
+          </p>
+        </div>
+      </div>
+    </section>
+
 <section class="section">
       <h2>이 문서의 목적</h2>
       <p>
@@ -241,28 +261,7 @@
         </tbody>
       </table>
     </section>
-
-    <section class="section">
-      <h2>먼저 이해할 것</h2>
-      <div class="section-grid">
-        <div>
-          <h3>서비스 역할</h3>
-          <p>
-            <span class="mono">engagement-svc</span>는 커뮤니티 그룹과 게임화 경험을 담당한다.
-            W1 Step 1에서는 기능을 만들지 않고, 이후 그룹 CRUD, 멤버 관리, 공유, 신고, XP/레벨/배지 기능이 들어갈 수 있는 모듈 기반만 만든다.
-          </p>
-        </div>
-        <div>
-          <h3>골격 단계의 보안 판단</h3>
-          <p>
-            인증과 권한은 아직 구현하지 않는다. 공개 API는 비즈니스 API가 아니라
-            <span class="mono">/actuator/health</span> 확인만 허용한다. Soft Delete와 행 단위 접근 제어는 후속 기능 단계에서 다룬다.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
+<section class="section">
       <h2>목표 패키지 구조</h2>
       <div class="diagram">synapse-engagement-svc/
 ├── build.gradle.kts
