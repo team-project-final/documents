@@ -1,5 +1,5 @@
 // build/lib/slugify.mjs
-const TRAILING_PARENS = /\(([^)]+)\)\.html$/;
+const TRAILING_PARENS = /\s*\(([^)]+)\)\.html$/;
 
 export function slugifyFilename(filename) {
   return filename.replace(TRAILING_PARENS, '.html');

@@ -46,6 +46,18 @@ test('falls back to filename topic when <title> missing', () => {
   assert.equal(guide.title, 'notification fcm');
 });
 
+test('tolerates whitespace before (author) block', () => {
+  const guide = parseGuide({
+    rootDir: '/repo',
+    absPath: '/repo/workflow-guides/workflow-w1-step1-guide/engagement-owner__svc-scaffold-workflow-guide (한승완).html',
+    html: '<html><head><title>WORKFLOW Guide - 골격</title></head></html>',
+  });
+  assert.ok(guide, 'guide should not be null');
+  assert.equal(guide.role, 'engagement-owner');
+  assert.equal(guide.authorName, '한승완');
+  assert.equal(guide.outputPath, 'w1/step1/engagement-owner__svc-scaffold-workflow-guide.html');
+});
+
 test('returns null when filename pattern does not match', () => {
   const guide = parseGuide({
     rootDir: '/repo',

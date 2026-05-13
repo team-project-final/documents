@@ -10,7 +10,7 @@
     "build:verbose": "node build.mjs --verbose",
     "validate": "node build.mjs --validate-only",
     "preview": "npx --yes serve@14 dist",
-    "test": "node --test lib/"
+    "test": "node --test"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",

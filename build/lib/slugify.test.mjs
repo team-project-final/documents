@@ -30,3 +30,10 @@ test('only strips the FINAL parens block', () => {
     'role__topic-(a)-workflow-guide.html',
   );
 });
+
+test('handles whitespace between guide and (author)', () => {
+  assert.equal(
+    slugifyFilename('engagement-owner__svc-scaffold-workflow-guide (한승완).html'),
+    'engagement-owner__svc-scaffold-workflow-guide.html',
+  );
+});

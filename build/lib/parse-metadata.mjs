@@ -14,7 +14,7 @@ export const ROLE_MAP = {
 };
 
 const FOLDER_PATTERN = /^workflow-w([1-5])-step(\d{1,2})-guide$/;
-const FILE_PATTERN   = /^([a-z0-9-]+)__([a-z0-9-]+)-workflow-guide(?:\(([^)]+)\))?\.html$/;
+const FILE_PATTERN   = /^([a-z0-9-]+)__([a-z0-9-]+)-workflow-guide\s*(?:\(([^)]+)\))?\.html$/;
 const TITLE_PATTERN  = /<title>\s*(?:WORKFLOW Guide\s*-\s*)?([^<]*?)\s*<\/title>/i;
 
 function toPosix(p) {
