@@ -1,9 +1,10 @@
 # Workflow Guide 페이지 배포 설계
 
 **날짜**: 2026-05-13
-**상태**: 초안 (사용자 리뷰 대기)
+**상태**: 구현 완료 (첫 배포 2026-05-13, buildSha `ec10bea`)
 **대상 repo**: [team-project-final/workflow-guide](https://github.com/team-project-final/workflow-guide) (public)
 **소스 repo**: [team-project-final/documents](https://github.com/team-project-final/documents)
+**라이브 사이트**: <https://team-project-final.github.io/workflow-guide/>
 
 ## 1. 문제
 
