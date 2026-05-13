@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WORKFLOW Guide - W2 Step 5 - community 공유 — share_token + 공유 콘텐츠 검색/복사</title>
+  <style>
+    :root { color-scheme: light; --bg:#f7f8fa; --panel:#fff; --text:#202428; --muted:#5b6673; --line:#d8dee4; --accent:#0a66c2; --accent-soft:#eaf3ff; --warn-bg:#fff8e6; --warn-line:#eac54f; --code-bg:#0d1117; --code:#e6edf3; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif; background:var(--bg); color:var(--text); line-height:1.58; }
+    header { background:var(--panel); border-bottom:1px solid var(--line); padding:34px 42px 24px; }
+    main { max-width:1240px; margin:0 auto; padding:28px 24px 48px; }
+    h1,h2,h3 { margin:0; line-height:1.25; } h1{font-size:30px;} h2{font-size:22px; margin-bottom:14px;} h3{font-size:17px; margin-bottom:8px;} p{margin:8px 0 0;} ul{margin:8px 0 0; padding-left:22px;} li{margin:5px 0;}
+    code,.mono { font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace; font-size:.94em; }
+    pre { margin:12px 0 0; padding:15px; overflow:auto; border-radius:8px; background:var(--code-bg); color:var(--code); font-size:13px; line-height:1.55; }
+    table { width:100%; border-collapse:collapse; font-size:14px; } th,td{padding:10px 11px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top;} th{background:#f3f5f7; font-weight:700;}
+    .meta{margin-top:11px; color:var(--muted); font-size:14px;} .hero-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:20px;}
+    .metric,.section,.callout,.step-card{background:var(--panel); border:1px solid var(--line); border-radius:8px;} .metric{padding:15px; min-height:96px;} .metric strong{display:block; font-size:24px; margin-bottom:6px;} .metric span{color:var(--muted); font-size:13px;} .section{padding:20px; margin-bottom:18px;}
+    .callout{padding:14px 16px; margin:14px 0 0; border-left:5px solid var(--accent); background:var(--accent-soft);} .callout.warn{border-left-color:var(--warn-line); background:var(--warn-bg);}
+    .steps{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px;} .step-card{padding:16px;} .badge{display:inline-block; padding:2px 8px; border-radius:999px; background:#eef2f6; color:#334155; font-size:12px; font-weight:700;}
+    @media (max-width:860px){ header{padding:26px 22px 20px;} main{padding:22px 16px 36px;} .hero-grid,.steps{grid-template-columns:1fr;} h1{font-size:25px;} }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>WORKFLOW Guide - W2 Step 5: community 공유 — share_token + 공유 콘텐츠 검색/복사</h1>
+    <p class="meta">담당: <span class="mono">@engagement-owner</span> (한승완) · 영역: engagement-svc</p>
+    <div class="hero-grid">
+      <div class="metric"><strong>W2</strong><span>Week 2 workflow</span></div>
+      <div class="metric"><strong>Step 5</strong><span>community 공유 — share_token + 공유 콘텐츠 검색/복사</span></div>
+      <div class="metric"><strong>final</strong><span>Duration 기준</span></div>
+      <div class="metric"><strong></strong><span>체크리스트 항목</span></div>
+    </div>
+  </header>
+  <main>
+    <section class="section">
+      <h2>이 문서의 목적</h2>
+      <p>이 가이드는 처음 프로젝트를 접한 개발자가 <span class="mono">WORKFLOW_engagement_W2.md</span>의 W2 Step  바로 진행할 수 있도록 원본 workflow 체크리스트를 실행 순서로 재구성한 문서다.</p>
+      <div class="callout"><strong>Done When 기준</strong><p>아래 체크리스트가 완료되고, 관련 테스트·빌드·실행 확인 결과가 PR 산출물에 포함되면 Step  완료로 판단한다.</p></div>
+    </section>
+    <section class="section">
+      <h2>기준 문서</h2>
+      <table><thead><tr><th>문서</th><th>확인할 내용</th></tr></thead><tbody>
+        <tr><td><span class="mono">WORKFLOW_engagement_W2.md</span></td><td>W2 Step 5 체크리스트와 완료 조건</td></tr>
+        <tr><td><span class="mono">TASK_engagement.md</span></td><td>Step Goal, Scope, Instructions, Constraints, Output Format</td></tr>
+        <tr><td><span class="mono">PRD_W2.md</span></td><td> 요구사항과 기능 범위</td></tr>
+        <tr><td><span class="mono">공통 개발 규칙 / wiki 03 / wiki 18</span></td><td>아키텍처, 기술 스택, 보안·테스트 기준</td></tr>
+      </tbody></table>
+    </section>
+    <section class="section"><h2>진행 체크리스트</h2><div class="steps">
+<div class="step-card">
+  <h3>5.1 TASK 시작</h3>
+  <ul>
+    <li>Step Goal / Done When / Scope / Input 확인</li>
+    <li>PRD_W2 해당 요구사항 확인 (커뮤니티 공유)</li>
+    <li>Duration 산정 확인</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>5.2 요구사항 분석</h3>
+  <ul>
+    <li>share_token 발행/검증 플로우 정의</li>
+    <li>공유 콘텐츠 유형 정의 (Deck, Note 등)</li>
+    <li>공유 콘텐츠 검색 요건 (키워드, 카테고리)</li>
+    <li>공유 콘텐츠 복사(fork) 요건 분석</li>
+    <li>Instructions 초안 → TASK 문서 반영</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>5.3 Security 1차 검토</h3>
+  <ul>
+    <li>인증 필요 여부: Yes (공유 등록/복사 시 JWT 필요, 검색은 공개 가능)</li>
+    <li>권한 종류: 로그인 사용자 (본인 콘텐츠만 공유 등록)</li>
+    <li>share_token 만료/무효화 정책 확인</li>
+    <li>결과 → TASK Constraints 반영</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>5.4 ERD 설계</h3>
+  <ul>
+    <li>shared_contents 테이블 설계 (id, ownerId, contentType, contentId, shareToken, title, description, tags, downloadCount, createdAt, updatedAt, deletedAt)</li>
+    <li>인덱스 설계 (shared_contents.shareToken UNIQUE, shared_contents.ownerId, shared_contents.contentType)</li>
+    <li>전문 검색 인덱스 (title, description, tags)</li>
+    <li>Duration(final) 갱신</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>5.5 Security 2차 검토</h3>
+  <ul>
+    <li>share_token UUID v4 + URL-safe 인코딩 확인</li>
+    <li>Soft Delete 정책: 논리삭제 (deletedAt)</li>
+    <li>행 단위 접근 제어: 필요 (ownerId 기반 수정/삭제)</li>
+    <li>공유 콘텐츠 부적절 내용 신고 기능 검토</li>
+    <li>결과 → TASK Constraints 반영</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>5.6 DTO / Entity 설계 (API First)</h3>
+  <ul>
+    <li>ShareContentRequest 정의 (contentType, contentId, title, description, tags)</li>
+    <li>SharedContentResponse 정의 (id, shareToken, title, description, tags, downloadCount, createdAt)</li>
+    <li>ShareTokenResponse 정의 (shareToken, shareUrl)</li>
+    <li>SharedContent Entity 작성</li>
+    <li>ContentType Enum 작성 (DECK, NOTE)</li>
+    <li>MapStruct 매퍼 작성</li>
+    <li>Output Format → TASK 반영</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>5.7 Repository 구현</h3>
+  <ul>
+    <li>SharedContentRepository 인터페이스 작성</li>
+    <li>findByShareToken 커스텀 쿼리</li>
+    <li>findByContentTypeAndTitleContaining 검색 쿼리</li>
+    <li>Flyway 마이그레이션 스크립트 작성</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>5.8 Service + Test</h3>
+  <ul>
+    <li>SharedContentService 구현 (share, findByToken, search, fork, delete)</li>
+    <li>share_token 발행 로직 (UUID v4 생성)</li>
+    <li>share_token 검증 로직 (존재 여부 + 만료 확인)</li>
+    <li>공유 콘텐츠 검색 서비스 구현 (키워드 + 카테고리 필터)</li>
+    <li>콘텐츠 복사(fork) 서비스 구현 (원본 → 사용자 소유 복사)</li>
+    <li>Bean Validation 적용</li>
+    <li>단위 테스트 작성 (Mockito)</li>
+    <li>테스트 통과 확인</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>5.9 Controller + Test</h3>
+  <ul>
+    <li>POST /api/v1/community/share 엔드포인트 구현 (공유 등록)</li>
+    <li>GET /api/v1/community/share/{token} 엔드포인트 구현 (토큰 조회)</li>
+    <li>GET /api/v1/community/search 엔드포인트 구현 (검색)</li>
+    <li>POST /api/v1/community/share/{token}/fork 엔드포인트 구현 (복사)</li>
+    <li>DELETE /api/v1/community/share/{id} 엔드포인트 구현</li>
+    <li>슬라이스 테스트 (@WebMvcTest)</li>
+    <li>401/403 응답 테스트</li>
+    <li>통합 테스트</li>
+    <li>테스트 통과 확인</li>
+  </ul>
+</div>
+<div class="step-card">
+  <h3>5.10 View + Test (해당 시)</h3>
+  <ul>
+    <li>Flutter 화면 연동: 해당 없음 (프론트 별도)</li>
+    <li>Swagger API 문서 확인</li>
+    <li>RULE Reference → TASK 반영</li>
+  </ul>
+</div>
+
+    </div></section>
+    <section class="section"><h2>실행 포인트</h2><p>아래 항목은 PR 전에 산출물이나 로그로 확인하기 좋은 핵심 작업이다.</p>
+<ul>
+<li>Step Goal / Done When / Scope / Input 확인</li>
+<li>PRD_W2 해당 요구사항 확인 (커뮤니티 공유)</li>
+<li>Duration 산정 확인</li>
+<li>share_token 발행/검증 플로우 정의</li>
+<li>공유 콘텐츠 유형 정의 (Deck, Note 등)</li>
+<li>share_token 만료/무효화 정책 확인</li>
+<li>shared_contents 테이블 설계 (id, ownerId, contentType, contentId, shareToken, title, description, tags, downloadCount, createdAt, updatedAt, deletedAt)</li>
+<li>인덱스 설계 (shared_contents.shareToken UNIQUE, shared_contents.ownerId, shared_contents.contentType)</li>
+<li>share_token UUID v4 + URL-safe 인코딩 확인</li>
+<li>ShareContentRequest 정의 (contentType, contentId, title, description, tags)</li>
+<li>SharedContentResponse 정의 (id, shareToken, title, description, tags, downloadCount, createdAt)</li>
+<li>ShareTokenResponse 정의 (shareToken, shareUrl)</li>
+<li>SharedContent Entity 작성</li>
+<li>ContentType Enum 작성 (DECK, NOTE)</li>
+</ul>
+
+    </section>
+    <section class="section">
+      <h2>검증과 산출물</h2>
+      <table><thead><tr><th>구분</th><th>확인 내용</th></tr></thead><tbody>
+        <tr><td><span class="badge">요구사항</span></td><td>Step Goal / Done When / Scope / Input이 TASK와 일치하는지 확인한다.</td></tr>
+        <tr><td><span class="badge">보안</span></td><td>인증, 권한, 공개 API, 시크릿, 접근 제어 판단 결과를 TASK Constraints에 반영한다.</td></tr>
+        <tr><td><span class="badge">구현</span></td><td>Step 5 범위 안의 코드, 설정, 문서만 포함하고 후속 Step 작업을 섞지 않는다.</td></tr>
+        <tr><td><span class="badge">테스트</span></td><td>workflow에 명시된 단위/통합/위젯/스모크/빌드 검증을 실행하고 결과를 남긴다.</td></tr>
+        <tr><td><span class="badge">PR</span></td><td>Output Format에 맞춰 코드, 설정, 테스트 로그, 스크린샷 또는 API 응답 예시를 첨부한다.</td></tr>
+      </tbody></table>
+      <div class="callout warn"><strong>범위 관리</strong><p>Step  Out of Scope 항목은 PR 설명에 명시하고, 필요한 경우 후속 Step 또는 별도 이슈로 연결한다.</p></div>
+    </section>
+    <section class="section"><h2>원본 경로</h2><pre><code>documents/docs/project-management/workflow/WORKFLOW_engagement_W2.md
+documents/docs/project-management/task/TASK_engagement.md</code></pre></section>
+  </main>
+</body>
+</html>
