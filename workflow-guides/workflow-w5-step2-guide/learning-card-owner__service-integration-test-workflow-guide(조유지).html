@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WORKFLOW Guide - W5 Step 2 - 서비스 통합 테스트 — API/DB/Kafka/외부 연동 검증</title>
+  <style>
+    :root { --bg:#f7f8fb; --text:#172033; --muted:#5f6b7a; --line:#d9e0ea; --panel:#ffffff; --accent:#2563eb; --accent2:#0f766e; --warn:#b45309; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial, 'Noto Sans KR', sans-serif; color:var(--text); background:var(--bg); line-height:1.6; }
+    main { max-width:1120px; margin:0 auto; padding:40px 24px 64px; }
+    .hero { border-bottom:2px solid var(--line); padding-bottom:24px; margin-bottom:24px; }
+    .eyebrow { color:var(--accent2); font-weight:700; font-size:14px; }
+    h1 { margin:8px 0 12px; font-size:32px; line-height:1.25; }
+    h2 { margin:0 0 12px; font-size:21px; }
+    p { margin:8px 0; }
+    .meta { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:20px; }
+    .metric, .section { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:18px; }
+    .metric strong { display:block; font-size:22px; }
+    .metric span { color:var(--muted); font-size:13px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0; }
+    .section { margin:16px 0; }
+    ul { margin:8px 0 0; padding-left:22px; }
+    li { margin:6px 0; }
+    table { width:100%; border-collapse:collapse; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    th, td { border-bottom:1px solid var(--line); padding:11px 12px; text-align:left; vertical-align:top; }
+    th { background:#eef4ff; }
+    code, .mono { font-family:Consolas, 'Courier New', monospace; font-size:.95em; }
+    pre { white-space:pre-wrap; background:#111827; color:#f8fafc; padding:16px; border-radius:8px; overflow:auto; }
+    .callout { border-left:4px solid var(--accent); }
+    .warning { border-left:4px solid var(--warn); }
+    @media (max-width:800px) { main { padding:28px 16px 48px; } .meta, .grid { grid-template-columns:1fr; } h1 { font-size:26px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Week 5 · Step 2 · learning-card-owner (조유지)</div>
+      <h1>WORKFLOW Guide - W5 Step 2: 서비스 통합 테스트 — API/DB/Kafka/외부 연동 검증</h1>
+      <p>5주차에는 별도 원본 WORKFLOW 문서가 없으므로, W1~W4 문서와 가이드에서 구현된 기능을 기준으로 테스트 중심의 실행 가이드를 구성한다. 이 문서는 <span class="mono">learning-card-svc</span> 담당자가 바로 검증 항목을 정리하고 실행할 수 있게 만든다.</p>
+      <div class="meta">
+        <div class="metric"><strong>18</strong><span>가이드 체크 항목</span></div>
+        <div class="metric"><strong>6</strong><span>진행 섹션</span></div>
+        <div class="metric"><strong>W5</strong><span>테스트 집중 주차</span></div>
+        <div class="metric"><strong>Step 2</strong><span>대상 단계</span></div>
+      </div>
+    </header>
+
+    <section class="section callout">
+      <h2>진행 기준</h2>
+      <p>서비스별 API, DB, Kafka, 검색, 알림, AI 연동을 실제 구성에 가깝게 검증해 단위 테스트로 잡히지 않는 계약 위반을 찾는다. 테스트 결과는 단순 통과 여부만 남기지 말고, 실행 명령, 환경, 실패 재현 절차, 수정 후 재검증 범위까지 TASK 또는 HISTORY에 연결한다.</p>
+    </section>
+
+    <div class="grid">
+      <section class="section warning">
+        <h2>공통 위험</h2>
+        <ul>
+          <li>W1~W4 구현 범위와 실제 테스트 범위가 어긋나면 릴리즈 판단이 왜곡된다.</li>
+          <li>외부 연동 테스트는 비용, rate limit, 테스트 데이터 오염을 피하도록 mock/fake 기준을 명확히 한다.</li>
+          <li>flaky test는 통과로 처리하지 말고 원인과 격리 여부를 별도 기록한다.</li>
+        </ul>
+      </section>
+      <section class="section">
+        <h2>산출물</h2>
+        <ul>
+          <li>테스트 실행 명령과 결과 요약</li>
+          <li>실패 케이스 재현 절차와 담당자</li>
+          <li>커버리지 또는 시나리오 매핑표</li>
+          <li>릴리즈 차단/비차단 결함 목록</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="section">
+      <h2>참조 문서</h2>
+      <table>
+        <thead><tr><th>문서</th><th>확인할 내용</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">WORKFLOW_*_W1.md ~ WORKFLOW_*_W4.md</span></td><td>구현 대상 기능과 완료 조건</td></tr>
+          <tr><td><span class="mono">workflow-guides/workflow-w1~w4-*</span></td><td>담당자별 구현/검증 기준</td></tr>
+          <tr><td><span class="mono">TASK_*.md / HISTORY_*.md</span></td><td>테스트 결과, 결함, 잔여 리스크 반영 위치</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section"><h2>1. TASK 시작</h2><ul><li>서비스별 W1~W4 주요 API, 이벤트, 배치, 스케줄러 목록 확인</li><li>통합 테스트 환경 요구사항 Docker Compose, Testcontainers, localstack, mock server 정리</li><li>Done When: API/DB/Kafka/외부 연동 경로가 테스트로 검증되고 재현 절차가 문서화됨</li></ul></section><section class="section"><h2>2. 계약/데이터 준비</h2><ul><li>요청/응답 DTO, Avro/JSON Schema, DB 마이그레이션, 인덱스 매핑 버전 확인</li><li>테스트 fixture는 사용자, 노트, 카드, 결제, 알림, 권한 상태를 최소 데이터로 구성</li><li>토픽명, 파티션 키, 이벤트 중복 처리, 재시도 정책을 테스트 관점에서 확인</li></ul></section><section class="section"><h2>트랙별 중점 검증</h2><ul><li>card/review/session/statistics API와 Kafka 발행 통합 테스트</li><li>스케줄러와 날짜 경계 조건 테스트</li><li>card, SRS, review session, Kafka review event 흐름을 검증한다.</li></ul></section><section class="section"><h2>3. 통합 테스트 구현</h2><ul><li>Controller/API 테스트는 인증, 권한, validation, paging, error format을 포함</li><li>Repository/DB 테스트는 제약조건, 인덱스 조회, 트랜잭션 롤백, soft delete 조건을 포함</li><li>Kafka/검색/알림/AI 연동은 발행, 소비, 실패, 재시도, idempotency를 포함</li></ul></section><section class="section"><h2>4. 환경 검증</h2><ul><li>로컬과 CI에서 같은 명령으로 실행 가능한지 확인</li><li>테스트 데이터 격리와 cleanup이 보장되는지 확인</li><li>외부 API 비용 또는 rate limit이 발생하지 않도록 mock/fake 기준 확인</li></ul></section><section class="section"><h2>5. 완료 정리</h2><ul><li>통합 테스트 실행 명령, 필요한 환경변수, 실패 시 점검 순서 작성</li><li>계약 위반이 발견되면 원본 PRD/TASK/WORKFLOW 중 어느 문서 기준인지 기록</li><li>테스트 결과와 남은 위험을 HISTORY 또는 TASK에 반영</li></ul></section>
+
+    <section class="section">
+      <h2>완료 전 점검</h2>
+      <ul>
+        <li>W1~W4 기능 중 미검증 항목이 있는지 확인하고 audit 문서에 남긴다.</li>
+        <li>실패 항목은 수정 완료, 릴리즈 보류, 후속 개선 중 하나로 분류한다.</li>
+        <li>CI 또는 수동 테스트 결과를 재현 가능한 형태로 남긴다.</li>
+        <li>Step 3 종료 시 릴리즈 가능 여부와 잔여 리스크를 팀 공통 문서에 반영한다.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

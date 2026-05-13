@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WORKFLOW Guide - W5 Step 1 - 단위 테스트 보강 — 핵심 도메인/서비스 로직 검증</title>
+  <style>
+    :root { --bg:#f7f8fb; --text:#172033; --muted:#5f6b7a; --line:#d9e0ea; --panel:#ffffff; --accent:#2563eb; --accent2:#0f766e; --warn:#b45309; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial, 'Noto Sans KR', sans-serif; color:var(--text); background:var(--bg); line-height:1.6; }
+    main { max-width:1120px; margin:0 auto; padding:40px 24px 64px; }
+    .hero { border-bottom:2px solid var(--line); padding-bottom:24px; margin-bottom:24px; }
+    .eyebrow { color:var(--accent2); font-weight:700; font-size:14px; }
+    h1 { margin:8px 0 12px; font-size:32px; line-height:1.25; }
+    h2 { margin:0 0 12px; font-size:21px; }
+    p { margin:8px 0; }
+    .meta { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:20px; }
+    .metric, .section { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:18px; }
+    .metric strong { display:block; font-size:22px; }
+    .metric span { color:var(--muted); font-size:13px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0; }
+    .section { margin:16px 0; }
+    ul { margin:8px 0 0; padding-left:22px; }
+    li { margin:6px 0; }
+    table { width:100%; border-collapse:collapse; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    th, td { border-bottom:1px solid var(--line); padding:11px 12px; text-align:left; vertical-align:top; }
+    th { background:#eef4ff; }
+    code, .mono { font-family:Consolas, 'Courier New', monospace; font-size:.95em; }
+    pre { white-space:pre-wrap; background:#111827; color:#f8fafc; padding:16px; border-radius:8px; overflow:auto; }
+    .callout { border-left:4px solid var(--accent); }
+    .warning { border-left:4px solid var(--warn); }
+    @media (max-width:800px) { main { padding:28px 16px 48px; } .meta, .grid { grid-template-columns:1fr; } h1 { font-size:26px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Week 5 · Step 1 · engagement-owner (한승완)</div>
+      <h1>WORKFLOW Guide - W5 Step 1: 단위 테스트 보강 — 핵심 도메인/서비스 로직 검증</h1>
+      <p>5주차에는 별도 원본 WORKFLOW 문서가 없으므로, W1~W4 문서와 가이드에서 구현된 기능을 기준으로 테스트 중심의 실행 가이드를 구성한다. 이 문서는 <span class="mono">engagement-svc</span> 담당자가 바로 검증 항목을 정리하고 실행할 수 있게 만든다.</p>
+      <div class="meta">
+        <div class="metric"><strong>18</strong><span>가이드 체크 항목</span></div>
+        <div class="metric"><strong>6</strong><span>진행 섹션</span></div>
+        <div class="metric"><strong>W5</strong><span>테스트 집중 주차</span></div>
+        <div class="metric"><strong>Step 1</strong><span>대상 단계</span></div>
+      </div>
+    </header>
+
+    <section class="section callout">
+      <h2>진행 기준</h2>
+      <p>W1~W4에서 구현한 기능의 핵심 로직을 단위 테스트로 고정하고, 리팩터링이나 버그 수정 중 회귀가 즉시 드러나게 한다. 테스트 결과는 단순 통과 여부만 남기지 말고, 실행 명령, 환경, 실패 재현 절차, 수정 후 재검증 범위까지 TASK 또는 HISTORY에 연결한다.</p>
+    </section>
+
+    <div class="grid">
+      <section class="section warning">
+        <h2>공통 위험</h2>
+        <ul>
+          <li>W1~W4 구현 범위와 실제 테스트 범위가 어긋나면 릴리즈 판단이 왜곡된다.</li>
+          <li>외부 연동 테스트는 비용, rate limit, 테스트 데이터 오염을 피하도록 mock/fake 기준을 명확히 한다.</li>
+          <li>flaky test는 통과로 처리하지 말고 원인과 격리 여부를 별도 기록한다.</li>
+        </ul>
+      </section>
+      <section class="section">
+        <h2>산출물</h2>
+        <ul>
+          <li>테스트 실행 명령과 결과 요약</li>
+          <li>실패 케이스 재현 절차와 담당자</li>
+          <li>커버리지 또는 시나리오 매핑표</li>
+          <li>릴리즈 차단/비차단 결함 목록</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="section">
+      <h2>참조 문서</h2>
+      <table>
+        <thead><tr><th>문서</th><th>확인할 내용</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">WORKFLOW_*_W1.md ~ WORKFLOW_*_W4.md</span></td><td>구현 대상 기능과 완료 조건</td></tr>
+          <tr><td><span class="mono">workflow-guides/workflow-w1~w4-*</span></td><td>담당자별 구현/검증 기준</td></tr>
+          <tr><td><span class="mono">TASK_*.md / HISTORY_*.md</span></td><td>테스트 결과, 결함, 잔여 리스크 반영 위치</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section"><h2>1. TASK 시작</h2><ul><li>W1~W4 TASK/WORKFLOW에서 구현 완료된 기능 목록 확인</li><li>단위 테스트 대상 함수, 서비스, 유틸, 정책 로직 목록화</li><li>Done When: 핵심 분기/예외/경계값 테스트가 통과하고 CI에서 반복 실행 가능함</li></ul></section><section class="section"><h2>2. 테스트 범위 분석</h2><ul><li>도메인 규칙, 권한 판정, 상태 전이, 날짜/시간 계산, 이벤트 페이로드 생성 로직을 우선 선정</li><li>외부 시스템 DB/Kafka/FCM/LLM/OpenSearch 호출은 mock 또는 fake로 격리</li><li>과거 W1~W4 가이드의 Security Constraints가 테스트 케이스에 반영됐는지 확인</li></ul></section><section class="section"><h2>트랙별 중점 검증</h2><ul><li>XP/level/badge/streak 계산, 중복 신고, 모더레이션 상태 전이 테스트</li><li>리더보드 노출 필드와 권한 조건 검증</li><li>community, gamification, 신고/모더레이션 흐름을 검증한다.</li></ul></section><section class="section"><h2>3. 단위 테스트 구현</h2><ul><li>성공 케이스, 실패 케이스, 권한 오류, 중복 요청, 빈 결과, 경계값 케이스 작성</li><li>테스트 이름은 Given/When/Then 또는 동작 중심으로 실패 원인이 보이게 작성</li><li>랜덤, 현재 시각, 외부 응답은 고정 가능한 fixture로 분리</li></ul></section><section class="section"><h2>4. 품질 기준</h2><ul><li>핵심 서비스/도메인 로직의 라인 커버리지보다 분기 커버리지와 회귀 방지력을 우선</li><li>테스트가 구현 세부사항보다 공개 메서드의 관찰 가능한 결과를 검증하는지 확인</li><li>깨지기 쉬운 snapshot/문자열 전체 비교는 필요한 필드 중심 검증으로 조정</li></ul></section><section class="section"><h2>5. 완료 정리</h2><ul><li>로컬 테스트 명령과 CI 실행 결과 기록</li><li>부족한 테스트 범위는 TODO가 아니라 이슈 또는 TASK 후속 항목으로 분리</li><li>RULE Reference에 테스트 기준과 실행 명령 반영</li></ul></section>
+
+    <section class="section">
+      <h2>완료 전 점검</h2>
+      <ul>
+        <li>W1~W4 기능 중 미검증 항목이 있는지 확인하고 audit 문서에 남긴다.</li>
+        <li>실패 항목은 수정 완료, 릴리즈 보류, 후속 개선 중 하나로 분류한다.</li>
+        <li>CI 또는 수동 테스트 결과를 재현 가능한 형태로 남긴다.</li>
+        <li>Step 3 종료 시 릴리즈 가능 여부와 잔여 리스크를 팀 공통 문서에 반영한다.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
