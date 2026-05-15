@@ -40,8 +40,8 @@
 
 ### 4.6 DTO / Entity 설계 (API First)
 - [ ] BacklinkResponse 정의 (noteId, title, createdAt)
-- [ ] GraphNodeDto 정의 (id, title, group)
-- [ ] GraphEdgeDto 정의 (source, target)
+- [ ] GraphNodeDto 정의 (id, title, linkCount, pageRank)
+- [ ] GraphEdgeDto 정의 (source, target, type)
 - [ ] GraphDataResponse 정의 (nodes[], edges[])
 - [ ] NoteLink Entity 확인/갱신
 - [ ] MapStruct 매퍼 작성
@@ -58,15 +58,16 @@
 - [ ] GraphService 구현 (getBacklinks, getOutlinks, getGraphData)
 - [ ] 백링크 조회 서비스 (targetNoteId → source 노트 목록)
 - [ ] 아웃링크 조회 서비스 (sourceNoteId → target 노트 목록)
-- [ ] D3.js용 노드/엣지 JSON 생성 서비스 (depth 제한 BFS/DFS)
+- [ ] D3.js용 노드/엣지 JSON 생성 서비스 (depth 제한 BFS/DFS — 노드: {id,title,linkCount,pageRank}, 엣지: {source,target,type})
 - [ ] 소유자 검증 로직 구현
 - [ ] 단위 테스트 작성 (Mockito)
 - [ ] 테스트 통과 확인
 
 ### 4.9 Controller + Test
-- [ ] GET /api/v1/notes/{noteId}/backlinks 엔드포인트 구현
-- [ ] GET /api/v1/notes/{noteId}/outlinks 엔드포인트 구현
-- [ ] GET /api/v1/graph?noteId={id}&depth={n} 엔드포인트 구현 (D3.js 데이터)
+- [ ] GET /notes/{noteId}/backlinks 엔드포인트 구현
+- [ ] GET /notes/{noteId}/links 엔드포인트 구현 (forward links — Wiki 추가 예정)
+- [ ] GET /graph/data 엔드포인트 구현 (D3.js 데이터 — nodes[{id,title,linkCount,pageRank}], edges[{source,target,type}])
+- [ ] GET /graph/neighbors/{noteId} 엔드포인트 구현 (인접 노드 탐색)
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 401/403 응답 테스트
 - [ ] 통합 테스트 (양방향 링크 + 그래프 JSON 검증)

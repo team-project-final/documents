@@ -84,8 +84,8 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.4 ERD 설계
-- [ ] groups 테이블 설계 (id, name, description, is_public, owner_id, created_at, updated_at, deleted_at)
-- [ ] 인덱스 설계 (owner_id, is_public)
+- [ ] groups 테이블 설계 (id, name, description, joinType, owner_id, created_at, updated_at, deleted_at)
+- [ ] 인덱스 설계 (owner_id, joinType)
 - [ ] 관계 정의 (groups.owner_id → users.id FK)
 - [ ] Duration(final) 갱신
 
@@ -96,9 +96,9 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.6 DTO / Entity 설계 (API First)
-- [ ] GroupCreateRequest 정의 (name, description, isPublic)
-- [ ] GroupUpdateRequest 정의 (name, description, isPublic)
-- [ ] GroupResponse 정의 (id, name, description, isPublic, ownerId, createdAt)
+- [ ] GroupCreateRequest 정의 (name, description, joinType)
+- [ ] GroupUpdateRequest 정의 (name, description, joinType)
+- [ ] GroupResponse 정의 (id, name, description, joinType, ownerId, createdAt, memberCount, myRole, status)
 - [ ] Group Entity 작성
 - [ ] MapStruct 매퍼 작성
 - [ ] Output Format → TASK 반영
@@ -115,7 +115,7 @@
 - [ ] 테스트 통과 확인
 
 ### 1.9 Controller + Test
-- [ ] GroupController REST API 구현 (5개 엔드포인트)
+- [ ] GroupController REST API 구현 (5개 엔드포인트) — `GET /community/groups`, `POST /community/groups`, `GET /community/groups/{id}`, `PATCH /community/groups/{id}`, `DELETE /community/groups/{id}`
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 401/403 응답 테스트 (미인증, 비소유자)
 - [ ] 통합 테스트 (@SpringBootTest + TestContainers)
@@ -185,7 +185,7 @@
 - [ ] 테스트 통과 확인
 
 ### 1.9 Controller + Test
-- [ ] MemberController REST API 구현 (invite, join, approve, leave/kick, list)
+- [ ] MemberController REST API 구현 (invite, join, approve, leave/kick, list) — `POST /community/groups/{id}/invite`, `POST /community/groups/{id}/join`, `PATCH /community/groups/{id}/join-requests/{uid}` (승인/거부), `DELETE /community/groups/{id}/members/{uid}` (탈퇴/강퇴)
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 401/403 응답 테스트 (미인증, 권한 부족)
 - [ ] 통합 테스트 (역할별 시나리오)

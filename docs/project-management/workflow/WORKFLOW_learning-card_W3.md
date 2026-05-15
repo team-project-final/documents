@@ -125,9 +125,8 @@
 - [ ] 테스트 통과 확인
 
 ### 1.9 Controller + Test
-- [ ] GET /reviews/stats/daily?from=&to= 엔드포인트 구현
-- [ ] GET /reviews/stats/weekly 엔드포인트 구현 (최근 4주)
-- [ ] GET /reviews/dashboard 엔드포인트 구현 (통합 대시보드)
+- [ ] GET /stats/overview 엔드포인트 구현 (일별 통계 + 종합 대시보드)
+- [ ] GET /stats/heatmap 엔드포인트 구현 (주별 히트맵, 최근 4주)
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 빈 데이터, 기간 필터 테스트
 - [ ] 테스트 통과 확인

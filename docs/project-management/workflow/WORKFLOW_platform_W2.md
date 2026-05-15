@@ -68,10 +68,9 @@
 - [ ] 테스트 통과 확인
 
 ### 4.9 Controller + Test
-- [ ] POST /api/v1/billing/checkout 엔드포인트 구현
-- [ ] POST /api/v1/billing/webhook 엔드포인트 구현 (Stripe Signature 검증)
-- [ ] GET /api/v1/billing/subscription 엔드포인트 구현
-- [ ] GET /api/v1/billing/payments 엔드포인트 구현
+- [ ] POST /billing/checkout 엔드포인트 구현
+- [ ] POST /billing/webhooks 엔드포인트 구현 (Stripe Signature 검증)
+- [ ] GET /billing/subscription 엔드포인트 구현
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] Webhook 서명 검증 테스트
 - [ ] 401/403 응답 테스트
@@ -144,10 +143,10 @@
 - [ ] 테스트 통과 확인
 
 ### 5.9 Controller + Test
-- [ ] POST /api/v1/notifications/devices 엔드포인트 구현 (토큰 등록)
-- [ ] DELETE /api/v1/notifications/devices/{id} 엔드포인트 구현
-- [ ] GET /api/v1/notifications/preferences 엔드포인트 구현
-- [ ] PUT /api/v1/notifications/preferences 엔드포인트 구현
+- [ ] POST /notifications/devices 엔드포인트 구현 (토큰 등록)
+- [ ] DELETE /notifications/devices/{id} 엔드포인트 구현
+- [ ] GET /notifications/preferences 엔드포인트 구현
+- [ ] PUT /notifications/preferences 엔드포인트 구현
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 401/403 응답 테스트
 - [ ] 통합 테스트

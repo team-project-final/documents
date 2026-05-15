@@ -43,7 +43,7 @@
 - [ ] ReviewSessionResponse 정의 (id, totalCards, reviewedCards, startedAt, completedAt)
 - [ ] ReviewQueueResponse 정의 (cards[], totalCount)
 - [ ] ReviewCardResponse 정의 (cardId, front, back, deckTitle)
-- [ ] ReviewSubmitRequest 정의 (cardId, rating)
+- [ ] ReviewSubmitRequest 정의 (cardId, rating, timeSpentMs)
 - [ ] ReviewSession Entity 작성
 - [ ] MapStruct 매퍼 작성
 - [ ] Output Format → TASK 반영
@@ -66,10 +66,10 @@
 - [ ] 테스트 통과 확인
 
 ### 4.9 Controller + Test
-- [ ] POST /api/v1/review/sessions 엔드포인트 구현 (세션 시작)
-- [ ] GET /api/v1/review/sessions/{id}/queue 엔드포인트 구현 (카드 큐)
-- [ ] POST /api/v1/review/sessions/{id}/submit 엔드포인트 구현 (rating 제출)
-- [ ] POST /api/v1/review/sessions/{id}/complete 엔드포인트 구현 (세션 완료)
+- [ ] POST /reviews/sessions 엔드포인트 구현 (세션 시작)
+- [ ] GET /reviews/queue 엔드포인트 구현 (카드 큐 — 별도 최상위 엔드포인트)
+- [ ] POST /reviews/sessions/{sessionId}/submit 엔드포인트 구현 (rating 제출)
+- [ ] PUT /reviews/sessions/{sessionId}/complete 엔드포인트 구현 (세션 완료)
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 401/403 응답 테스트
 - [ ] 통합 테스트 (전체 복습 플로우)
@@ -203,9 +203,8 @@
 - [ ] 테스트 통과 확인
 
 ### 6.9 Controller + Test
-- [ ] GET /api/v1/review/stats/daily?days={n} 엔드포인트 구현
-- [ ] GET /api/v1/review/stats/weekly?weeks={n} 엔드포인트 구현
-- [ ] GET /api/v1/review/stats 엔드포인트 구현 (종합)
+- [ ] GET /stats/overview 엔드포인트 구현 (일별 통계 + 종합)
+- [ ] GET /stats/heatmap 엔드포인트 구현 (주별 통계)
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 401/403 응답 테스트
 - [ ] 통합 테스트 (복습 데이터 → 통계 API 검증)

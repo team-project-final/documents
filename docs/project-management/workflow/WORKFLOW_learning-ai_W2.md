@@ -63,8 +63,8 @@
 - [ ] 테스트 통과 확인
 
 ### 4.9 Controller + Test
-- [ ] POST /api/v1/ai/embeddings 엔드포인트 구현 (임베딩 생성)
-- [ ] POST /api/v1/ai/search/semantic 엔드포인트 구현 (시맨틱 검색)
+- [ ] POST /ai/embeddings 엔드포인트 구현 (임베딩 생성)
+- [ ] POST /ai/search/semantic 엔드포인트 구현 (시맨틱 검색)
 - [ ] 401/403 응답 테스트
 - [ ] 통합 테스트 (임베딩 저장 → 시맨틱 검색 → 결과 검증)
 - [ ] 테스트 통과 확인
@@ -89,7 +89,7 @@
 - [ ] Note → LLM → Card 목록 생성 플로우 분석
 - [ ] LLM 입력 포맷 정의 (노트 내용 + 시스템 프롬프트)
 - [ ] LLM 출력 포맷 정의 (JSON — front/back 리스트)
-- [ ] 생성 카드 수 제한 (max_cards)
+- [ ] 생성 카드 수 제한 (count)
 - [ ] 프롬프트 엔지니어링 요건 분석
 - [ ] Instructions 초안 → TASK 문서 반영
 
@@ -112,7 +112,7 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 5.6 DTO / Entity 설계 (API First)
-- [ ] CardGenerateRequest 정의 (noteId, maxCards, language)
+- [ ] CardGenerateRequest 정의 (noteId, cardType, count, difficulty)
 - [ ] CardGenerateResponse 정의 (generationId, cards[{front, back}], status)
 - [ ] GeneratedCardDto 정의 (front, back)
 - [ ] AiCardGeneration Entity 작성 (SQLAlchemy)
@@ -138,9 +138,9 @@
 - [ ] 테스트 통과 확인
 
 ### 5.9 Controller + Test
-- [ ] POST /api/v1/ai/cards/generate 엔드포인트 구현 (카드 생성 요청)
-- [ ] GET /api/v1/ai/cards/generations/{id} 엔드포인트 구현 (상태 조회)
-- [ ] GET /api/v1/ai/cards/generations 엔드포인트 구현 (생성 이력)
+- [ ] POST /ai/cards/generate 엔드포인트 구현 (카드 생성 요청)
+- [ ] GET /ai/cards/generations/{id} 엔드포인트 구현 (상태 조회 — Wiki 추가 예정)
+- [ ] GET /ai/cards/generations 엔드포인트 구현 (생성 이력)
 - [ ] 401/403 응답 테스트
 - [ ] 통합 테스트 (노트 → LLM → 카드 목록 생성 플로우)
 - [ ] 테스트 통과 확인

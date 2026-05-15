@@ -99,7 +99,7 @@
 
 ### 1.6 DTO / Entity 설계 (API First)
 - [ ] OAuthCallbackRequest 정의 (code, state)
-- [ ] OAuthTokenResponse 정의 (access_token, refresh_token, expires_in)
+- [ ] OAuthTokenResponse 정의 (accessToken, refreshToken, expiresIn)
 - [ ] User Entity 작성
 - [ ] OAuthAccount Entity 작성
 - [ ] MapStruct 매퍼 작성
@@ -165,9 +165,9 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.6 DTO / Entity 설계 (API First)
-- [ ] TokenRefreshRequest 정의 (refresh_token)
-- [ ] TokenResponse 정의 (access_token, refresh_token, expires_in)
-- [ ] MfaSetupResponse 정의 (qr_code_url, secret)
+- [ ] TokenRefreshRequest 정의 (refreshToken)
+- [ ] TokenResponse 정의 (accessToken, refreshToken, expiresIn)
+- [ ] MfaSetupResponse 정의 (qrCodeUrl, secret)
 - [ ] MfaVerifyRequest 정의 (code)
 - [ ] MfaSecret Entity 작성
 - [ ] Output Format → TASK 반영

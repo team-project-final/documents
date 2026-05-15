@@ -22,6 +22,11 @@
   - FCM 푸시 알림 + AWS SES 이메일 알림
   - Kafka 이벤트 소비 → audit_logs 적재
   - 테넌트/사용자 관리
+  - **GDPR/CCPA 사용자 데이터 권리**: `POST /me/data-export` (데이터 내보내기 요청), `GET /me/data-export/{jobId}` (상태 조회), `DELETE /me/account` (계정 삭제, 30일 유예 — GDPR Article 17) *(Wiki API 명세서 동기화 — 추가)*
+  - **Audit 로그 조회 API**: `GET /audit/logs` (현재 테넌트 감사 로그 조회, Admin/Owner 전용) — 현재 적재만 담당, 조회 API 추가 *(Wiki API 명세서 동기화 — 추가)*
+  - **Tenant 상세 API**: `POST /tenant/switch` (테넌트 전환), `GET /tenant/usage` (사용량 현황 조회) — 현재 포괄적 언급만 있고 개별 엔드포인트 미명시 *(Wiki API 명세서 동기화 — 추가)*
+  - **알림 읽음 처리**: `GET /notifications`, `PATCH /notifications/{id}/read`, `POST /notifications/read-all`, `GET /notifications/unread-count` — 발송만 담당하고 읽음 처리 API 누락 *(Wiki API 명세서 동기화 — 추가)*
+  - **알림 설정**: `GET /notifications/preferences`, `PUT /notifications/preferences` — 알림 설정 조회/변경 *(Wiki API 명세서 동기화 — 추가)*
 - **Out of Scope**:
   - 알림 트리거 로직 (engagement/learning 서비스가 이벤트 발행)
   - Flutter UI 전체 (인증 화면은 frontend 협업)
@@ -33,8 +38,8 @@
 |------|------|-----------|--------|--------|
 | W1 | 05-12~16 | platform-svc 골격 + auth(OAuth+JWT+MFA 기초) | 서비스 골격, 회원가입/로그인/JWT API | 인프라 Docker Compose (team-lead) |
 | W2 | 05-19~23 | billing(Stripe) + notification(FCM 설정) | 결제 API, device_tokens 관리 | auth 완성 (W1) |
-| W3 | 05-26~30 | audit(Kafka→logs) + notification 발송 + 테넌트 관리 | audit_logs, 푸시/이메일 발송, 관리 API | Kafka 토픽 (team-lead W2) |
-| W4 | 06-02~06 | 버그 수정 + 통합 테스트 | 안정화된 platform-svc | 전체 통합 (W3) |
+| W3 | 05-26~30 | audit(Kafka→logs) + notification 발송 + 테넌트 관리 + 알림 읽음 처리/설정 API + Tenant 상세 API | audit_logs, 푸시/이메일 발송, 관리 API, 알림 읽음/설정 API, tenant switch/usage | Kafka 토픽 (team-lead W2) |
+| W4 | 06-02~06 | GDPR/CCPA 데이터 권리 API + Audit 로그 조회 API + 버그 수정 + 통합 테스트 | data-export API, account 삭제 API, audit/logs 조회, 안정화된 platform-svc | 전체 통합 (W3) |
 
 ## 협업 인터페이스
 
@@ -53,3 +58,9 @@
 - [ ] Stripe 결제 플로우 (Checkout → Webhook → 플랜 활성화)
 - [ ] 푸시 알림 발송 동작 (FCM)
 - [ ] Audit 로그 Kafka 소비 → DB 적재
+- [ ] GDPR/CCPA 데이터 내보내기 요청 및 상태 조회 동작 *(Wiki API 명세서 동기화 — 추가)*
+- [ ] 계정 삭제 API (30일 유예 포함) 동작 *(Wiki API 명세서 동기화 — 추가)*
+- [ ] Audit 로그 조회 API (`GET /audit/logs`) Admin/Owner 권한 검증 포함 *(Wiki API 명세서 동기화 — 추가)*
+- [ ] Tenant switch/usage API 동작 *(Wiki API 명세서 동기화 — 추가)*
+- [ ] 알림 읽음 처리 API 4종 동작 *(Wiki API 명세서 동기화 — 추가)*
+- [ ] 알림 설정 조회/변경 API 동작 *(Wiki API 명세서 동기화 — 추가)*

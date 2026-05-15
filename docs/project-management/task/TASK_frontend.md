@@ -35,7 +35,7 @@
 | **Done When** | 로그인/회원가입 화면 + OAuth 버튼 → platform-svc 연동 + 토큰 저장 |
 | **Scope** | **In**: 로그인 화면 UI, 회원가입 화면 UI, OAuth 버튼, platform-svc 토큰 연동, SecureStorage 저장 / **Out**: 토큰 갱신 로직, 소셜 로그인 다중 프로바이더, 프로필 관리 |
 | **Input** | Step 1 완료된 프로젝트, DESIGN.md UI 규격, platform-svc OAuth API 명세 |
-| **Instructions** | 1. 로그인 페이지 UI 구현 (이메일/비밀번호 폼 + OAuth 버튼)<br>2. 회원가입 페이지 UI 구현 (이메일/비밀번호/확인 폼)<br>3. OAuth 버튼 클릭 시 platform-svc 인증 URL로 리다이렉트<br>4. 콜백 처리 및 access_token/refresh_token 수신<br>5. flutter_secure_storage로 토큰 저장<br>6. 인증 상태 Riverpod Provider 구현 (AuthNotifier)<br>7. GoRouter redirect guard 설정 (미인증 시 /login 이동)<br>8. 폼 유효성 검증 및 에러 메시지 표시 |
+| **Instructions** | 1. 로그인 페이지 UI 구현 (이메일/비밀번호 폼 + OAuth 버튼)<br>2. 회원가입 페이지 UI 구현 (이메일/비밀번호/확인 폼)<br>3. OAuth 버튼 클릭 시 platform-svc 인증 URL로 리다이렉트<br>4. 콜백 처리 및 access_token 수신 (refresh_token은 httpOnly Cookie Set-Cookie 헤더로 전달 — JSON 바디 아님)<br>5. flutter_secure_storage로 access_token 저장 (refresh_token은 Cookie로 관리)<br>6. 인증 상태 Riverpod Provider 구현 (AuthNotifier)<br>7. GoRouter redirect guard 설정 (미인증 시 /login 이동)<br>8. 폼 유효성 검증 및 에러 메시지 표시 |
 | **Output Format** | 로그인/회원가입 화면 스크린샷 + OAuth 플로우 시퀀스 + 토큰 저장 확인 |
 | **Constraints** | - OAuth 2.0 + PKCE 플로우<br>- 토큰은 SecureStorage에만 저장 (localStorage 금지)<br>- 비밀번호 최소 8자, 영문+숫자+특수문자<br>- platform-svc 베이스 URL 환경변수 관리<br>- 로딩 상태 및 에러 상태 UI 필수 |
 | **Duration** | 2일 |
@@ -177,9 +177,9 @@
 | **Done When** | 신고 목록 화면 + 신고 상세 + 승인/거부 처리 + 관리자 권한 가드 + 테스트 통과 |
 | **Scope** | **In**: 신고 목록 UI, 신고 상세 UI, 승인/거부 처리, 관리자 권한 가드 / **Out**: 신고 통계 대시보드, 자동 제재, 이의 제기 |
 | **Input** | admin-svc API 명세, DESIGN.md UI 규격, PRD_W3 관리자 요구사항 |
-| **Instructions** | 1. 관리자 전용 라우트 가드 구현 (role=ADMIN 검증)<br>2. 신고 목록 화면 구현 (신고 유형, 상태, 날짜 필터)<br>3. 신고 상세 화면 구현 (신고 내용, 신고 대상 콘텐츠, 신고자 정보)<br>4. 승인/거부 버튼 및 사유 입력 모달<br>5. admin-svc API 연동 (신고 목록/상세/처리)<br>6. 처리 완료 후 목록 자동 갱신<br>7. 관리자 미인증 시 접근 차단 UI<br>8. Widget 테스트 작성 |
+| **Instructions** | 1. 관리자 전용 라우트 가드 구현 (role=ADMIN 검증)<br>2. 신고 목록 화면 구현 (신고 유형, 상태, 날짜 필터)<br>3. 신고 상세 화면 구현 (신고 내용, 신고 대상 콘텐츠, 신고자 정보)<br>4. 처리(resolve/dismiss) 버튼 및 사유 입력 모달<br>5. admin-svc API 연동 — 처리 시 `PUT /admin/reports/{id}/resolve` (body: `{ "status": "resolved"/"dismissed", "actionTaken": "..." }`)<br>6. 처리 완료 후 목록 자동 갱신<br>7. 관리자 미인증 시 접근 차단 UI<br>8. Widget 테스트 작성 |
 | **Output Format** | 관리자 화면 스크린샷 + 신고 처리 플로우 캡처 + Widget 테스트 결과 |
-| **Constraints** | - 관리자 권한 필수 (role=ADMIN)<br>- 신고 상태: PENDING, APPROVED, REJECTED<br>- 처리 사유 필수 입력 (최소 10자)<br>- 처리 후 되돌리기 불가 (확인 다이얼로그)<br>- DESIGN.md 토큰 일관 적용 |
+| **Constraints** | - 관리자 권한 필수 (role=ADMIN)<br>- 신고 상태: `pending`, `resolved`, `dismissed` (소문자, Wiki 기준 — PENDING/APPROVED/REJECTED 아님)<br>- 처리 사유 필수 입력 (최소 10자)<br>- 처리 후 되돌리기 불가 (확인 다이얼로그)<br>- DESIGN.md 토큰 일관 적용 |
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @frontend-owner |

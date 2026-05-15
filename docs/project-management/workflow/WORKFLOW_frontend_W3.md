@@ -42,12 +42,12 @@
 - [ ] GamificationProvider 설계 (Riverpod StateNotifier)
 - [ ] GamificationState 모델 (xp, level, nextLevelXp, streak, badges[])
 - [ ] Badge 모델 (id, name, description, iconUrl, earned)
-- [ ] API 연동 모델 (engagement-svc /gamification/me 응답 매핑)
+- [ ] API 연동 모델 (engagement-svc /gamification/profile 응답 매핑 — level, totalXp, currentStreak, longestStreak, title, nextLevelXp, recentBadges)
 - [ ] Output Format → TASK 반영
 
 ### 1.7 Repository 구현
 - [ ] GamificationRepository 클래스 작성 (HTTP client + engagement-svc 연동)
-- [ ] GET /gamification/me API 호출
+- [ ] GET /gamification/profile API 호출
 - [ ] GET /gamification/badges API 호출
 - [ ] GET /gamification/leaderboard API 호출
 
@@ -118,8 +118,8 @@
 - [ ] NotificationRepository 클래스 작성 (HTTP client + platform-svc 연동)
 - [ ] GET /notifications API 호출 (페이징)
 - [ ] PATCH /notifications/{id}/read API 호출
-- [ ] GET /notification-settings API 호출
-- [ ] PUT /notification-settings API 호출
+- [ ] GET /notifications/preferences API 호출
+- [ ] PUT /notifications/preferences API 호출
 
 ### 1.8 Service + Test
 - [ ] NotificationNotifier 구현 (알림 목록 로드, 무한 스크롤, 읽음 처리)
@@ -187,7 +187,7 @@
 ### 1.7 Repository 구현
 - [ ] AdminReportRepository 클래스 작성 (HTTP client + engagement-svc 연동)
 - [ ] GET /admin/reports API 호출 (페이징, 필터)
-- [ ] PATCH /admin/reports/{id} API 호출 (승인/거부)
+- [ ] PUT /admin/reports/{id}/resolve API 호출 (승인/거부)
 
 ### 1.8 Service + Test
 - [ ] AdminReportNotifier 구현 (신고 목록 로드, 필터, 페이징)
@@ -197,7 +197,7 @@
 
 ### 1.9 Controller + Test
 - [ ] 관리자 신고 목록 페이지 Widget 구현 (DataTable + 필터 드롭다운)
-- [ ] 상태 필터 Widget 구현 (PENDING/APPROVED/REJECTED 탭)
+- [ ] 상태 필터 Widget 구현 (pending/resolved/dismissed 탭)
 - [ ] 신고 상세 다이얼로그 Widget 구현 (사유 + 대상 콘텐츠 미리보기)
 - [ ] 승인/거부 버튼 + 사유 입력 + 확인 다이얼로그 구현
 - [ ] 관리자 라우트 가드 구현 (GoRouter redirect)
@@ -249,14 +249,14 @@
 - [ ] SharedDeckProvider 설계 (Riverpod StateNotifier)
 - [ ] SharedDeck 모델 (id, title, description, cardCount, author, tags[])
 - [ ] SharedDeckDetail 모델 (deck + cards[] 미리보기)
-- [ ] API 연동 모델 (learning-card-svc /shared-decks 응답 매핑)
+- [ ] API 연동 모델 (engagement-svc /community/shared-decks 응답 매핑)
 - [ ] Output Format → TASK 반영
 
 ### 1.7 Repository 구현
-- [ ] SharedDeckRepository 클래스 작성 (HTTP client + learning-card-svc 연동)
-- [ ] GET /shared-decks API 호출 (페이징, 정렬, 태그 필터)
-- [ ] GET /shared-decks/{id} API 호출 (상세)
-- [ ] POST /shared-decks/{id}/copy API 호출 (복사)
+- [ ] SharedDeckRepository 클래스 작성 (HTTP client + engagement-svc 연동)
+- [ ] GET /community/shared-decks API 호출 (페이징, 정렬, 태그 필터)
+- [ ] GET /community/shared-decks/{id} API 호출 (상세)
+- [ ] POST /community/shared-decks/{id}/copy API 호출 (복사)
 
 ### 1.8 Service + Test
 - [ ] SharedDeckNotifier 구현 (목록 로드, 무한 스크롤, 필터)

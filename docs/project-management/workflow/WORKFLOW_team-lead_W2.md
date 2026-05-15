@@ -116,7 +116,13 @@
 - [ ] Duration 산정 확인
 
 ### 6.2 요구사항 분석
-- [ ] 4-서비스 경로 매핑 요건 정의 (/api/platform/**, /api/engagement/**, /api/knowledge/**, /api/learning/**)
+- [ ] 4-서비스 경로 매핑 요건 정의 — Wiki 도메인 경로 기준:
+  - platform-svc: `/auth/**`, `/tenant/**`, `/billing/**`, `/me/**`
+  - engagement-svc: `/community/**`, `/gamification/**`
+  - knowledge-svc: `/notes/**`, `/graph/**`
+  - learning-svc: `/decks/**`, `/cards/**`, `/reviews/**`, `/ai/**`, `/stats/**`
+  - cross-cutting: `/notifications/**`
+  - admin: `/admin/**`
 - [ ] Rate Limit 요건 분석 (서비스별/글로벌 제한)
 - [ ] CORS 설정 요건 확인
 - [ ] Instructions 초안 → TASK 문서 반영
@@ -128,7 +134,7 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 6.4 인프라 아키텍처 설계
-- [ ] 서비스별 라우팅 테이블 설계
+- [ ] 서비스별 라우팅 테이블 설계 (Wiki 도메인 경로 기준, `/api/platform/**` 등 구 prefix 제거)
 - [ ] Rate Limit 정책 설계 (req/sec per IP)
 - [ ] Health check 엔드포인트 바이패스 설계
 - [ ] Duration(final) 갱신
@@ -142,7 +148,7 @@
 ### 6.6 N/A (인프라 — DTO/Entity 해당 없음)
 
 ### 6.7 Gateway 구현
-- [ ] Spring Cloud Gateway 라우트 설정 (4-서비스 경로 매핑)
+- [ ] Spring Cloud Gateway 라우트 설정 (Wiki 도메인 경로 기준 — platform-svc: `/auth/**`,`/tenant/**`,`/billing/**`,`/me/**`; engagement-svc: `/community/**`,`/gamification/**`; knowledge-svc: `/notes/**`,`/graph/**`; learning-svc: `/decks/**`,`/cards/**`,`/reviews/**`,`/ai/**`,`/stats/**`; `/notifications/**`; `/admin/**`)
 - [ ] Rate Limit 필터 설정 (Redis 기반 RequestRateLimiter)
 - [ ] CORS 글로벌 설정
 - [ ] docker-compose에 Gateway 서비스 추가/갱신

@@ -115,7 +115,7 @@
 - [ ] 테스트 통과 확인
 
 ### 1.9 Controller + Test
-- [ ] POST /api/v1/ai/generate 엔드포인트 구현
+- [ ] POST /ai/cards/generate 엔드포인트 구현
 - [ ] 입력값 검증 (max_tokens 제한 등)
 - [ ] 에러 핸들러 미들웨어 구현
 - [ ] pytest 통합 테스트 (mock 기반)
@@ -183,7 +183,7 @@
 - [ ] 테스트 통과 확인
 
 ### 1.9 Controller + Test
-- [ ] POST /api/v1/ai/embed 엔드포인트 구현
+- [ ] POST /ai/embeddings 엔드포인트 구현
 - [ ] 배치 크기 검증 (최대 20건)
 - [ ] 에러 핸들링 (OpenAI API 에러)
 - [ ] pytest 통합 테스트 (mock 기반)

@@ -33,18 +33,18 @@
 
 | ID | 유저 스토리 | 수용 기준 | 우선순위 |
 |----|------------|-----------|----------|
-| FR-EG-001 | 로그인 사용자가 학습 그룹을 생성할 수 있다 | POST /api/v1/groups → 201 + 그룹 정보 반환 | P0 |
-| FR-EG-002 | 사용자가 그룹 목록을 조회할 수 있다 | GET /api/v1/groups → 커서 페이지네이션 | P0 |
-| FR-EG-003 | 그룹 소유자가 그룹 정보를 수정/삭제할 수 있다 | PUT/DELETE /api/v1/groups/{id} → 소유자만 허용 | P0 |
-| FR-EG-004 | 사용자가 그룹에 가입/탈퇴할 수 있다 | POST/DELETE /api/v1/groups/{id}/members → 멤버 관리 | P0 |
+| FR-EG-001 | 로그인 사용자가 학습 그룹을 생성할 수 있다 | POST /community/groups → 201 + 그룹 정보 반환 | P0 |
+| FR-EG-002 | 사용자가 그룹 목록을 조회할 수 있다 | GET /community/groups → 커서 페이지네이션 | P0 |
+| FR-EG-003 | 그룹 소유자가 그룹 정보를 수정/삭제할 수 있다 | PATCH/DELETE /community/groups/{id} → 소유자만 허용 | P0 |
+| FR-EG-004 | 사용자가 그룹에 가입/탈퇴할 수 있다 | POST /community/groups/{id}/join, POST /community/groups/{id}/leave → 멤버 관리 | P0 |
 | FR-EG-005 | 그룹 소유자가 멤버를 초대/강퇴할 수 있다 | 소유자 권한 체크 + 멤버 상태 변경 | P1 |
 
 ### 2.4 @knowledge-owner-1 — Note
 
 | ID | 유저 스토리 | 수용 기준 | 우선순위 |
 |----|------------|-----------|----------|
-| FR-KN-001 | 로그인 사용자가 Markdown 노트를 생성할 수 있다 | POST /api/v1/notes → 201 + 노트(제목/본문/태그) 저장 | P0 |
-| FR-KN-002 | 사용자가 자신의 노트를 조회/수정/삭제할 수 있다 | GET/PUT/DELETE /api/v1/notes/{id} → 본인 노트만 | P0 |
+| FR-KN-001 | 로그인 사용자가 Markdown 노트를 생성할 수 있다 | POST /notes → 201 + 노트(제목/본문/태그) 저장 | P0 |
+| FR-KN-002 | 사용자가 자신의 노트를 조회/수정/삭제할 수 있다 | GET/PATCH/DELETE /notes/{id} → 본인 노트만 | P0 |
 | FR-KN-003 | 노트 저장 시 `[[note-title]]` 위키링크가 자동 추출된다 | 위키링크 파싱 → note_links 테이블 저장 + 양방향 조회 | P0 |
 
 ### 2.5 @knowledge-owner-2 — Modulith/ArchUnit/Schema
@@ -61,15 +61,15 @@
 |----|------------|-----------|----------|
 | FR-LC-001 | 사용자가 덱(Deck)을 생성/조회/수정/삭제할 수 있다 | CRUD API + 덱 목록 페이지네이션 | P0 |
 | FR-LC-002 | 사용자가 덱 내 카드(앞면/뒷면)를 생성/조회/수정/삭제할 수 있다 | CRUD API + 카드-덱 1:N 관계 | P0 |
-| FR-LC-003 | 시스템이 복습 rating으로 SM-2 알고리즘을 계산한다 | rating(Again/Hard/Good/Easy) → ease factor + interval + 다음 복습일 계산 | P0 |
+| FR-LC-003 | 시스템이 복습 rating으로 SM-2 알고리즘을 계산한다 | rating(1=Again/2=Hard/3=Good/4=Easy/5=Perfect, 정수) → ease factor + interval + 다음 복습일 계산 | P0 |
 
 ### 2.7 @learning-ai-owner — AI Service
 
 | ID | 유저 스토리 | 수용 기준 | 우선순위 |
 |----|------------|-----------|----------|
 | FR-LA-001 | learning-ai 서비스가 Health endpoint로 상태를 확인할 수 있다 | GET /health → 200 OK + Dockerfile 빌드 성공 | P0 |
-| FR-LA-002 | 서비스가 Claude API를 호출하여 텍스트를 생성할 수 있다 | POST /api/v1/ai/generate → Claude 응답 반환 + 에러 핸들링 | P0 |
-| FR-LA-003 | 서비스가 텍스트를 벡터(1536차원)로 변환할 수 있다 | POST /api/v1/ai/embed → 벡터 반환 + pgvector 저장 준비 | P1 |
+| FR-LA-002 | 서비스가 Claude API를 호출하여 텍스트를 생성할 수 있다 | POST /ai/cards/generate → Claude 응답 반환 + 에러 핸들링 | P0 |
+| FR-LA-003 | 서비스가 텍스트를 벡터(1536차원)로 변환할 수 있다 | POST /ai/embeddings → 벡터 반환 + pgvector 저장 준비 | P1 |
 
 ### 2.8 Frontend (전체 협업)
 

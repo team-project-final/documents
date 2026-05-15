@@ -90,7 +90,7 @@
 ### 1.4 ERD 설계
 - [ ] 프론트엔드 — ERD 해당 없음
 - [ ] 인증 상태 모델 설계 (AuthState: unauthenticated/loading/authenticated)
-- [ ] 토큰 저장 구조 설계 (access_token, refresh_token)
+- [ ] 토큰 저장 구조 설계 (access_token: SecureStorage 저장, refresh_token: httpOnly Cookie — 서버에서 Set-Cookie로 발급되므로 클라이언트에서 직접 저장 불필요)
 - [ ] Duration(final) 갱신
 
 ### 1.5 Security 2차 검토
@@ -102,7 +102,7 @@
 ### 1.6 DTO / Entity 설계 (API First)
 - [ ] LoginRequest 모델 정의 (email, password)
 - [ ] SignupRequest 모델 정의 (email, password, confirmPassword)
-- [ ] AuthToken 모델 정의 (accessToken, refreshToken, expiresIn)
+- [ ] AuthToken 모델 정의 (accessToken, expiresIn) — refreshToken은 httpOnly Cookie로 서버 관리, JSON body 미포함
 - [ ] AuthState Provider 설계
 - [ ] Output Format → TASK 반영
 

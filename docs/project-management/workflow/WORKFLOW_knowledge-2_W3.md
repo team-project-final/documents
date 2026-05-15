@@ -40,8 +40,8 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.6 DTO / Entity 설계 (API First)
-- [ ] HybridSearchRequest DTO 정의 (query, page, size, filters)
-- [ ] HybridSearchResponse DTO 정의 (results[], totalCount, searchTime)
+- [ ] HybridSearchRequest DTO 정의 (query, cursor, limit, filters)
+- [ ] HybridSearchResponse DTO 정의 (results[], totalCount, cursor, searchTime)
 - [ ] SearchResultItem DTO 정의 (noteId, title, snippet, score, source)
 - [ ] Output Format → TASK 반영
 
@@ -60,7 +60,9 @@
 - [ ] 테스트 통과 확인
 
 ### 1.9 Controller + Test
-- [ ] POST /search 엔드포인트 구현 (하이브리드 검색)
+- [ ] GET /notes/search?q=... 엔드포인트 구현 (키워드 검색)
+- [ ] POST /ai/search/semantic 엔드포인트 구현 (시맨틱 검색)
+- [ ] POST /ai/search/hybrid 엔드포인트 구현 (하이브리드 검색)
 - [ ] 검색 결과 하이라이트 (매칭 키워드 강조)
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 빈 결과, 페이징, 필터 테스트

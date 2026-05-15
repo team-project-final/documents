@@ -95,7 +95,7 @@
 | **Done When** | 키워드 검색 API + BM25 스코어링 + 페이지네이션 + 테스트 통과 |
 | **Scope** | **In**: Elasticsearch 인덱스 설정, BM25 검색 API, 노트 인덱싱 / **Out**: 시맨틱 검색, 하이브리드 검색, 검색 튜닝 |
 | **Input** | Step 4 완료된 청크 데이터, Elasticsearch 공식 문서, PRD_W2 검색 요구사항 |
-| **Instructions** | 1. Elasticsearch Docker 컨테이너 구성 (docker-compose)<br>2. 노트 인덱스 매핑 정의 (title, content, tags 필드)<br>3. 노트 생성/수정 시 Elasticsearch 인덱싱 연동<br>4. BM25 기반 키워드 검색 API 구현 (GET `/api/v1/notes/search`)<br>5. 검색 결과 하이라이팅 적용<br>6. 페이지네이션 및 정렬 옵션 구현<br>7. 통합 테스트: 키워드 검색 정확도 검증 |
+| **Instructions** | 1. Elasticsearch Docker 컨테이너 구성 (docker-compose)<br>2. 노트 인덱스 매핑 정의 (title, content, tags 필드)<br>3. 노트 생성/수정 시 Elasticsearch 인덱싱 연동<br>4. BM25 기반 키워드 검색 API 구현 (`GET /notes/search?q=...` — `/api/v1/` 접두사 제거)<br>5. 검색 결과 하이라이팅 적용<br>6. 페이지네이션 및 정렬 옵션 구현<br>7. 통합 테스트: 키워드 검색 정확도 검증 |
 | **Output Format** | Elasticsearch 인덱스 매핑 + 검색 API 응답 예시 + 테스트 결과 |
 | **Constraints** | - Elasticsearch 8.x 사용<br>- BM25 기본 파라미터 (k1=1.2, b=0.75)<br>- 검색 결과 최대 100건 페이지네이션<br>- 한국어 형태소 분석기 (nori) 적용<br>- 인덱싱은 비동기 처리 |
 | **Duration** | 1.5일 |
@@ -117,9 +117,9 @@
 | **Done When** | 하이브리드 검색 API + RRF 점수 병합 + BM25/시맨틱 단독 대비 정확도 향상 확인 |
 | **Scope** | **In**: RRF 점수 병합 로직, 시맨틱 검색 연동, 하이브리드 검색 API / **Out**: 검색 UI, 자동완성, 필터링 고도화 |
 | **Input** | Step 5 완료된 BM25 검색, learning-ai 시맨틱 검색 API, RRF 알고리즘 문서 |
-| **Instructions** | 1. learning-ai 서비스의 시맨틱 검색 API 연동 (HTTP 클라이언트)<br>2. RRF(Reciprocal Rank Fusion) 점수 병합 로직 구현<br>3. 하이브리드 검색 API 구현 (GET `/api/v1/notes/search?mode=hybrid`)<br>4. BM25 단독 / 시맨틱 단독 / 하이브리드 모드 전환 지원<br>5. RRF 파라미터(k=60) 설정 및 조정 가능하도록 구현<br>6. 검색 결과 정렬: RRF 점수 내림차순<br>7. 통합 테스트: 하이브리드 검색 결과 품질 검증 |
+| **Instructions** | 1. learning-ai 서비스의 시맨틱 검색 API 연동 (HTTP 클라이언트)<br>2. RRF(Reciprocal Rank Fusion) 점수 병합 로직 구현<br>3. 하이브리드 검색 API 구현 → `POST /ai/search/hybrid` (Wiki 기준: GET 아님, `/api/v1/` 접두사 제거, 단일 mode 파라미터 방식 폐기)<br>4. 검색 모드별 별도 엔드포인트: keyword → `GET /notes/search?q=...`, semantic → `POST /ai/search/semantic`, hybrid → `POST /ai/search/hybrid`<br>5. RRF 파라미터(k=60) 설정 및 조정 가능하도록 구현<br>6. 검색 결과 정렬: RRF 점수 내림차순<br>7. 통합 테스트: 하이브리드 검색 결과 품질 검증 |
 | **Output Format** | 하이브리드 검색 API 응답 + RRF 병합 로직 코드 + 검색 모드별 비교 결과 |
-| **Constraints** | - RRF 기본 k=60<br>- BM25와 시맨틱 검색 병렬 실행 (응답 시간 최소화)<br>- 타임아웃: 시맨틱 검색 3초 초과 시 BM25 결과만 반환<br>- 검색 모드: keyword, semantic, hybrid 3종 지원 |
+| **Constraints** | - RRF 기본 k=60<br>- BM25와 시맨틱 검색 병렬 실행 (응답 시간 최소화)<br>- 타임아웃: 시맨틱 검색 3초 초과 시 BM25 결과만 반환<br>- 검색 모드별 별도 엔드포인트 사용 (단일 엔드포인트에 mode 파라미터 방식 사용 금지): keyword=`GET /notes/search?q=...`, semantic=`POST /ai/search/semantic`, hybrid=`POST /ai/search/hybrid` |
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @knowledge-owner-2 |

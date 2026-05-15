@@ -127,7 +127,7 @@
 - [ ] 테스트 통과 확인
 
 ### 1.9 Controller + Test
-- [ ] POST /ai/ask 엔드포인트 구현 (RAG Q&A)
+- [ ] POST /ai/qa 엔드포인트 구현 (RAG Q&A — `{ "stream": true }` 파라미터 지원, Server-Sent Events 스트리밍 응답)
 - [ ] 응답에 출처 정보 포함 (노트 제목 + 관련도)
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 캐시 히트 시 빠른 응답 확인

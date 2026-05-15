@@ -48,7 +48,7 @@
 
 ### 4.7 Repository 구현
 - [ ] NoteRepository 클래스 작성 (HTTP client + knowledge-svc 연동)
-- [ ] CRUD API 호출 (POST/GET/PUT/DELETE /api/v1/notes)
+- [ ] CRUD API 호출 (POST/GET/PUT/DELETE /notes)
 - [ ] Riverpod Provider 등록 (NoteNotifier)
 
 ### 4.8 Service + Test

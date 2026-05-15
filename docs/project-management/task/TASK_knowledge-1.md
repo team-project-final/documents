@@ -107,7 +107,7 @@
   - [ ] 추출된 링크 → note_links 테이블 저장 (source_note_id, target_title)
   - [ ] 대상 노트 존재 시 target_note_id 자동 매핑
   - [ ] 노트 수정 시 기존 링크 갱신 (삭제 + 재생성)
-  - [ ] `GET /notes/{id}/links` → 해당 노트의 위키링크 목록 반환
+  - [ ] `GET /notes/{id}/backlinks` → 해당 노트를 참조하는 노트 목록 반환 (Wiki는 `/backlinks`만 정의 — `/links` 아님)
   - [ ] note_links 테이블 Flyway 마이그레이션 완료
   - [ ] 단위/통합 테스트 통과
 - **Scope**:
@@ -131,7 +131,7 @@
   4. NoteService.save/update 후처리에 링크 추출 로직 추가
   5. 추출된 title로 notes 테이블 조회 → target_note_id 매핑
   6. 노트 수정 시 기존 링크 삭제 후 재생성
-  7. LinkController `GET /notes/{id}/links` 구현
+  7. LinkController `GET /notes/{id}/backlinks` 구현 (Wiki 기준 — `/links` 아님)
   8. WikiLinkParser 단위 테스트 (다양한 케이스)
   9. 통합 테스트 (노트 생성 → 링크 자동 저장 확인)
 - **Output Format**: note 모듈 위키링크 코드 + Flyway 마이그레이션 + 테스트 코드
@@ -159,17 +159,17 @@
 - **Step Goal**: 사용자가 노트 간 백링크를 조회하고, D3.js 지식 그래프 데이터를 API로 받을 수 있다.
 - **Done When**:
   - [ ] `GET /notes/{id}/backlinks` → 해당 노트를 참조하는 노트 목록 반환
-  - [ ] `GET /graph/nodes` → 전체 노트 그래프 노드 데이터 반환
-  - [ ] `GET /graph/edges` → 전체 노트 링크 엣지 데이터 반환
-  - [ ] `GET /graph?userId={id}` → 사용자별 그래프 데이터 반환
+  - [ ] `GET /graph/data` → 전체 노트 그래프 데이터 반환 (nodes + edges 단일 엔드포인트, Wiki 기준 — `/graph/nodes`·`/graph/edges` 분리 없음)
+     - 쿼리 파라미터로 `userId={id}` 지원 (구 `GET /graph?userId={id}` 대체)
   - [ ] D3.js force-directed graph 호환 JSON 포맷
   - [ ] 통합 테스트 통과
 - **Scope**:
   - In Scope:
     - 백링크 조회 API (note_links 역방향 조회)
-    - 그래프 노드 목록 API (노트 id, title, link_count)
-    - 그래프 엣지 목록 API (source_note_id, target_note_id)
-    - D3.js 호환 JSON 포맷 (nodes + links)
+    - 그래프 데이터 단일 API `GET /graph/data` (nodes + edges 함께 반환)
+      - 노드: id, title, `linkCount` + `pageRank` (구 `val` → `linkCount`+`pageRank`)
+      - 엣지: source, target, `type` 필드 포함 (배열명 `edges` — 구 `links` 아님)
+    - D3.js 호환 JSON 포맷 (nodes + edges)
     - 사용자별 그래프 필터링
     - 통합 테스트
   - Out of Scope:
@@ -181,10 +181,12 @@
   1. 백링크 조회 로직 구현 (note_links.target_note_id → source_note_id 역추적)
   2. BacklinkController `GET /notes/{id}/backlinks` 구현
   3. GraphService 구현 (노트 → 노드, 링크 → 엣지 변환)
-  4. GraphController `GET /graph/nodes` 구현
-  5. GraphController `GET /graph/edges` 구현
-  6. D3.js 호환 JSON 포맷 정의 ({nodes: [{id, title, val}], links: [{source, target}]})
-  7. 사용자별 그래프 필터링 로직 추가
+  4. GraphController `GET /graph/data` 구현 (nodes + edges 단일 엔드포인트)
+     - 노드 응답 필드: `id`, `title`, `linkCount`, `pageRank` (구 `val` → 분리)
+     - 엣지 배열명: `edges` (구 `links` 아님), 각 엣지에 `type` 필드 포함
+  5. (구 `/graph/nodes`, `/graph/edges` 별도 엔드포인트 제거 — Wiki 미정의)
+  6. D3.js 호환 JSON 포맷 정의 (`{nodes: [{id, title, linkCount, pageRank}], edges: [{source, target, type}]}`)
+  7. 사용자별 그래프 필터링 로직 추가 (`GET /graph/data?userId={id}`)
   8. 통합 테스트 작성
 - **Output Format**: graph 모듈 코드 + API 문서 (Swagger) + 테스트 코드
 - **Constraints**:
@@ -258,7 +260,7 @@
   - [ ] 노트 수정 시 note_versions 테이블에 이전 버전 자동 저장
   - [ ] `GET /notes/{id}/versions` → 수정 이력 목록 조회
   - [ ] `GET /notes/{id}/versions/{versionId}` → 특정 버전 상세 조회
-  - [ ] `POST /notes/{id}/versions/{versionId}/restore` → 이전 버전으로 복원
+  - [ ] `POST /notes/{id}/versions/{versionId}/restore` → 이전 버전으로 복원 (Wiki에 추가 예정)
   - [ ] note_versions 테이블 Flyway 마이그레이션 완료
   - [ ] 통합 테스트 통과
 - **Scope**:
@@ -302,10 +304,10 @@
 - **Step Name**: 태그 필터링/자동완성
 - **Step Goal**: 사용자가 태그로 노트를 필터링하고, 태그 자동완성을 사용할 수 있다.
 - **Done When**:
-  - [ ] `POST /notes/{id}/tags` → 노트에 태그 추가
-  - [ ] `DELETE /notes/{id}/tags/{tagId}` → 노트에서 태그 제거
+  - [ ] `POST /notes/{id}/tags` → 노트에 태그 추가 (Wiki에 추가 예정)
+  - [ ] `DELETE /notes/{id}/tags/{tagId}` → 노트에서 태그 제거 (Wiki에 추가 예정)
   - [ ] `GET /notes?tag={tagName}` → 태그 기반 노트 필터링
-  - [ ] `GET /tags/autocomplete?q={prefix}` → 태그 자동완성 (prefix 매칭)
+  - [ ] `GET /tags/autocomplete?q={prefix}` → 태그 자동완성 (prefix 매칭, Wiki에 추가 예정)
   - [ ] tags / note_tags 테이블 Flyway 마이그레이션 완료
   - [ ] 통합 테스트 통과
 - **Scope**:

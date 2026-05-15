@@ -42,7 +42,7 @@
 
 ### 4.6 DTO / Entity 설계 (API First)
 - [ ] XpEventResponse 정의 (eventType, xpAmount, createdAt)
-- [ ] UserXpResponse 정의 (totalXp, level)
+- [ ] UserXpResponse 정의 — `/gamification/profile` 응답 기준 (level, totalXp, currentStreak, longestStreak, title, nextLevelXp, recentBadges)
 - [ ] XpEvent Entity 작성
 - [ ] UserXp Entity 작성
 - [ ] EventType Enum 작성 (CARD_REVIEWED, NOTE_CREATED 등)
@@ -67,8 +67,8 @@
 - [ ] 테스트 통과 확인
 
 ### 4.9 Controller + Test
-- [ ] GET /api/v1/gamification/xp 엔드포인트 구현 (사용자 총 XP/레벨 조회)
-- [ ] GET /api/v1/gamification/xp/history 엔드포인트 구현 (XP 이력 조회)
+- [ ] GET /gamification/profile 엔드포인트 구현 (사용자 XP/레벨/스트릭/배지 프로필 조회)
+- [ ] GET /gamification/xp/history 엔드포인트 구현 (XP 이력 조회)
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 401/403 응답 테스트
 - [ ] 통합 테스트
@@ -94,7 +94,7 @@
 - [ ] share_token 발행/검증 플로우 정의
 - [ ] 공유 콘텐츠 유형 정의 (Deck, Note 등)
 - [ ] 공유 콘텐츠 검색 요건 (키워드, 카테고리)
-- [ ] 공유 콘텐츠 복사(fork) 요건 분석
+- [ ] 공유 콘텐츠 복사(copy) 요건 분석
 - [ ] Instructions 초안 → TASK 문서 반영
 
 ### 5.3 Security 1차 검토
@@ -132,21 +132,21 @@
 - [ ] Flyway 마이그레이션 스크립트 작성
 
 ### 5.8 Service + Test
-- [ ] SharedContentService 구현 (share, findByToken, search, fork, delete)
+- [ ] SharedContentService 구현 (share, findById, search, copy, delete)
 - [ ] share_token 발행 로직 (UUID v4 생성)
 - [ ] share_token 검증 로직 (존재 여부 + 만료 확인)
-- [ ] 공유 콘텐츠 검색 서비스 구현 (키워드 + 카테고리 필터)
-- [ ] 콘텐츠 복사(fork) 서비스 구현 (원본 → 사용자 소유 복사)
+- [ ] 공유 콘텐츠 검색 서비스 구현 (키워드 + 카테고리 필터, `GET /community/shared-decks?q=...`)
+- [ ] 콘텐츠 복사(copy) 서비스 구현 (원본 → 사용자 소유 복사)
 - [ ] Bean Validation 적용
 - [ ] 단위 테스트 작성 (Mockito)
 - [ ] 테스트 통과 확인
 
 ### 5.9 Controller + Test
-- [ ] POST /api/v1/community/share 엔드포인트 구현 (공유 등록)
-- [ ] GET /api/v1/community/share/{token} 엔드포인트 구현 (토큰 조회)
-- [ ] GET /api/v1/community/search 엔드포인트 구현 (검색)
-- [ ] POST /api/v1/community/share/{token}/fork 엔드포인트 구현 (복사)
-- [ ] DELETE /api/v1/community/share/{id} 엔드포인트 구현
+- [ ] POST /community/shared-decks 또는 POST /community/shared-notes 엔드포인트 구현 (공유 등록)
+- [ ] GET /community/shared-decks/{id} 또는 GET /community/shared-notes/{id} 엔드포인트 구현 (ID 조회)
+- [ ] GET /community/shared-decks?q=... 엔드포인트 구현 (검색)
+- [ ] POST /community/shared-decks/{id}/copy 엔드포인트 구현 (복사)
+- [ ] DELETE /community/shared-decks/{id} 엔드포인트 구현
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 401/403 응답 테스트
 - [ ] 통합 테스트

@@ -170,8 +170,8 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.6 DTO / Entity 설계 (API First)
-- [ ] ReviewRequest 정의 (rating)
-- [ ] ReviewResponse 정의 (nextReviewDate, interval, easeFactor)
+- [ ] ReviewSubmitRequest 정의 (cardId, rating, timeSpentMs)
+- [ ] ReviewResponse 정의 (nextDueDate, nextInterval, newEF)
 - [ ] ReviewLog Entity 작성
 - [ ] Rating Enum 작성 (AGAIN, HARD, GOOD, EASY)
 - [ ] MapStruct 매퍼 작성
@@ -191,7 +191,7 @@
 - [ ] 테스트 통과 확인
 
 ### 1.9 Controller + Test
-- [ ] POST /api/v1/cards/{cardId}/review 엔드포인트 구현
+- [ ] POST /reviews/sessions/{sessionId}/submit 엔드포인트 구현 (body: { cardId, rating, timeSpentMs })
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 401/403 응답 테스트
 - [ ] 통합 테스트 (복습 → interval 변경 확인)

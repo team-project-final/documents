@@ -23,6 +23,10 @@
   - 노트 버전 이력 (수정 히스토리)
   - 태그 관리 고도화
   - Graph PageRank (시간 허용 시)
+  - **첨부파일 업로드**: `POST /notes/{id}/attachments` (Presigned URL 반환) *(Wiki API 명세서 동기화 — 추가)*
+  - **Graph 클러스터**: `GET /graph/clusters` (자동 감지된 클러스터 목록) *(Wiki API 명세서 동기화 — 추가)*
+  - **Graph N-hop 이웃**: `GET /graph/neighbors/{noteId}` (특정 노트의 N-hop 이웃 조회) *(Wiki API 명세서 동기화 — 추가)*
+  - **Import/Export**: `POST /import/markdown` (Obsidian Vault 가져오기), `POST /import/anki` (Anki .apkg 가져오기), `POST /export/markdown`, `POST /export/anki` *(Wiki API 명세서 동기화 — 추가)*
 - **Out of Scope**:
   - chunking/검색 (knowledge-owner-2 담당)
   - Spring Modulith 설정/ArchUnit (knowledge-owner-2 담당)
@@ -34,8 +38,8 @@
 |------|------|-----------|--------|--------|
 | W1 | 05-12~16 | knowledge-svc 골격 + note CRUD + 위키링크 | 서비스 골격, 노트 API, 위키링크 파싱 | 인프라 (team-lead) |
 | W2 | 05-19~23 | graph 백링크 + ES 동기화 (Kafka) | graph API, ES 인덱싱 | Kafka 토픽 (team-lead W2) |
-| W3 | 05-26~30 | 노트 버전이력 + 태그 고도화 + PageRank | 버전 API, 태그 관리, PageRank | graph 완성 (W2) |
-| W4 | 06-02~06 | 버그 수정 + 통합 테스트 | 안정화 | 전체 통합 (W3) |
+| W3 | 05-26~30 | 노트 버전이력 + 태그 고도화 + PageRank + 첨부파일 업로드 + Graph 클러스터/N-hop | 버전 API, 태그 관리, PageRank, attachments API, graph clusters/neighbors API | graph 완성 (W2) |
+| W4 | 06-02~06 | Import/Export API + 버그 수정 + 통합 테스트 | import/export API (markdown/anki), 안정화 | 전체 통합 (W3) |
 
 ## 협업 인터페이스
 
@@ -53,3 +57,7 @@
 - [ ] 그래프 시각화 데이터 API 동작
 - [ ] ES 검색 동기화 (노트 생성/수정 → ES 반영)
 - [ ] 노트 버전 이력 조회
+- [ ] 첨부파일 업로드 Presigned URL 반환 동작 *(Wiki API 명세서 동기화 — 추가)*
+- [ ] Graph 클러스터 목록 조회 API 동작 *(Wiki API 명세서 동기화 — 추가)*
+- [ ] Graph N-hop 이웃 조회 API 동작 *(Wiki API 명세서 동기화 — 추가)*
+- [ ] Markdown/Anki Import 및 Export API 동작 *(Wiki API 명세서 동기화 — 추가)*

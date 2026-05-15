@@ -44,7 +44,7 @@
 - [ ] UserBadge Entity 작성
 - [ ] UserStreak Entity 작성
 - [ ] BadgeResponse DTO 정의
-- [ ] LeaderboardEntryResponse DTO 정의 (rank, userId, nickname, xp, level)
+- [ ] LeaderboardEntryResponse DTO 정의 (rank, userId, displayName, xp, level)
 - [ ] UserGamificationResponse DTO 정의 (xp, level, streak, badges)
 - [ ] Output Format → TASK 반영
 
@@ -63,7 +63,7 @@
 - [ ] 테스트 통과 확인
 
 ### 1.9 Controller + Test
-- [ ] GET /gamification/me 엔드포인트 구현 (내 XP, 레벨, 스트릭, 배지)
+- [ ] GET /gamification/profile 엔드포인트 구현 (내 XP, 레벨, 스트릭, 배지 — level, totalXp, currentStreak, longestStreak, title, nextLevelXp, recentBadges)
 - [ ] GET /gamification/leaderboard 엔드포인트 구현 (주간/월간/전체)
 - [ ] GET /gamification/badges 엔드포인트 구현 (전체 배지 목록)
 - [ ] 슬라이스 테스트 (@WebMvcTest)
@@ -163,7 +163,7 @@
 
 ### 1.4 ERD 설계
 - [ ] reports 테이블 설계 (id, reporter_id, target_type, target_id, reason, status, admin_note, created_at, resolved_at)
-- [ ] status ENUM 정의 (PENDING, APPROVED, REJECTED)
+- [ ] status ENUM 정의 (pending, resolved, dismissed)
 - [ ] 인덱스 설계 (status, reporter_id, target_type+target_id)
 - [ ] UNIQUE 제약: reporter_id + target_type + target_id
 - [ ] Duration(final) 갱신
@@ -183,7 +183,7 @@
 
 ### 1.7 Repository 구현
 - [ ] ReportRepository 인터페이스 작성
-- [ ] findByStatus 커스텀 쿼리 (PENDING 목록)
+- [ ] findByStatus 커스텀 쿼리 (pending 목록)
 - [ ] existsByReporterIdAndTargetTypeAndTargetId 중복 검사 쿼리
 
 ### 1.8 Service + Test
@@ -194,9 +194,9 @@
 - [ ] 테스트 통과 확인
 
 ### 1.9 Controller + Test
-- [ ] POST /reports 엔드포인트 구현 (신고 접수)
+- [ ] POST /community/reports 엔드포인트 구현 (신고 접수)
 - [ ] GET /admin/reports 엔드포인트 구현 (관리자 신고 목록, 페이징)
-- [ ] PATCH /admin/reports/{id} 엔드포인트 구현 (승인/거부 처리)
+- [ ] PUT /admin/reports/{id}/resolve 엔드포인트 구현 (승인/거부 처리)
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 403 Forbidden 테스트 (비관리자 처리 시도)
 - [ ] 409 Conflict 테스트 (중복 신고)

@@ -127,8 +127,8 @@
 ### 1.9 Controller + Test
 - [ ] GET /notifications 엔드포인트 구현 (사용자별 알림 목록)
 - [ ] PATCH /notifications/{id}/read 엔드포인트 구현 (읽음 처리)
-- [ ] GET /notification-settings 엔드포인트 구현
-- [ ] PUT /notification-settings 엔드포인트 구현
+- [ ] GET /notifications/preferences 엔드포인트 구현
+- [ ] PUT /notifications/preferences 엔드포인트 구현
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 테스트 통과 확인
 

@@ -54,11 +54,11 @@
 
 - **Step Goal**: 로그인 사용자가 학습 그룹을 생성/조회/수정/삭제할 수 있다.
 - **Done When**:
-  - [ ] `POST /groups` → 그룹 생성 (이름, 설명, 공개여부)
-  - [ ] `GET /groups` → 그룹 목록 조회 (페이징)
-  - [ ] `GET /groups/{id}` → 그룹 상세 조회
-  - [ ] `PUT /groups/{id}` → 그룹 정보 수정 (소유자만)
-  - [ ] `DELETE /groups/{id}` → 그룹 삭제 (소유자만)
+  - [ ] `POST /community/groups` → 그룹 생성 (이름, 설명, joinType, maxMembers, avatarUrl)
+  - [ ] `GET /community/groups` → 그룹 목록 조회 (페이징)
+  - [ ] `GET /community/groups/{id}` → 그룹 상세 조회
+  - [ ] `PATCH /community/groups/{id}` → 그룹 정보 수정 (소유자만)
+  - [ ] `DELETE /community/groups/{id}` → 그룹 삭제 (소유자만)
   - [ ] groups 테이블 Flyway 마이그레이션 완료
   - [ ] 통합 테스트 통과
 - **Scope**:
@@ -76,12 +76,13 @@
     - 그룹 이미지 업로드
 - **Input**: PRD_W1 그룹 기능 요구사항, JWT 인증 토큰 (platform-svc)
 - **Instructions**:
-  1. groups 테이블 DDL 작성 (id, name, description, is_public, owner_id, created_at, updated_at)
+  1. groups 테이블 DDL 작성 (id, name, description, joinType, maxMembers, avatarUrl, owner_id, created_at, updated_at)
+     - `joinType`: `open` (즉시 가입) 또는 `approval` (승인 필요) — `is_public` 대신 사용
   2. Flyway V1 마이그레이션 파일 생성
   3. Group 엔티티 + JPA Repository 작성
   4. GroupService 구현 (create, findAll, findById, update, delete)
   5. 소유자 권한 검증 로직 (수정/삭제 시 owner_id 확인)
-  6. GroupController REST API 구현 (5개 엔드포인트)
+  6. GroupController REST API 구현 (5개 엔드포인트: POST/GET/GET/{id}/PATCH/{id}/DELETE/{id})
   7. 페이징 처리 (Pageable, 기본 20건)
   8. 통합 테스트 작성 (@SpringBootTest + TestContainers)
 - **Output Format**: community 모듈 코드 + Flyway 마이그레이션 + API 문서 (Swagger)
@@ -102,12 +103,12 @@
 
 - **Step Goal**: 그룹 소유자가 멤버를 초대/가입승인/탈퇴시킬 수 있고, 멤버는 자발적으로 가입/탈퇴할 수 있다.
 - **Done When**:
-  - [ ] `POST /groups/{id}/members/invite` → 멤버 초대 (소유자)
-  - [ ] `POST /groups/{id}/members/join` → 가입 신청 (사용자)
-  - [ ] `PUT /groups/{id}/members/{memberId}/approve` → 가입 승인 (소유자)
-  - [ ] `DELETE /groups/{id}/members/{memberId}` → 멤버 탈퇴/강퇴
-  - [ ] `GET /groups/{id}/members` → 멤버 목록 조회
-  - [ ] 멤버 역할 구분 (OWNER, ADMIN, MEMBER)
+  - [ ] `POST /community/groups/{id}/invite` → 멤버 초대 (소유자)
+  - [ ] `POST /community/groups/{id}/join` → 가입 신청 (사용자)
+  - [ ] `PATCH /community/groups/{id}/join-requests/{uid}` → 가입 승인 (소유자, body: `{ "action": "approve" }`)
+  - [ ] `DELETE /community/groups/{id}/members/{uid}` → 멤버 탈퇴/강퇴
+  - [ ] `GET /community/groups/{id}/members` → 멤버 목록 조회
+  - [ ] 멤버 역할 구분 (`owner`, `admin`, `member` — 소문자)
   - [ ] group_members 테이블 마이그레이션 완료
   - [ ] 통합 테스트 통과
 - **Scope**:
@@ -115,7 +116,7 @@
     - group_members 테이블 설계 + Flyway 마이그레이션
     - GroupMember 엔티티 + Repository
     - 멤버 초대/가입/승인/탈퇴/강퇴 로직
-    - 멤버 역할 관리 (OWNER, ADMIN, MEMBER)
+    - 멤버 역할 관리 (`owner`, `admin`, `member`)
     - 멤버 목록 조회 API
     - 통합 테스트
   - Out of Scope:
@@ -128,14 +129,14 @@
   2. Flyway V2 마이그레이션 파일 생성
   3. GroupMember 엔티티 + Repository 작성
   4. MemberService 구현 (invite, join, approve, leave, kick)
-  5. 역할 기반 권한 검증 (OWNER: 모든 작업, ADMIN: 승인/강퇴, MEMBER: 탈퇴만)
+  5. 역할 기반 권한 검증 (`owner`: 모든 작업, `admin`: 승인/강퇴, `member`: 탈퇴만)
   6. MemberController REST API 구현
   7. 멤버 상태 관리 (PENDING, ACTIVE, KICKED)
   8. 통합 테스트 작성 (역할별 시나리오)
 - **Output Format**: community 모듈 멤버 관리 코드 + Flyway 마이그레이션 + 테스트 코드
 - **Constraints**:
   - 공개 그룹: 즉시 가입, 비공개 그룹: 승인 필요
-  - OWNER는 탈퇴 불가 (소유권 이전 후 탈퇴)
+  - `owner`는 탈퇴 불가 (소유권 이전 후 탈퇴)
   - 강퇴된 멤버는 7일간 재가입 불가
 - **Duration**: 2일
 - **RULE Reference**: wiki 03_아키텍처_정의서 §REST API 규칙, wiki 09_Git_규칙_정의서 §커밋 컨벤션
@@ -158,7 +159,7 @@
   - [ ] Kafka Consumer가 card.reviewed 이벤트 수신
   - [ ] 이벤트 수신 시 사용자 XP 자동 적립
   - [ ] user_xp 테이블에 XP 이력 저장
-  - [ ] `GET /gamification/xp/me` → 누적 XP 조회
+  - [ ] `GET /gamification/profile` → 누적 XP 조회 (구 `/gamification/xp/me` → Wiki 기준 `/gamification/profile`)
   - [ ] 중복 이벤트 처리 방지 (멱등성)
   - [ ] 통합 테스트 통과
 - **Scope**:
@@ -180,7 +181,7 @@
   3. Kafka Consumer 구현 (@KafkaListener, card.reviewed 토픽)
   4. XP 계산 로직 구현 (카드 복습 1회 = 10 XP)
   5. 멱등성 처리 (event_id UNIQUE 제약)
-  6. 누적 XP 조회 API 구현 (`GET /gamification/xp/me`)
+  6. 누적 XP 조회 API 구현 (`GET /gamification/profile`)
   7. 통합 테스트 작성 (Embedded Kafka + TestContainers)
 - **Output Format**: gamification 모듈 XP 코드 + Kafka Consumer + 테스트 코드
 - **Constraints**:
@@ -201,10 +202,10 @@
 - **Step Name**: 공유 토큰 기반 콘텐츠 공유
 - **Step Goal**: 사용자가 덱/노트를 share_token으로 공유하고, 다른 사용자가 공유 콘텐츠를 검색하여 복사할 수 있다.
 - **Done When**:
-  - [ ] `POST /community/shares` → share_token 생성 (덱/노트)
-  - [ ] `GET /community/shares/{token}` → 공유 콘텐츠 조회
-  - [ ] `POST /community/shares/{token}/copy` → 공유 콘텐츠 복사
-  - [ ] `GET /community/shares/search` → 공유 콘텐츠 검색
+  - [ ] `POST /community/shared-decks` → 덱 공유 토큰 생성 / `POST /community/shared-notes` → 노트 공유 토큰 생성
+  - [ ] `GET /community/shared-decks/{id}` → 공유 덱 조회 / `GET /community/shared-notes/{id}` → 공유 노트 조회
+  - [ ] `POST /community/shared-decks/{id}/copy` → 공유 덱 복사
+  - [ ] `GET /community/shared-decks?q=...` → 공유 덱 검색
   - [ ] shared_contents 테이블 마이그레이션 완료
   - [ ] 통합 테스트 통과
 - **Scope**:
@@ -222,15 +223,17 @@
 - **Input**: 덱/노트 데이터, JWT 인증 토큰, community 모듈
 - **Instructions**:
   1. shared_contents 테이블 DDL 작성 (id, share_token, content_type, content_id, owner_id, title, description, created_at)
+     - share_token 컬럼: 12자리 base62 문자열 생성기 사용
   2. Flyway 마이그레이션 파일 생성
-  3. share_token 생성 API 구현 (UUID v4)
-  4. 공유 콘텐츠 조회 API 구현 (토큰 기반, 인증 불필요)
-  5. 공유 콘텐츠 복사 API 구현 (인증 필요, 원본 복제)
-  6. 공유 콘텐츠 검색 API 구현 (DB LIKE 검색, 페이징)
+  3. 공유 토큰 생성 API 구현 (`POST /community/shared-decks`, `POST /community/shared-notes`)
+     - share_token: 12자리 base62 문자열 (UUID v4 아님)
+  4. 공유 콘텐츠 조회 API 구현 (ID 기반, 인증 불필요): `GET /community/shared-decks/{id}`, `GET /community/shared-notes/{id}`
+  5. 공유 덱 복사 API 구현: `POST /community/shared-decks/{id}/copy` (인증 필요, 원본 복제)
+  6. 공유 덱 검색 API 구현: `GET /community/shared-decks?q=...` (DB LIKE 검색, 페이징)
   7. 통합 테스트 작성
 - **Output Format**: community 모듈 공유 코드 + Flyway 마이그레이션 + 테스트 코드
 - **Constraints**:
-  - share_token: UUID v4 (추측 불가)
+  - share_token: 12자리 base62 문자열 (UUID v4 아님 — Wiki 기준)
   - 공유 콘텐츠 조회는 인증 불필요 (공개 접근)
   - 복사 시 원본과의 연결 유지 (source_share_id)
 - **Duration**: 1.5일
@@ -254,8 +257,8 @@
   - [ ] XP 누적 → 레벨 자동 상승 (레벨 테이블 기준)
   - [ ] 조건 달성 시 배지 자동 수여 (e.g., 7일 연속 학습)
   - [ ] 일별 학습 스트릭 추적 (연속 일수)
-  - [ ] `GET /gamification/leaderboard` → 주간 XP 리더보드
-  - [ ] `GET /gamification/me` → 내 레벨/배지/스트릭 조회
+  - [ ] `GET /gamification/leaderboard` → 주간 XP 리더보드 (`scope` 파라미터로 전체/그룹 리더보드 전환 지원)
+  - [ ] `GET /gamification/profile` → 내 레벨/배지/스트릭 조회 (구 `/gamification/me` → Wiki 기준 `/gamification/profile`)
   - [ ] 통합 테스트 통과
 - **Scope**:
   - In Scope:
@@ -278,7 +281,7 @@
   5. 배지 조건 엔진 구현 (스트릭 7일, XP 1000 등)
   6. 스트릭 추적 로직 구현 (일별 학습 여부 체크)
   7. 리더보드 API 구현 (Redis Sorted Set 활용)
-  8. 내 현황 조회 API 구현
+  8. 내 현황 조회 API 구현 (`GET /gamification/profile`)
   9. 통합 테스트 작성
 - **Output Format**: gamification 모듈 레벨/배지/스트릭 코드 + Flyway 마이그레이션 + 테스트 코드
 - **Constraints**:
@@ -345,8 +348,8 @@
 - **Done When**:
   - [ ] `POST /community/reports` → 콘텐츠 신고
   - [ ] `GET /admin/reports` → 신고 목록 조회 (관리자)
-  - [ ] `PUT /admin/reports/{id}/approve` → 신고 승인 (콘텐츠 숨김)
-  - [ ] `PUT /admin/reports/{id}/reject` → 신고 거부
+  - [ ] `PUT /admin/reports/{id}/resolve` → 신고 처리 (body: `{ "status": "resolved", "actionTaken": "..." }`)
+     - 기존 `/approve` 및 `/reject` 별도 엔드포인트 → `/resolve` 단일 엔드포인트로 통합 (Wiki 기준)
   - [ ] reports 테이블 마이그레이션 완료
   - [ ] 통합 테스트 통과
 - **Scope**:
@@ -367,8 +370,9 @@
   2. Flyway 마이그레이션 파일 생성
   3. 신고 접수 API 구현 (`POST /community/reports`)
   4. 신고 목록 조회 API 구현 (`GET /admin/reports` + 상태 필터)
-  5. 신고 승인 API 구현 (콘텐츠 is_hidden = true 처리)
-  6. 신고 거부 API 구현 (status → REJECTED)
+  5. 신고 처리 API 구현: `PUT /admin/reports/{id}/resolve` (body: `{ "status": "resolved", "actionTaken": "..." }`)
+     - 콘텐츠 숨김 처리(is_hidden = true) 또는 기각(dismiss)은 `actionTaken` 필드로 구분
+  6. 신고 상태: `pending` → `resolved` 또는 `dismissed` (소문자, Wiki 기준)
   7. 통합 테스트 작성 (사용자 신고 + 관리자 처리)
 - **Output Format**: community 모듈 신고 코드 + Flyway 마이그레이션 + 테스트 코드
 - **Constraints**:

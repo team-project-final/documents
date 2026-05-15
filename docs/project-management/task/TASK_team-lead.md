@@ -259,7 +259,9 @@
 - **Output Format**: Gateway 설정 파일 + 라우팅 문서
 - **Constraints**:
   - Rate Limit: 분당 60회 (사용자별, Redis key)
-  - 라우팅: /api/platform/**, /api/engagement/**, /api/knowledge/**, /api/learning/**
+  - 라우팅: `/api/platform/**`, `/api/engagement/**`, `/api/knowledge/**`, `/api/learning/**` 형식의 prefix는 Wiki 도메인 경로로 매핑해야 함
+    - 실제 내부 서비스 경로는 Wiki API 명세 기준: `/auth/**`, `/billing/**`, `/notes/**`, `/community/**`, `/gamification/**`, `/notifications/**`, `/reviews/**`, `/ai/**`, `/stats/**`, `/graph/**`
+    - Gateway에서 외부 prefix → 내부 Wiki 도메인 경로 변환 규칙 정의 필요
   - 응답 타임아웃: 30초
 - **Duration**: 1일
 - **RULE Reference**: wiki 03_아키텍처_정의서 §Gateway, wiki 18_기술_스택_정의서 §Spring Cloud Gateway

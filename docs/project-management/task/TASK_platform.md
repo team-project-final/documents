@@ -172,11 +172,11 @@
 - **Instructions**:
   1. subscriptions 테이블 DDL 작성 + Flyway 마이그레이션
   2. payment_history 테이블 DDL 작성 + Flyway 마이그레이션
-  3. Stripe Checkout 세션 생성 API 구현 (`POST /payments/checkout`)
-  4. Webhook 엔드포인트 구현 (`POST /webhooks/stripe`)
+  3. Stripe Checkout 세션 생성 API 구현 (`POST /billing/checkout` — 구 `/payments/checkout`)
+  4. Webhook 엔드포인트 구현 (`POST /billing/webhooks` — 구 `/webhooks/stripe`)
   5. Webhook 서명 검증 로직 구현
   6. checkout.session.completed → 구독 활성화 로직
-  7. 구독 상태 조회 API (`GET /subscriptions/me`)
+  7. 구독 상태 조회 API (`GET /billing/subscription` — 구 `/subscriptions/me`)
   8. 통합 테스트 (Stripe Test Mode)
 - **Output Format**: auth 모듈 결제 코드 + Flyway 마이그레이션 + 테스트 코드
 - **Constraints**:
@@ -197,18 +197,18 @@
 - **Step Name**: FCM 디바이스 등록
 - **Step Goal**: 사용자가 FCM 푸시 알림을 받기 위해 디바이스를 등록할 수 있다.
 - **Done When**:
-  - [ ] `POST /devices` → FCM 토큰 등록
-  - [ ] `DELETE /devices/{id}` → 디바이스 해제
-  - [ ] `GET /devices/me` → 내 디바이스 목록 조회
+  - [ ] `POST /notifications/devices` → FCM 토큰 등록 (구 `/devices`)
+  - [ ] `DELETE /notifications/devices/{id}` → 디바이스 해제 (구 `/devices/{id}`)
+  - [ ] ~~`GET /devices/me`~~ → Wiki에 정의되지 않은 엔드포인트 (디바이스 관리는 POST/DELETE만 지원)
   - [ ] devices 테이블 Flyway 마이그레이션 완료
   - [ ] 통합 테스트 통과
 - **Scope**:
   - In Scope:
     - devices 테이블 설계 + Flyway 마이그레이션
-    - FCM 토큰 등록 API
-    - 디바이스 해제 API
-    - 내 디바이스 목록 조회 API
+    - FCM 토큰 등록 API (`POST /notifications/devices`)
+    - 디바이스 해제 API (`DELETE /notifications/devices/{id}`)
     - 중복 토큰 방지 로직
+    - (내 디바이스 목록 조회 API 제외 — Wiki 미정의)
   - Out of Scope:
     - 실제 푸시 발송 (W3 Step 7)
     - 토큰 갱신 자동화
@@ -218,8 +218,8 @@
   1. devices 테이블 DDL 작성 (id, user_id, fcm_token, device_type, created_at)
   2. Flyway 마이그레이션 파일 생성
   3. Device 엔티티 + Repository 작성
-  4. DeviceService 구현 (register, unregister, findByUser)
-  5. DeviceController REST API 구현
+  4. DeviceService 구현 (register, unregister)
+  5. DeviceController REST API 구현 (`POST /notifications/devices`, `DELETE /notifications/devices/{id}`)
   6. 중복 FCM 토큰 방지 (UNIQUE 제약)
   7. 통합 테스트 작성
 - **Output Format**: notification 모듈 디바이스 코드 + Flyway 마이그레이션 + 테스트 코드
@@ -338,11 +338,11 @@
 - **Step Name**: 관리자 테넌트/사용자 관리
 - **Step Goal**: 관리자가 테넌트와 사용자를 관리(목록/검색/정지/삭제)할 수 있다.
 - **Done When**:
-  - [ ] `GET /admin/users` → 사용자 목록 조회 (페이징 + 검색)
-  - [ ] `PUT /admin/users/{id}/suspend` → 사용자 정지
-  - [ ] `DELETE /admin/users/{id}` → 사용자 삭제 (soft delete)
+  - [ ] `GET /admin/users` → 사용자 목록 조회 (페이징 + 검색, Wiki 추가 예정 `/admin/users/*`)
+  - [ ] `PUT /admin/users/{id}/suspend` → 사용자 정지 (Wiki 추가 예정)
+  - [ ] `DELETE /admin/users/{id}` → 사용자 삭제 (soft delete, Wiki 추가 예정)
   - [ ] `GET /admin/tenants` → 테넌트 목록 조회
-  - [ ] `PUT /admin/tenants/{id}/suspend` → 테넌트 정지
+  - [ ] `PUT /admin/tenants/{id}/status` → 테넌트 상태 변경 (body: `{ "status": "suspended" }`) (구 `/suspend` → Wiki 기준 `/status`)
   - [ ] 관리자 권한 검증 동작
   - [ ] 통합 테스트 통과
 - **Scope**:
@@ -364,7 +364,7 @@
   3. 사용자 정지 API (status → SUSPENDED, JWT 블랙리스트)
   4. 사용자 삭제 API (soft delete, 개인정보 마스킹)
   5. 테넌트 목록 조회 API (페이징)
-  6. 테넌트 정지 API (소속 사용자 일괄 정지)
+  6. 테넌트 상태 변경 API: `PUT /admin/tenants/{id}/status` (body: `{ "status": "suspended" }`) — 구 `/suspend`
   7. 통합 테스트 작성 (관리자/비관리자 시나리오)
 - **Output Format**: admin 모듈 관리 코드 + 테스트 코드
 - **Constraints**:

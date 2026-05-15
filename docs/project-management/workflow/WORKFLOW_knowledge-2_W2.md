@@ -110,9 +110,9 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 5.6 DTO / Entity 설계 (API First)
-- [ ] SearchRequest 정의 (query, filters, page, size)
+- [ ] SearchRequest 정의 (query, filters, cursor, limit)
 - [ ] SearchResultResponse 정의 (noteId, title, highlights[], score)
-- [ ] SearchPageResponse 정의 (results[], totalCount, page, size)
+- [ ] SearchPageResponse 정의 (results[], totalCount, cursor — cursor-based pagination)
 - [ ] Output Format → TASK 반영
 
 ### 5.7 Repository 구현
@@ -131,7 +131,7 @@
 - [ ] 테스트 통과 확인
 
 ### 5.9 Controller + Test
-- [ ] GET /api/v1/search?q={query}&page={p}&size={s} 엔드포인트 구현
+- [ ] GET /notes/search?q={query}&cursor=...&limit=20 엔드포인트 구현
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 401/403 응답 테스트
 - [ ] 통합 테스트 (인덱싱 → 검색 → 하이라이팅 검증)

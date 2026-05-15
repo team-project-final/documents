@@ -183,7 +183,7 @@
 - [ ] 테스트 통과 확인
 
 ### 1.9 Controller + Test
-- [ ] GET /notes/{id}/links 엔드포인트 구현
+- [ ] GET /notes/{id}/backlinks 엔드포인트 구현
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 401/403 응답 테스트
 - [ ] 통합 테스트 (노트 생성 → 링크 자동 저장 확인)
