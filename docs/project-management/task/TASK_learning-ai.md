@@ -1,8 +1,8 @@
 # TASK: @learning-ai-owner
 
-> **담당 서비스**: learning-ai-svc
+> **담당 서비스**: learning-ai 런타임
 > **GitHub Repository**: [synapse-learning-svc](https://github.com/team-project-final/synapse-learning-svc) (`learning-ai` 모듈)
-> **주차**: W1 (2026-05-12 ~ 2026-05-16)
+> **주차**: W1 (2026-05-12 ~ 2026-05-15, 4 영업일)
 > **관련 문서**: [SCOPE](../scope/SCOPE_learning-ai.md) | [PRD_W1](../prd/PRD_W1.md) | [WORKFLOW](../workflow/WORKFLOW_learning-ai_W1.md) | [HISTORY](../history/HISTORY_learning-ai.md)
 
 ---
@@ -64,7 +64,7 @@
 
 ---
 
-# W2 (2026-05-19 ~ 2026-05-23)
+# W2 (2026-05-18 ~ 2026-05-22, 5 영업일)
 
 ## Step 4: 시맨틱 검색 (pgvector)
 

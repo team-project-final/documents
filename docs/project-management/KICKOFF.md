@@ -253,7 +253,7 @@ Conventional Commits 형식이야:
 - [ ] 자기 서비스 레포 clone: `gh repo clone team-project-final/{레포이름}`
 - [ ] 위키 5개 문서 순서대로 읽기:
   1. [18 기술 스택 정의서](https://github.com/team-project-final/documents/wiki) — 전체 스택 파악
-  2. [03 아키텍처 정의서](https://github.com/team-project-final/documents/wiki) — 4-서비스 구조
+  2. [03 아키텍처 정의서](https://github.com/team-project-final/documents/wiki) — 4개 서비스 구조
   3. [09 Git 규칙 정의서](https://github.com/team-project-final/documents/wiki) — 브랜치/PR 규칙
   4. [09a Git 워크플로 가이드](https://github.com/team-project-final/documents/wiki) — 실전 시나리오
   5. [17 스케줄 v3.0](https://github.com/team-project-final/documents/wiki) — 너의 트랙 W1~W5

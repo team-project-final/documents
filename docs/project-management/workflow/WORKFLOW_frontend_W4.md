@@ -1,7 +1,7 @@
-# WORKFLOW: @frontend-owner — Week 4
+# WORKFLOW: Frontend 전체 협업 — Week 4
 
-> **Task 문서**: [TASK_frontend.md](../task/TASK_frontend.md)  
-> **기간**: 2026-06-02 ~ 2026-06-06  
+> **Task 문서**: [TASK_frontend.md](../task/TASK_frontend.md)
+> **기간**: 2026-06-01 ~ 2026-06-05, 4 영업일
 > **PRD**: [PRD_W4.md](../prd/PRD_W4.md)
 
 ---

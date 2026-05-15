@@ -10,7 +10,7 @@
 | 담당 모듈 | note, graph |
 | GitHub Repository | [synapse-knowledge-svc](https://github.com/team-project-final/synapse-knowledge-svc) |
 
-## 4주 전체 책임 범위
+## 5주 전체 책임 범위
 
 ### 도메인 경계
 
@@ -36,10 +36,11 @@
 
 | 주차 | 기간 | 핵심 목표 | 산출물 | 의존성 |
 |------|------|-----------|--------|--------|
-| W1 | 05-12~16 | knowledge-svc 골격 + note CRUD + 위키링크 | 서비스 골격, 노트 API, 위키링크 파싱 | 인프라 (team-lead) |
-| W2 | 05-19~23 | graph 백링크 + ES 동기화 (Kafka) | graph API, ES 인덱싱 | Kafka 토픽 (team-lead W2) |
-| W3 | 05-26~30 | 노트 버전이력 + 태그 고도화 + PageRank + 첨부파일 업로드 + Graph 클러스터/N-hop | 버전 API, 태그 관리, PageRank, attachments API, graph clusters/neighbors API | graph 완성 (W2) |
-| W4 | 06-02~06 | Import/Export API + 버그 수정 + 통합 테스트 | import/export API (markdown/anki), 안정화 | 전체 통합 (W3) |
+| W1 | 05-12~15 | knowledge-svc 골격 + note CRUD + 위키링크 | 서비스 골격, 노트 API, 위키링크 파싱 | 인프라 (team-lead) |
+| W2 | 05-18~22 | graph 백링크 + ES 동기화 (Kafka) | graph API, ES 인덱싱 | Kafka 토픽 (team-lead W2) |
+| W3 | 05-26~29 | 노트 버전이력 + 태그 고도화 + PageRank + 첨부파일 업로드 + Graph 클러스터/N-hop | 버전 API, 태그 관리, PageRank, attachments API, graph clusters/neighbors API | graph 완성 (W2) |
+| W4 | 06-01~05 | Import/Export API + 버그 수정 + 통합 테스트 | import/export API (markdown/anki), 안정화 | 전체 통합 (W3) |
+| W5 | 06-08~12 | 노트/그래프/ES 동기화 E2E + P0 버그 수정 | E2E 결과, ES 안정화 리포트, 데모 데이터 | staging 환경, 검색 연동 |
 
 ## 협업 인터페이스
 

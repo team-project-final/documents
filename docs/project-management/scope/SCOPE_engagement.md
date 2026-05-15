@@ -10,7 +10,7 @@
 | 담당 모듈 | community, gamification |
 | GitHub Repository | [synapse-engagement-svc](https://github.com/team-project-final/synapse-engagement-svc) |
 
-## 4주 전체 책임 범위
+## 5주 전체 책임 범위
 
 ### 도메인 경계
 
@@ -39,10 +39,11 @@
 
 | 주차 | 기간 | 핵심 목표 | 산출물 | 의존성 |
 |------|------|-----------|--------|--------|
-| W1 | 05-12~16 | engagement-svc 골격 + community(그룹CRUD+멤버) | 서비스 골격, 그룹/멤버 API | 인프라 (team-lead) |
-| W2 | 05-19~23 | gamification XP + community 공유 | XP API, share_token API | auth (platform W1) |
-| W3 | 05-26~30 | 배지/레벨/스트릭/리더보드 + 신고/Admin + 그룹 초대 수락/거절 + 가입 신청 관리 + 공유 덱 평가 + 공유 노트 관리 | gamification 완성, 모더레이션 API, 초대/가입 API, shared-notes API | Kafka (team-lead W2) |
-| W4 | 06-02~06 | Admin 게이미피케이션/커뮤니티 관리 API + 그룹 리더보드 + 배지 상세 + 버그 수정 + 통합 테스트 | admin gamification/community API, 그룹 리더보드, 안정화 | 전체 통합 (W3) |
+| W1 | 05-12~15 | engagement-svc 골격 + community(그룹CRUD+멤버) | 서비스 골격, 그룹/멤버 API | 인프라 (team-lead) |
+| W2 | 05-18~22 | gamification XP + community 공유 | XP API, share_token API | auth (platform W1) |
+| W3 | 05-26~29 | 배지/레벨/스트릭/리더보드 + 신고/Admin + 그룹 초대 수락/거절 + 가입 신청 관리 + 공유 덱 평가 + 공유 노트 관리 | gamification 완성, 모더레이션 API, 초대/가입 API, shared-notes API | Kafka (team-lead W2) |
+| W4 | 06-01~05 | Admin 게이미피케이션/커뮤니티 관리 API + 그룹 리더보드 + 배지 상세 + 버그 수정 + 통합 테스트 | admin gamification/community API, 그룹 리더보드, 안정화 | 전체 통합 (W3) |
+| W5 | 06-08~12 | 게이미피케이션/커뮤니티 공유·신고 E2E + P0 버그 수정 | E2E 결과, P0 수정 PR, 데모 시나리오 | platform 알림, learning-card 이벤트 |
 
 ## 협업 인터페이스
 

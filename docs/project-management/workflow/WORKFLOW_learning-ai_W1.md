@@ -1,7 +1,7 @@
 # WORKFLOW: @learning-ai-owner — Week 1
 
-> **Task 문서**: [TASK_learning-ai.md](../task/TASK_learning-ai.md)  
-> **기간**: 2026-05-12 ~ 2026-05-16  
+> **Task 문서**: [TASK_learning-ai.md](../task/TASK_learning-ai.md)
+> **기간**: 2026-05-12 ~ 2026-05-15, 4 영업일
 > **기능개발 Workflow**: [README §7](../README.md)
 
 ---

@@ -1,9 +1,9 @@
-# TASK: @frontend-owner
+# TASK: Frontend 전체 협업
 
 > **담당 서비스**: frontend (Flutter Web)
 > **GitHub Repository**: [synapse-frontend](https://github.com/team-project-final/synapse-frontend)
-> **주차**: W1 (2026-05-12 ~ 2026-05-16)
-> **관련 문서**: [SCOPE](../scope/SCOPE_frontend.md) | [PRD_W1](../prd/PRD_W1.md) | [WORKFLOW](../workflow/WORKFLOW_frontend_W1.md) | [HISTORY](../history/HISTORY_frontend.md)
+> **주차**: W1 (2026-05-12 ~ 2026-05-15, 4 영업일)
+> **관련 문서**: [PRD_W1](../prd/PRD_W1.md) | [WORKFLOW](../workflow/WORKFLOW_frontend_W1.md) | [HISTORY](../history/HISTORY_frontend.md)
 
 ---
 
@@ -21,7 +21,7 @@
 | **Constraints** | - Flutter 3.24+ / Dart 3.5+<br>- Web 플랫폼 전용 (mobile 미지원)<br>- Riverpod 2.x (flutter_riverpod)<br>- GoRouter 14.x<br>- Material 3 디자인 시스템 |
 | **Duration** | 1일 |
 | **RULE Reference** | [18-기술-스택](../../wiki/18-기술-스택.md) · [03-아키텍처](../../wiki/03-아키텍처.md) |
-| **Assignee** | @frontend-owner |
+| **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
 
 ---
@@ -40,7 +40,7 @@
 | **Constraints** | - OAuth 2.0 + PKCE 플로우<br>- 토큰은 SecureStorage에만 저장 (localStorage 금지)<br>- 비밀번호 최소 8자, 영문+숫자+특수문자<br>- platform-svc 베이스 URL 환경변수 관리<br>- 로딩 상태 및 에러 상태 UI 필수 |
 | **Duration** | 2일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) · [17-스케줄](../../wiki/17-스케줄.md) |
-| **Assignee** | @frontend-owner |
+| **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
 
 ---
@@ -59,12 +59,12 @@
 | **Constraints** | - 사이드바 확장: 240px, 축소: 56px (아이콘만 표시)<br>- 반응형 브레이크포인트: 768px<br>- 전환 애니메이션: 200ms ease-in-out<br>- 네비게이션 항목 최대 8개<br>- 키보드 접근성 (Tab 이동, Enter 선택) 지원 |
 | **Duration** | 2일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) · [17-스케줄](../../wiki/17-스케줄.md) |
-| **Assignee** | @frontend-owner |
+| **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
 
 ---
 
-# W2 (2026-05-19 ~ 2026-05-23)
+# W2 (2026-05-18 ~ 2026-05-22, 5 영업일)
 
 ## Step 4: 노트 에디터 (Markdown 편집/미리보기)
 
@@ -80,7 +80,7 @@
 | **Constraints** | - Markdown 표준 문법 지원 (CommonMark)<br>- 자동 저장 debounce: 5초<br>- 에디터 최대 입력: 50,000자<br>- 미리보기 렌더링 지연 200ms 이내<br>- DESIGN.md 토큰 일관 적용 |
 | **Duration** | 2일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
-| **Assignee** | @frontend-owner |
+| **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
 | **Status** | TODO |
 
@@ -93,14 +93,14 @@
 | **Step Name** | SRS 복습 화면 |
 | **Step Goal** | 사용자가 SRS 복습 화면에서 카드를 뒤집고 난이도를 선택하여 복습할 수 있다. |
 | **Done When** | 카드 플립 애니메이션 + 난이도 버튼(Again/Hard/Good/Easy) + learning-card API 연동 |
-| **Scope** | **In**: 카드 플립 UI, 난이도 선택 버튼, learning-card-svc API 연동 / **Out**: 통계 대시보드, 스트릭 UI, 게이미피케이션 |
-| **Input** | Step 3 완료된 대시보드 구조, learning-card-svc 복습 API 명세, DESIGN.md UI 규격 |
-| **Instructions** | 1. 카드 플립 위젯 구현 (3D Transform 애니메이션)<br>2. 카드 앞면/뒷면 렌더링 (Markdown 지원)<br>3. 난이도 선택 버튼 구현 (1=Again, 2=Hard, 3=Good, 4=Easy — 1-based, ERD 기준)<br>4. learning-card-svc 복습 세션 API 연동<br>5. 복습 진행 상태 표시 (n/전체 카드 수)<br>6. 복습 완료 화면 (결과 요약: 정답률, 소요 시간)<br>7. 카드 스와이프 제스처 지원 (좌: Again, 우: Good)<br>8. Widget 테스트 작성 |
+| **Scope** | **In**: 카드 플립 UI, 난이도 선택 버튼, learning-card 런타임 API 연동 / **Out**: 통계 대시보드, 스트릭 UI, 게이미피케이션 |
+| **Input** | Step 3 완료된 대시보드 구조, learning-card 런타임 복습 API 명세, DESIGN.md UI 규격 |
+| **Instructions** | 1. 카드 플립 위젯 구현 (3D Transform 애니메이션)<br>2. 카드 앞면/뒷면 렌더링 (Markdown 지원)<br>3. 난이도 선택 버튼 구현 (1=Again, 2=Hard, 3=Good, 4=Easy — 1-based, ERD 기준)<br>4. learning-card 런타임 복습 세션 API 연동<br>5. 복습 진행 상태 표시 (n/전체 카드 수)<br>6. 복습 완료 화면 (결과 요약: 정답률, 소요 시간)<br>7. 카드 스와이프 제스처 지원 (좌: Again, 우: Good)<br>8. Widget 테스트 작성 |
 | **Output Format** | 복습 화면 스크린샷 + 플립 애니메이션 캡처 + Widget 테스트 결과 |
 | **Constraints** | - 플립 애니메이션: 300ms ease-in-out<br>- 난이도 버튼 4종 고정 (Again/Hard/Good/Easy)<br>- 복습 세션당 최대 50장<br>- 오프라인 시 로컬 캐시에서 카드 로드<br>- DESIGN.md 토큰 일관 적용 |
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
-| **Assignee** | @frontend-owner |
+| **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
 | **Status** | TODO |
 
@@ -120,7 +120,7 @@
 | **Constraints** | - 그룹 목록 페이지네이션: 20건씩<br>- 멤버 목록 최대 표시: 50명<br>- 공유 콘텐츠 정렬: 최신순<br>- 로딩/에러 상태 UI 필수<br>- DESIGN.md 토큰 일관 적용 |
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
-| **Assignee** | @frontend-owner |
+| **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
 | **Status** | TODO |
 
@@ -142,7 +142,7 @@
 | **Constraints** | - XP 바 애니메이션: 500ms ease-out<br>- 레벨업 애니메이션: 2초 (confetti 라이브러리 사용)<br>- 배지 그리드: 한 행 4개 (반응형 조정)<br>- 미획득 배지: 회색 처리 + 잠금 아이콘<br>- DESIGN.md 토큰 일관 적용 |
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
-| **Assignee** | @frontend-owner |
+| **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
 | **Status** | TODO |
 
@@ -162,7 +162,7 @@
 | **Constraints** | - 알림 목록 페이지네이션: 20건씩<br>- 안읽음 알림 시각적 구분 (배경색 차이)<br>- 알림 배지 최대 표시: 99+<br>- 알림 없을 시 빈 상태 UI<br>- DESIGN.md 토큰 일관 적용 |
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
-| **Assignee** | @frontend-owner |
+| **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
 | **Status** | TODO |
 
@@ -182,7 +182,7 @@
 | **Constraints** | - 관리자 권한 필수 (role=ADMIN)<br>- 신고 상태: `pending`, `resolved`, `dismissed` (소문자, Wiki 기준 — PENDING/APPROVED/REJECTED 아님)<br>- 처리 사유 필수 입력 (최소 10자)<br>- 처리 후 되돌리기 불가 (확인 다이얼로그)<br>- DESIGN.md 토큰 일관 적용 |
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
-| **Assignee** | @frontend-owner |
+| **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
 | **Status** | TODO |
 
@@ -196,13 +196,13 @@
 | **Step Goal** | 사용자가 공유 덱을 탐색하고 상세를 보고 내 덱으로 복사할 수 있다. |
 | **Done When** | 공유 덱 목록 + 상세 화면 + 내 덱으로 복사 + API 연동 + 테스트 통과 |
 | **Scope** | **In**: 공유 덱 목록 UI, 공유 덱 상세 UI, 덱 복사 기능 / **Out**: 덱 공유 설정, 평점/리뷰, 추천 알고리즘 |
-| **Input** | learning-card-svc 공유 덱 API 명세, DESIGN.md UI 규격, PRD_W3 요구사항 |
-| **Instructions** | 1. 공유 덱 목록 화면 구현 (덱명, 카드 수, 작성자, 복사 수 표시)<br>2. 검색 및 카테고리 필터 구현<br>3. 공유 덱 상세 화면 구현 (설명, 카드 미리보기, 작성자 정보)<br>4. "내 덱으로 복사" 버튼 및 확인 다이얼로그<br>5. learning-card-svc API 연동 (공유 덱 목록/상세/복사)<br>6. 복사 완료 후 내 덱 목록으로 이동<br>7. 무한 스크롤 페이지네이션<br>8. Widget 테스트 작성 |
+| **Input** | learning-card 런타임 공유 덱 API 명세, DESIGN.md UI 규격, PRD_W3 요구사항 |
+| **Instructions** | 1. 공유 덱 목록 화면 구현 (덱명, 카드 수, 작성자, 복사 수 표시)<br>2. 검색 및 카테고리 필터 구현<br>3. 공유 덱 상세 화면 구현 (설명, 카드 미리보기, 작성자 정보)<br>4. "내 덱으로 복사" 버튼 및 확인 다이얼로그<br>5. learning-card 런타임 API 연동 (공유 덱 목록/상세/복사)<br>6. 복사 완료 후 내 덱 목록으로 이동<br>7. 무한 스크롤 페이지네이션<br>8. Widget 테스트 작성 |
 | **Output Format** | 공유 덱 화면 스크린샷 + 복사 플로우 캡처 + Widget 테스트 결과 |
 | **Constraints** | - 공유 덱 목록 페이지네이션: 20건씩<br>- 카드 미리보기: 최대 5장<br>- 복사 시 원본과의 연결 없음 (독립 사본)<br>- 복사 후 즉시 내 덱 목록에 반영<br>- DESIGN.md 토큰 일관 적용 |
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
-| **Assignee** | @frontend-owner |
+| **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
 | **Status** | TODO |
 
@@ -224,7 +224,7 @@
 | **Constraints** | - Mobile: < 768px<br>- Tablet: 768-1024px<br>- Desktop: > 1024px<br>- 레이아웃 깨짐 0건<br>- 터치 타겟 최소 48x48dp |
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
-| **Assignee** | @frontend-owner |
+| **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
 | **Status** | TODO |
 
@@ -244,7 +244,7 @@
 | **Constraints** | - AppErrorWidget 필수 사용 (직접 에러 UI 구현 금지)<br>- AppLoadingWidget 필수 사용 (직접 로딩 UI 구현 금지)<br>- 재시도 버튼 필수 포함 (에러 상태)<br>- 하드코딩 에러/로딩 UI 0건<br>- DESIGN.md 토큰 일관 적용 |
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
-| **Assignee** | @frontend-owner |
+| **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
 | **Status** | TODO |
 
@@ -264,7 +264,7 @@
 | **Constraints** | - 하드코딩 색상/타이포/스페이싱 0건 달성 필수<br>- Theme.of(context) 또는 AppTheme 상수만 허용<br>- 교체 후 시각적 변경 없어야 함 (1:1 매핑)<br>- 빌드 에러 0건<br>- DESIGN.md 토큰 정의와 100% 일치 |
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
-| **Assignee** | @frontend-owner |
+| **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
 | **Status** | TODO |
 ---
@@ -283,6 +283,6 @@
 | **Constraints** | - 시연 흐름 100% 동작<br>- 시드 데이터 깨진 참조 0건<br>- 응답 지연 시각적 피드백 필수 |
 | **Duration** | 0.5일 |
 | **RULE Reference** | wiki 17_스케줄 §발표일 규칙 |
-| **Assignee** | @frontend-owner |
+| **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
 | **Status** | TODO |

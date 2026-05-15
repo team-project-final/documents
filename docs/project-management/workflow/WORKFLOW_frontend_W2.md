@@ -1,7 +1,7 @@
-# WORKFLOW: @frontend-owner — Week 2
+# WORKFLOW: Frontend 전체 협업 — Week 2
 
-> **Task 문서**: [TASK_frontend.md](../task/TASK_frontend.md)  
-> **기간**: 2026-05-19 ~ 2026-05-23  
+> **Task 문서**: [TASK_frontend.md](../task/TASK_frontend.md)
+> **기간**: 2026-05-18 ~ 2026-05-22, 5 영업일
 > **PRD**: [PRD_W2.md](../prd/PRD_W2.md)
 
 ---
@@ -115,7 +115,7 @@
 - [ ] Output Format → TASK 반영
 
 ### 5.7 Repository 구현
-- [ ] ReviewRepository 클래스 작성 (HTTP client + learning-card-svc 연동)
+- [ ] ReviewRepository 클래스 작성 (HTTP client + learning-card 런타임 연동)
 - [ ] 세션 시작/카드 큐/rating 제출/세션 완료 API 호출
 - [ ] Riverpod Provider 등록 (ReviewSessionNotifier)
 

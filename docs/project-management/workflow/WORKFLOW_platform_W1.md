@@ -1,7 +1,7 @@
 # WORKFLOW: @platform-owner — Week 1
 
-> **Task 문서**: [TASK_platform.md](../task/TASK_platform.md)  
-> **기간**: 2026-05-12 ~ 2026-05-16  
+> **Task 문서**: [TASK_platform.md](../task/TASK_platform.md)
+> **기간**: 2026-05-12 ~ 2026-05-15, 4 영업일
 > **기능개발 Workflow**: [README §7](../README.md)
 
 ---
@@ -72,7 +72,7 @@
 - [ ] Duration 산정 확인 (2일)
 
 ### 1.2 요구사항 분석
-- [ ] Google/GitHub/Apple/Microsoft OAuth 연동 플로우 분석 (아키텍처 표준: 4개 프로바이더 지원)
+- [ ] Google/GitHub/Apple OAuth 연동 플로우 분석 (Microsoft는 확장 Provider로 문서화)
 - [ ] 신규 사용자 자동 회원가입 로직 설계
 - [ ] 기존 사용자 매핑 로직 (email 기준) 설계
 - [ ] Instructions 초안 → TASK 문서 반영

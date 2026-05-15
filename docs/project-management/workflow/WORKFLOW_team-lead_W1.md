@@ -1,7 +1,7 @@
 # WORKFLOW: @team-lead — Week 1
 
-> **Task 문서**: [TASK_team-lead.md](../task/TASK_team-lead.md)  
-> **기간**: 2026-05-12 ~ 2026-05-16  
+> **Task 문서**: [TASK_team-lead.md](../task/TASK_team-lead.md)
+> **기간**: 2026-05-12 ~ 2026-05-15, 4 영업일
 > **기능개발 Workflow**: [README §7](../README.md)
 
 ---
@@ -15,7 +15,7 @@
 
 ### 1.2 요구사항 분석
 - [x] EKS/RDS/MSK/ElastiCache/Elasticsearch 8 각 서비스 스펙 정의
-- [x] ArgoCD ApplicationSet 구성 요건 분석 (5서비스x3환경)
+- [x] ArgoCD ApplicationSet 구성 요건 분석 (4개 서비스 + learning 내부 2개 런타임 × 3환경)
 - [x] VPC/서브넷/보안그룹 설계 요건 분석
 - [x] Instructions 초안 → TASK 문서 반영
 
@@ -48,7 +48,7 @@
 - [ ] MSK 클러스터 생성 + Schema Registry 설정
 - [ ] ElastiCache Redis 클러스터 생성
 - [ ] Elasticsearch 8 도메인 생성 + nori 플러그인
-- [ ] ArgoCD 설치 + ApplicationSet(5서비스x3환경) 구성
+- [ ] ArgoCD 설치 + ApplicationSet(4개 서비스 + learning 내부 2개 런타임 × 3환경) 구성
 
 > Terraform 베이스라인 작성 완료: `synapse-gitops/infra/aws/dev/`. 실제 생성은 AWS 자격 증명 및 비용 승인 후 `terraform plan/apply` 단계에서 수행한다.
 
@@ -71,7 +71,7 @@
 
 ---
 
-## Step 2: Docker Compose 5-서비스 구성
+## Step 2: Docker Compose 4개 서비스 + learning 내부 2개 런타임 구성
 
 ### 1.1 TASK 시작
 - [ ] Step Goal / Done When / Scope / Input 확인
@@ -79,7 +79,7 @@
 - [ ] Duration 산정 확인 (1일)
 
 ### 1.2 요구사항 분석
-- [ ] 5-서비스 (platform, engagement, knowledge, learning-card, learning-ai) + infra 컨테이너 목록 확정 — learning-ai는 FastAPI 독립 서비스 (port 8090)
+- [ ] 4개 서비스 + learning 내부 2개 런타임 (platform, engagement, knowledge, learning-card, learning-ai) + infra 컨테이너 목록 확정 — learning-ai는 FastAPI 독립 서비스 (port 8090)
 - [ ] Health check 기준 정의 (각 서비스별)
 - [ ] .env.example 환경변수 목록 도출
 - [ ] Instructions 초안 → TASK 문서 반영

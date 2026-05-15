@@ -1,15 +1,15 @@
 # TASK: @team-lead
 
-> **담당 서비스**: Gateway / 인프라 / 아키텍처  
-> **GitHub Repository**: [syn](https://github.com/team-project-final/syn) · [synapse-shared](https://github.com/team-project-final/synapse-shared) · [synapse-mirror](https://github.com/team-project-final/synapse-mirror) · [synapse-gitops](https://github.com/team-project-final/synapse-gitops)  
-> **주차**: W1 (2026-05-12 ~ 2026-05-16)  
+> **담당 서비스**: Gateway / 인프라 / 아키텍처
+> **GitHub Repository**: [syn](https://github.com/team-project-final/syn) · [synapse-shared](https://github.com/team-project-final/synapse-shared) · [synapse-mirror](https://github.com/team-project-final/synapse-mirror) · [synapse-gitops](https://github.com/team-project-final/synapse-gitops)
+> **주차**: W1 (2026-05-12 ~ 2026-05-15, 4 영업일)
 > **관련 문서**: [SCOPE](../scope/SCOPE_team-lead.md) | [PRD_W1](../prd/PRD_W1.md) | [WORKFLOW](../workflow/WORKFLOW_team-lead_W1.md) | [HISTORY](../history/HISTORY_team-lead.md)
 
 ---
 
 ## Step 1: AWS 인프라 프로비저닝
 
-- **Step Goal**: 팀장이 AWS 인프라(EKS, RDS, MSK, ElastiCache, Elasticsearch 8)와 ArgoCD를 프로비저닝하여 5-서비스 배포 기반을 확보한다.
+- **Step Goal**: 팀장이 AWS 인프라(EKS, RDS, MSK, ElastiCache, Elasticsearch 8)와 ArgoCD를 프로비저닝하여 4개 서비스 + learning 내부 2개 런타임 배포 기반을 확보한다.
 - **Done When**:
   - [ ] EKS 클러스터 정상 가동 (kubectl get nodes → Ready)
   - [ ] RDS PostgreSQL 16 인스턴스 접속 가능
@@ -36,7 +36,7 @@
   3. MSK 클러스터 생성 + Schema Registry 설정
   4. ElastiCache Redis 클러스터 생성
   5. Elasticsearch 8 클러스터 생성 + nori 플러그인
-  6. ArgoCD 설치 + ApplicationSet(5서비스×3환경) 구성 (platform, engagement, knowledge, learning-card, learning-ai)
+  6. ArgoCD 설치 + ApplicationSet(4개 서비스 + learning 내부 2개 런타임 × 3환경) 구성 (platform, engagement, knowledge, learning-card, learning-ai)
   7. 접속 테스트 및 팀원 접근 권한 부여
 - **Output Format**: 인프라 구성도 + 접속 정보 문서 (Notion 또는 .env.example 업데이트)
 - **Constraints**:
@@ -60,17 +60,17 @@
 
 ---
 
-## Step 2: Docker Compose 4-서비스 구성
+## Step 2: Docker Compose 4개 서비스 + learning 내부 2개 런타임 구성
 
-- **Step Goal**: 팀장이 Docker Compose로 5개 서비스(platform, engagement, knowledge, learning-card, learning-ai)와 Schema Registry를 포함한 전체 로컬 개발 환경을 한 번에 실행할 수 있다.
+- **Step Goal**: 팀장이 Docker Compose로 4개 서비스 + learning 내부 2개 런타임(platform, engagement, knowledge, learning-card, learning-ai)와 Schema Registry를 포함한 전체 로컬 개발 환경을 한 번에 실행할 수 있다.
 - **Done When**:
-  - [ ] `docker compose up` → 5-서비스 Health OK (< 2분)
+  - [ ] `docker compose up` → 4개 서비스 + learning 내부 2개 런타임 Health OK (< 2분)
   - [ ] Schema Registry 접속 (http://localhost:8081)
   - [ ] PostgreSQL + Redis + Kafka + ES 접속 가능
   - [ ] 팀원 온보딩 문서에 실행 방법 기재
 - **Scope**:
   - In Scope:
-    - docker-compose.yml (4-서비스 + infra)
+    - docker-compose.yml (4개 서비스 + learning 내부 2개 런타임 + infra)
     - .env.example 업데이트
     - Schema Registry 컨테이너
     - Health check 설정
@@ -137,7 +137,7 @@
 
 ---
 
-## W2 (2026-05-19 ~ 2026-05-23)
+## W2 (2026-05-18 ~ 2026-05-22, 5 영업일)
 
 ---
 
@@ -228,13 +228,13 @@
 ## Step 6: Spring Cloud Gateway 라우팅 및 Rate Limit 설정
 
 - **Step Name**: Gateway 라우팅/Rate Limit
-- **Step Goal**: 팀장이 Spring Cloud Gateway에서 5개 서비스로의 라우팅, Rate Limit, Tenant Resolution, Circuit Breaker를 설정한다.
+- **Step Goal**: 팀장이 Spring Cloud Gateway에서 4개 서비스 + learning 내부 2개 런타임으로의 라우팅, Rate Limit, Tenant Resolution, Circuit Breaker를 설정한다.
 - **Done When**:
   - [ ] Gateway → platform-svc 라우팅 동작
   - [ ] Gateway → engagement-svc 라우팅 동작
   - [ ] Gateway → knowledge-svc 라우팅 동작
-  - [ ] Gateway → learning-card-svc 라우팅 동작
-  - [ ] Gateway → learning-ai-svc 라우팅 동작
+  - [ ] Gateway → learning-card 런타임 라우팅 동작
+  - [ ] Gateway → learning-ai 런타임 라우팅 동작
   - [ ] Rate Limit 설정 적용 (Redis 기반, 플랜별)
   - [ ] Rate Limit 초과 시 429 응답 확인
   - [ ] Tenant Resolution: X-Tenant-Id 헤더 자동 주입 동작 확인
@@ -242,7 +242,7 @@
 - **Scope**:
   - In Scope:
     - Spring Cloud Gateway 프로젝트 설정
-    - 5개 서비스 라우팅 규칙 (path prefix 기반)
+    - 4개 서비스 + learning 내부 2개 런타임 라우팅 규칙 (path prefix 기반)
     - Redis 기반 Rate Limit (RequestRateLimiter, 플랜별)
     - Tenant Resolution 필터 (JWT에서 tenant 추출 → X-Tenant-Id 헤더 주입)
     - Circuit Breaker (Resilience4j)
@@ -254,7 +254,7 @@
 - **Input**: 각 서비스 API 경로 목록, Redis 접속 정보, 03_아키텍처_정의서 §Gateway
 - **Instructions**:
   1. Spring Cloud Gateway 프로젝트 생성 (또는 기존 프로젝트에 설정)
-  2. application.yml에 5개 서비스 라우팅 규칙 작성 (learning-ai-svc 포함)
+  2. application.yml에 4개 서비스 + learning 내부 2개 런타임 라우팅 규칙 작성 (learning-ai 런타임 포함)
   3. Redis 기반 RequestRateLimiter 설정 (플랜별: Free 100/min, Pro 1000/min, Team 3000/min)
   4. Tenant Resolution 필터 구현 (JWT claims에서 tenantId 추출 → X-Tenant-Id 헤더 자동 주입)
   5. Resilience4j Circuit Breaker 설정 (서비스별 fallback 응답)
@@ -334,8 +334,8 @@
 - **Step Name**: ArgoCD dev/staging 배포 검증
 - **Step Goal**: 팀장이 ArgoCD로 dev/staging 환경 배포를 검증한다.
 - **Done When**:
-  - [ ] dev 환경 5개 서비스 ArgoCD Sync 정상 (platform, engagement, knowledge, learning-card, learning-ai)
-  - [ ] staging 환경 5개 서비스 ArgoCD Sync 정상
+  - [ ] dev 환경 4개 서비스 + learning 내부 2개 런타임 ArgoCD Sync 정상 (platform, engagement, knowledge, learning-card, learning-ai)
+  - [ ] staging 환경 4개 서비스 + learning 내부 2개 런타임 ArgoCD Sync 정상
   - [ ] dev → staging 프로모션 워크플로우 동작
   - [ ] 배포 후 Health check 통과
   - [ ] Rollback 시나리오 테스트 완료
@@ -353,7 +353,7 @@
 - **Input**: ArgoCD ApplicationSet, Helm Chart, ECR 이미지, K8s manifest
 - **Instructions**:
   1. dev 환경 ArgoCD Sync 상태 확인
-  2. 5개 서비스 dev 환경 배포 테스트 (platform, engagement, knowledge, learning-card, learning-ai)
+  2. 4개 서비스 + learning 내부 2개 런타임 dev 환경 배포 테스트 (platform, engagement, knowledge, learning-card, learning-ai)
   3. staging 환경 ApplicationSet 설정 (autoSync: false)
   4. dev → staging 이미지 태그 프로모션 테스트
   5. staging 수동 Sync + Health check 확인
@@ -470,7 +470,7 @@
 - **Step Name**: Staging 최종 배포/모니터링
 - **Step Goal**: 팀장이 Staging 환경에 최종 배포하고 모니터링 대시보드를 가동한다.
 - **Done When**:
-  - [ ] Staging 환경 5개 서비스 최종 배포 완료 (platform, engagement, knowledge, learning-card, learning-ai)
+  - [ ] Staging 환경 4개 서비스 + learning 내부 2개 런타임 최종 배포 완료 (platform, engagement, knowledge, learning-card, learning-ai)
   - [ ] Grafana 모니터링 대시보드 구성 완료
   - [ ] 주요 메트릭 알림 설정 (에러율, 응답시간, Kafka lag)
   - [ ] 모니터링 대시보드 팀 공유

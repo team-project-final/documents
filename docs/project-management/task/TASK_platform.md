@@ -1,8 +1,8 @@
 # TASK: @platform-owner
 
-> **담당 서비스**: platform-svc (auth / audit / billing / notification)  
-> **GitHub Repository**: [synapse-platform-svc](https://github.com/team-project-final/synapse-platform-svc)  
-> **주차**: W1 (2026-05-12 ~ 2026-05-16)  
+> **담당 서비스**: platform-svc (auth / audit / billing / notification)
+> **GitHub Repository**: [synapse-platform-svc](https://github.com/team-project-final/synapse-platform-svc)
+> **주차**: W1 (2026-05-12 ~ 2026-05-15, 4 영업일)
 > **관련 문서**: [SCOPE](../scope/SCOPE_platform.md) | [PRD_W1](../prd/PRD_W1.md) | [WORKFLOW](../workflow/WORKFLOW_platform_W1.md) | [HISTORY](../history/HISTORY_platform.md)
 
 ---
@@ -52,7 +52,7 @@
 
 ## Step 2: OAuth 회원가입/로그인
 
-- **Step Goal**: 사용자가 Google/GitHub OAuth를 통해 회원가입하고 로그인할 수 있다.
+- **Step Goal**: 사용자가 Google/GitHub/Apple OAuth를 통해 회원가입하고 로그인할 수 있다.
 - **Done When**:
   - [ ] Google OAuth 로그인 → 신규 사용자 자동 회원가입
   - [ ] GitHub OAuth 로그인 → 신규 사용자 자동 회원가입
@@ -64,6 +64,8 @@
     - Spring Security OAuth2 Client 설정
     - Google OAuth 연동 (회원가입 + 로그인)
     - GitHub OAuth 연동 (회원가입 + 로그인)
+    - Apple OAuth 연동 (회원가입 + 로그인)
+    - Microsoft OAuth 확장 TODO 문서화
     - users 테이블 설계 + Flyway 마이그레이션
     - OAuth 콜백 핸들러
     - 통합 테스트
@@ -71,9 +73,9 @@
     - 이메일/비밀번호 로그인
     - 소셜 프로필 동기화
     - 계정 연동 해제
-- **Input**: Google/GitHub OAuth Client ID/Secret, Spring Security OAuth2 문서
+- **Input**: Google/GitHub/Apple OAuth Client ID/Secret, Spring Security OAuth2 문서
 - **Instructions**:
-  1. application.yml에 OAuth2 Client 설정 (Google, GitHub)
+  1. application.yml에 OAuth2 Client 설정 (Google, GitHub, Apple)
   2. users 테이블 DDL 작성 + Flyway V1 마이그레이션
      - provider/provider_id는 users 테이블에 넣지 않음 (ERD 기준: oauth_identities 별도 테이블로 분리)
   3. oauth_identities 테이블 DDL 작성 (id, user_id, provider, provider_id, created_at) + Flyway 마이그레이션
@@ -143,7 +145,7 @@
 
 ---
 
-## W2 (2026-05-19 ~ 2026-05-23)
+## W2 (2026-05-18 ~ 2026-05-22, 5 영업일)
 
 ---
 

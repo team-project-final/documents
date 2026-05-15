@@ -1,8 +1,8 @@
 # TASK: @learning-card-owner
 
-> **담당 서비스**: learning-card-svc
+> **담당 서비스**: learning-card 런타임
 > **GitHub Repository**: [synapse-learning-svc](https://github.com/team-project-final/synapse-learning-svc) (`learning-card` 모듈)
-> **주차**: W1 (2026-05-12 ~ 2026-05-16)
+> **주차**: W1 (2026-05-12 ~ 2026-05-15, 4 영업일)
 > **관련 문서**: [SCOPE](../scope/SCOPE_learning-card.md) | [PRD_W1](../prd/PRD_W1.md) | [WORKFLOW](../workflow/WORKFLOW_learning-card_W1.md) | [HISTORY](../history/HISTORY_learning-card.md)
 
 ---
@@ -64,7 +64,7 @@
 
 ---
 
-# W2 (2026-05-19 ~ 2026-05-23)
+# W2 (2026-05-18 ~ 2026-05-22, 5 영업일)
 
 ## Step 4: 복습 세션 및 SM-2 스케줄링
 
@@ -157,7 +157,7 @@
 | **Done When** | 대시보드 API + 스트릭 계산 + 종합 통계 응답 + 테스트 통과 |
 | **Scope** | **In**: 스트릭 계산 로직, 종합 대시보드 API, 캐싱 / **Out**: 프론트엔드 대시보드 UI, 게이미피케이션 연동 |
 | **Input** | Step 6 완료된 통계 API, 복습 로그 데이터, PRD_W3 대시보드 요구사항 |
-| **Instructions** | 1. 스트릭 계산 로직 구현 (연속 복습 일수)<br>2. 종합 통계 개요 API 구현 (`GET /stats/overview` — 구 `/api/v1/stats/dashboard`, Wiki 기준)<br>3. 응답 데이터: 오늘 복습 수, 주간 복습 수, 정답률, 현재 스트릭, 최장 스트릭<br>4. 스트릭 데이터: 별도 `user_streaks` 테이블 없음 — 스트릭은 engagement-svc의 `user_profiles_gamification` 테이블의 `current_streak`, `longest_streak` 컬럼에 위치 (아키텍처). learning-card-svc는 직접 DB 접근 금지 — card.reviewed Kafka 이벤트 발행을 통해 engagement-svc에 스트릭 갱신 위임<br>5. 복습 완료 시 스트릭 자동 업데이트 로직 (Kafka 이벤트 경유)<br>6. 캐싱 적용 (대시보드 데이터 5분 TTL)<br>7. 통합 테스트: 복습 시나리오별 대시보드 데이터 정확도 검증 |
+| **Instructions** | 1. 스트릭 계산 로직 구현 (연속 복습 일수)<br>2. 종합 통계 개요 API 구현 (`GET /stats/overview` — 구 `/api/v1/stats/dashboard`, Wiki 기준)<br>3. 응답 데이터: 오늘 복습 수, 주간 복습 수, 정답률, 현재 스트릭, 최장 스트릭<br>4. 스트릭 데이터: 별도 `user_streaks` 테이블 없음 — 스트릭은 engagement-svc의 `user_profiles_gamification` 테이블의 `current_streak`, `longest_streak` 컬럼에 위치 (아키텍처). learning-card 런타임은 직접 DB 접근 금지 — card.reviewed Kafka 이벤트 발행을 통해 engagement-svc에 스트릭 갱신 위임<br>5. 복습 완료 시 스트릭 자동 업데이트 로직 (Kafka 이벤트 경유)<br>6. 캐싱 적용 (대시보드 데이터 5분 TTL)<br>7. 통합 테스트: 복습 시나리오별 대시보드 데이터 정확도 검증 |
 | **Output Format** | 대시보드 API 응답 JSON + 스트릭 계산 로직 + 테스트 결과 |
 | **Constraints** | - 스트릭: 연속 복습 일수 (하루라도 빠지면 리셋)<br>- 대시보드 응답 시간 300ms 이내<br>- 캐싱 TTL: 5분<br>- 스트릭은 KST 기준 자정으로 날짜 구분<br>- 복습 0건인 날도 대시보드 표시 |
 | **Duration** | 1.5일 |

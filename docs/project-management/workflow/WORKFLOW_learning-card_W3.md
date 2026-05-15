@@ -1,7 +1,7 @@
 # WORKFLOW: @learning-card-owner — Week 3
 
-> **Task 문서**: [TASK_learning-card.md](../task/TASK_learning-card.md)  
-> **기간**: 2026-05-26 ~ 2026-05-30  
+> **Task 문서**: [TASK_learning-card.md](../task/TASK_learning-card.md)
+> **기간**: 2026-05-26 ~ 2026-05-29, 4 영업일
 > **PRD**: [PRD_W3.md](../prd/PRD_W3.md)
 
 ---
@@ -21,7 +21,7 @@
 
 ### 1.3 Security 1차 검토
 - [ ] 인증 필요 여부: No (내부 스케줄러, API 미노출)
-- [ ] Kafka 토픽 ACL: learning-card-svc만 발행 권한
+- [ ] Kafka 토픽 ACL: learning-card 런타임만 발행 권한
 - [ ] 스케줄러 중복 실행 방지 (ShedLock 등)
 - [ ] 결과 → TASK Constraints 반영
 

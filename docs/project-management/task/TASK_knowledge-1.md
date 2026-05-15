@@ -1,8 +1,8 @@
 # TASK: @knowledge-owner-1
 
-> **담당 서비스**: knowledge-svc (note / graph / chunking)  
-> **GitHub Repository**: [synapse-knowledge-svc](https://github.com/team-project-final/synapse-knowledge-svc)  
-> **주차**: W1 (2026-05-12 ~ 2026-05-16)  
+> **담당 서비스**: knowledge-svc (note / graph / chunking)
+> **GitHub Repository**: [synapse-knowledge-svc](https://github.com/team-project-final/synapse-knowledge-svc)
+> **주차**: W1 (2026-05-12 ~ 2026-05-15, 4 영업일)
 > **관련 문서**: [SCOPE](../scope/SCOPE_knowledge-1.md) | [PRD_W1](../prd/PRD_W1.md) | [WORKFLOW](../workflow/WORKFLOW_knowledge-1_W1.md) | [HISTORY](../history/HISTORY_knowledge-1.md)
 
 ---
@@ -155,7 +155,7 @@
 
 ---
 
-## W2 (2026-05-19 ~ 2026-05-23)
+## W2 (2026-05-18 ~ 2026-05-22, 5 영업일)
 
 ---
 

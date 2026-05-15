@@ -1,7 +1,7 @@
 # WORKFLOW: @knowledge-owner-1 — Week 3
 
-> **Task 문서**: [TASK_knowledge-1.md](../task/TASK_knowledge-1.md)  
-> **기간**: 2026-05-26 ~ 2026-05-30  
+> **Task 문서**: [TASK_knowledge-1.md](../task/TASK_knowledge-1.md)
+> **기간**: 2026-05-26 ~ 2026-05-29, 4 영업일
 > **PRD**: [PRD_W3.md](../prd/PRD_W3.md)
 
 ---

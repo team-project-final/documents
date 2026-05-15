@@ -1,7 +1,7 @@
 # WORKFLOW: @learning-card-owner — Week 1
 
-> **Task 문서**: [TASK_learning-card.md](../task/TASK_learning-card.md)  
-> **기간**: 2026-05-12 ~ 2026-05-16  
+> **Task 문서**: [TASK_learning-card.md](../task/TASK_learning-card.md)
+> **기간**: 2026-05-12 ~ 2026-05-15, 4 영업일
 > **기능개발 Workflow**: [README §7](../README.md)
 
 ---
@@ -58,7 +58,7 @@
 
 ### 1.10 View + Test (해당 시)
 - [ ] Flutter 화면 연동: 해당 없음
-- [ ] docker compose에서 learning-card-svc 실행 확인
+- [ ] docker compose에서 learning-card 런타임 실행 확인
 - [ ] RULE Reference → TASK 반영
 
 **Step 1 Status**: [ ] Not Started / [ ] In Progress / [ ] Done

@@ -4,8 +4,8 @@
 
 | 항목 | 내용 |
 |------|------|
-| 기간 | 2026-05-12 (월) ~ 2026-05-16 (금) |
-| 목표 | DB 스키마, 4-서비스 골격, 기본 CRUD, Spring Modulith 모듈 정의 |
+| 기간 | 2026-05-12 (화) ~ 2026-05-15 (금) |
+| 목표 | DB 스키마, 4개 서비스 골격, 기본 CRUD, Spring Modulith 모듈 정의 |
 | 팀 구성 | 팀장 1명 + 팀원 6명 (트랙 A/B/C-1/C-2/D-1/D-2) + Frontend 전체 협업 |
 | GitHub Repositories | [synapse-platform-svc](https://github.com/team-project-final/synapse-platform-svc) · [synapse-engagement-svc](https://github.com/team-project-final/synapse-engagement-svc) · [synapse-knowledge-svc](https://github.com/team-project-final/synapse-knowledge-svc) · [synapse-learning-svc](https://github.com/team-project-final/synapse-learning-svc) · [synapse-frontend](https://github.com/team-project-final/synapse-frontend) · [synapse-shared](https://github.com/team-project-final/synapse-shared) · [synapse-mirror](https://github.com/team-project-final/synapse-mirror) · [synapse-gitops](https://github.com/team-project-final/synapse-gitops) |
 | 부트스트랩 스크립트 | [syn](https://github.com/team-project-final/syn) — `scripts/bootstrap/` (phase1/2/3.sh) |
@@ -16,7 +16,7 @@
 
 | ID | 유저 스토리 | 수용 기준 | 우선순위 |
 |----|------------|-----------|----------|
-| FR-TL-001 | 팀원이 Docker Compose로 전체 로컬 환경을 실행할 수 있다 | `docker compose up` → 4-서비스 + Schema Registry + PostgreSQL + Redis + Kafka + ES 실행 + Health OK | P0 |
+| FR-TL-001 | 팀원이 Docker Compose로 전체 로컬 환경을 실행할 수 있다 | `docker compose up` → 4개 서비스 + Schema Registry + PostgreSQL + Redis + Kafka + ES 실행 + Health OK | P0 |
 | FR-TL-002 | 팀원이 AWS EKS 클러스터에 서비스를 배포할 수 있다 | EKS 클러스터 가동 + RDS/Redis/MSK/OpenSearch 접속 가능 | P0 |
 | FR-TL-003 | main branch push 시 자동 빌드/배포가 동작한다 | GitHub Actions CI → ECR push → ArgoCD dev 동기화 | P1 |
 
@@ -26,6 +26,8 @@
 |----|------------|-----------|----------|
 | FR-PL-001 | 사용자가 Google OAuth로 회원가입할 수 있다 | Google 로그인 → users 테이블 생성 + Access Token 반환 | P0 |
 | FR-PL-002 | 사용자가 GitHub OAuth로 로그인할 수 있다 | GitHub 로그인 → 기존 유저 조회 + Access Token 반환 | P0 |
+| FR-PL-002a | 사용자가 Apple OAuth로 로그인/회원가입할 수 있다 | Apple 로그인 → users 테이블 생성 또는 기존 유저 매핑 + Access Token 반환 | P0 |
+| FR-PL-002b | Microsoft OAuth 확장 범위를 문서화한다 | Microsoft는 MVP 이후 확장 Provider로 분리되어 환경 변수와 연동 TODO가 명시됨 | P1 |
 | FR-PL-003 | 인증된 사용자에게 JWT Access/Refresh Token이 발급된다 | 로그인 → Access(15분) + Refresh(7일) 발급 + 갱신 API | P0 |
 | FR-PL-004 | 사용자가 TOTP 기반 MFA를 등록할 수 있다 | MFA 등록 → QR 코드 + 시크릿 발급 + 검증 API | P1 |
 
@@ -100,7 +102,7 @@
 
 ## 5. 성공 기준 체크리스트
 
-- [ ] Docker Compose로 4-서비스 + Schema Registry 로컬 실행
+- [ ] Docker Compose로 4개 서비스 + Schema Registry 로컬 실행
 - [ ] 각 서비스 골격 동작 (Hello World + Health endpoint)
 - [ ] Spring Modulith 모듈 검증 (`ApplicationModules.verify()`) 통과
 - [ ] auth 모듈: 회원가입/로그인/JWT 발급 동작

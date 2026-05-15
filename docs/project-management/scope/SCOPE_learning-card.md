@@ -10,7 +10,7 @@
 | 담당 모듈 | card, srs (Java) |
 | GitHub Repository | [synapse-learning-svc](https://github.com/team-project-final/synapse-learning-svc) (`learning-card` 모듈) |
 
-## 4주 전체 책임 범위
+## 5주 전체 책임 범위
 
 ### 도메인 경계
 
@@ -35,10 +35,11 @@
 
 | 주차 | 기간 | 핵심 목표 | 산출물 | 의존성 |
 |------|------|-----------|--------|--------|
-| W1 | 05-12~16 | learning-card 골격 + 덱/카드 CRUD + SM-2 기초 | 서비스 골격, 덱/카드 API, SM-2 유틸 | 인프라 (team-lead) |
-| W2 | 05-19~23 | 복습 세션 완성 + card.reviewed Kafka 발행 + 카드 일괄 생성 + 복습 큐 조회 | 복습 세션 API, Kafka 발행, review_sessions, `POST /cards/batch`, `GET /reviews/queue` | Kafka 토픽 (team-lead W2) |
-| W3 | 05-26~30 | card.review.due + 복습 통계 대시보드 + 세션 완료 API + Stats 히트맵/리텐션 | 리마인더 발행, 통계 API, `PUT /reviews/sessions/{sessionId}/complete`, heatmap/retention API | notification (platform W3) |
-| W4 | 06-02~06 | 버그 수정 + 통합 테스트 | 안정화 | 전체 통합 (W3) |
+| W1 | 05-12~15 | learning-card 골격 + 덱/카드 CRUD + SM-2 기초 | 서비스 골격, 덱/카드 API, SM-2 유틸 | 인프라 (team-lead) |
+| W2 | 05-18~22 | 복습 세션 완성 + card.reviewed Kafka 발행 + 카드 일괄 생성 + 복습 큐 조회 | 복습 세션 API, Kafka 발행, review_sessions, `POST /cards/batch`, `GET /reviews/queue` | Kafka 토픽 (team-lead W2) |
+| W3 | 05-26~29 | card.review.due + 복습 통계 대시보드 + 세션 완료 API + Stats 히트맵/리텐션 | 리마인더 발행, 통계 API, `PUT /reviews/sessions/{sessionId}/complete`, heatmap/retention API | notification (platform W3) |
+| W4 | 06-01~05 | 버그 수정 + 통합 테스트 | 안정화 | 전체 통합 (W3) |
+| W5 | 06-08~12 | 복습/SRS/Kafka 이벤트 E2E + P0 버그 수정 | 복습 E2E 결과, Kafka 안정화 리포트, P0 수정 PR | engagement XP, platform notification |
 
 ## 협업 인터페이스
 
