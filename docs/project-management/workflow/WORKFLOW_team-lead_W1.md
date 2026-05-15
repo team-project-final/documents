@@ -14,7 +14,7 @@
 - [x] Duration 산정 확인 (2일)
 
 ### 1.2 요구사항 분석
-- [x] EKS/RDS/MSK/ElastiCache/OpenSearch 각 서비스 스펙 정의
+- [x] EKS/RDS/MSK/ElastiCache/Elasticsearch 8 각 서비스 스펙 정의
 - [x] ArgoCD ApplicationSet 구성 요건 분석 (5서비스x3환경)
 - [x] VPC/서브넷/보안그룹 설계 요건 분석
 - [x] Instructions 초안 → TASK 문서 반영
@@ -30,7 +30,7 @@
 - [x] RDS PostgreSQL 16 (db.t3.medium) 구성 설계
 - [x] MSK Kafka 3.x (3 broker) + Schema Registry 설계
 - [x] ElastiCache Redis 7 (cache.t3.micro) 설계
-- [x] OpenSearch 8.x (1 node dev) + nori 플러그인 설계
+- [x] Elasticsearch 8 (1 node dev) + nori 플러그인 설계
 - [x] Duration(final) 갱신
 
 ### 1.5 Security 2차 검토
@@ -47,7 +47,7 @@
 - [ ] RDS PostgreSQL 인스턴스 생성 + 보안 그룹 설정
 - [ ] MSK 클러스터 생성 + Schema Registry 설정
 - [ ] ElastiCache Redis 클러스터 생성
-- [ ] OpenSearch 도메인 생성 + nori 플러그인
+- [ ] Elasticsearch 8 도메인 생성 + nori 플러그인
 - [ ] ArgoCD 설치 + ApplicationSet(5서비스x3환경) 구성
 
 > Terraform 베이스라인 작성 완료: `synapse-gitops/infra/aws/dev/`. 실제 생성은 AWS 자격 증명 및 비용 승인 후 `terraform plan/apply` 단계에서 수행한다.
@@ -57,7 +57,7 @@
 - [ ] RDS PostgreSQL 접속 테스트
 - [ ] MSK 브로커 접속 테스트
 - [ ] ElastiCache Redis 접속 테스트
-- [ ] OpenSearch 도메인 접속 테스트
+- [ ] Elasticsearch 8 도메인 접속 테스트
 - [ ] ArgoCD 대시보드 접근 테스트
 - [ ] 팀원 접근 권한 부여 확인
 
@@ -71,7 +71,7 @@
 
 ---
 
-## Step 2: Docker Compose 4-서비스 구성
+## Step 2: Docker Compose 5-서비스 구성
 
 ### 1.1 TASK 시작
 - [ ] Step Goal / Done When / Scope / Input 확인
@@ -79,7 +79,7 @@
 - [ ] Duration 산정 확인 (1일)
 
 ### 1.2 요구사항 분석
-- [ ] 4-서비스 + infra 컨테이너 목록 확정
+- [ ] 5-서비스 (platform, engagement, knowledge, learning-card, learning-ai) + infra 컨테이너 목록 확정 — learning-ai는 FastAPI 독립 서비스 (port 8090)
 - [ ] Health check 기준 정의 (각 서비스별)
 - [ ] .env.example 환경변수 목록 도출
 - [ ] Instructions 초안 → TASK 문서 반영

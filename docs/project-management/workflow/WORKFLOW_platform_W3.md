@@ -14,7 +14,7 @@
 - [ ] Duration 산정 확인
 
 ### 1.2 요구사항 분석
-- [ ] 소비 대상 Kafka 토픽 목록 정의 (gamification.*, community.*, card.*, auth.*)
+- [ ] 소비 대상 Kafka 토픽 목록 정의 (audit.event, user.registered, billing.subscription.changed — 아키텍처 표준. gamification.*, community.*, card.* 토픽은 audit 모듈 소비 대상 아님)
 - [ ] audit_logs 테이블 스키마 요건 분석
 - [ ] 90일 보존 정책 구현 방안 분석 (pg_partman / 스케줄러 삭제)
 - [ ] Instructions 초안 → TASK 문서 반영
@@ -79,7 +79,7 @@
 - [ ] Duration 산정 확인
 
 ### 1.2 요구사항 분석
-- [ ] 소비 대상 토픽 정의 (gamification.level_up, gamification.badge_earned, community.report.*, card.review.due)
+- [ ] 소비 대상 토픽 정의 (`notification.send` 토픽 — 아키텍처 표준 패턴. 각 서비스(gamification, community, card 등)는 직접 notification 모듈을 호출하는 대신 `notification.send` 토픽에 이벤트를 발행하며, notification 모듈은 이 단일 토픽만 소비하여 채널별 발송을 처리함)
 - [ ] 알림 채널별 발송 조건 정의 (FCM: 모바일, SES: 이메일)
 - [ ] 사용자 알림 설정 (opt-in/opt-out) 반영 로직 분석
 - [ ] Instructions 초안 → TASK 문서 반영
@@ -115,7 +115,7 @@
 - [ ] findByUserIdAndIsReadFalse 커스텀 쿼리
 
 ### 1.8 Service + Test
-- [ ] NotificationKafkaConsumer 구현 (gamification.*/community.*/card.review.due 소비)
+- [ ] NotificationKafkaConsumer 구현 (`notification.send` 토픽 소비 — 아키텍처 표준 패턴. gamification/community/card 등 각 서비스는 `notification.send` 토픽에 발행하며, 이 Consumer가 라우팅 처리)
 - [ ] NotificationService 구현 (알림 생성 + 채널별 발송 분기)
 - [ ] FcmPushService 구현 (Firebase Admin SDK → FCM 발송)
 - [ ] SesEmailService 구현 (AWS SES SDK → 이메일 발송)

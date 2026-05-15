@@ -81,7 +81,7 @@
 ### 1.2 요구사항 분석
 - [ ] 일별 복습 통계 요건 (복습 수, 정답률)
 - [ ] 주별 복습 통계 요건 (주간 합산, 추세 그래프 데이터)
-- [ ] 스트릭 통합 요건 (engagement-svc user_streaks 연동)
+- [ ] 스트릭 통합 요건 (engagement-svc 연동 — 스트릭 데이터는 `user_profiles_gamification` 테이블 기반이며 Kafka 이벤트를 통해 수신; engagement-svc DB에 직접 접근하지 않음)
 - [ ] Instructions 초안 → TASK 문서 반영
 
 ### 1.3 Security 1차 검토
@@ -113,13 +113,13 @@
 - [ ] ReviewStatRepository 구현 (일별/주별 집계 쿼리)
 - [ ] 일별 통계: GROUP BY date, COUNT(*), AVG(correct)
 - [ ] 주별 통계: 최근 4주 집계
-- [ ] engagement-svc 연동 (REST 또는 Kafka로 스트릭 조회)
+- [ ] engagement-svc 연동 (Kafka 이벤트로 스트릭 수신 — `user_profiles_gamification` 기반 데이터; engagement-svc DB 직접 접근 금지)
 
 ### 1.8 Service + Test
 - [ ] ReviewStatService 구현 (일별 통계 조회)
 - [ ] ReviewStatService 구현 (주별 통계 조회 — 최근 4주)
 - [ ] ReviewDashboardService 구현 (일별 + 주별 + 스트릭 통합)
-- [ ] 스트릭 데이터 연동 (engagement-svc REST 호출 + fallback)
+- [ ] 스트릭 데이터 연동 (engagement-svc Kafka 이벤트 수신 — `user_profiles_gamification` 데이터 기반, DB 직접 접근 금지 + fallback 처리)
 - [ ] Redis 캐싱 적용 (TTL: 5분)
 - [ ] 단위 테스트 작성 (Mockito)
 - [ ] 테스트 통과 확인

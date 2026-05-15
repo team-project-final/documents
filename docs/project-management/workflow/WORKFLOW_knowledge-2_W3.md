@@ -1,4 +1,4 @@
-# WORKFLOW: @knowledge-2-owner — Week 3
+# WORKFLOW: @knowledge-owner-2 — Week 3
 
 > **Task 문서**: [TASK_knowledge-2.md](../task/TASK_knowledge-2.md)  
 > **기간**: 2026-05-26 ~ 2026-05-30  
@@ -61,8 +61,8 @@
 
 ### 1.9 Controller + Test
 - [ ] GET /notes/search?q=... 엔드포인트 구현 (키워드 검색)
-- [ ] POST /ai/search/semantic 엔드포인트 구현 (시맨틱 검색)
-- [ ] POST /ai/search/hybrid 엔드포인트 구현 (하이브리드 검색)
+- [ ] POST /ai/search/semantic 엔드포인트 구현 (시맨틱 검색) — **아키텍처 주의**: `/ai/search/semantic` 및 `/ai/search/hybrid` API는 learning-ai 서비스 소관입니다. knowledge-svc에서 직접 구현하지 말고 learning-ai-svc가 제공하는 API를 호출(프록시)하는 방식으로 연동하십시오.
+- [ ] POST /ai/search/hybrid 엔드포인트 구현 (하이브리드 검색) — **아키텍처 주의**: 위 항목 참조. 해당 엔드포인트의 실제 구현 책임은 learning-ai 팀에 있습니다.
 - [ ] 검색 결과 하이라이트 (매칭 키워드 강조)
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 빈 결과, 페이징, 필터 테스트

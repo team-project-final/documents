@@ -138,7 +138,7 @@
 - [ ] share_token 발행 로직 (UUID v4 생성)
 - [ ] share_token 검증 로직 (존재 여부 + 만료 확인)
 - [ ] 공유 덱 검색 서비스 구현 (키워드 + 카테고리 필터, `GET /community/shared-decks?q=...`)
-- [ ] 덱 복사(copy) 서비스 구현 — `fork` 대신 `copy` 용어 사용, deck_copies 테이블 활용 (원본 → 사용자 소유 복사)
+- [ ] 덱 복사(copy) 서비스 구현 — `fork` 대신 `copy` 용어 사용, deck_copies 테이블 활용 (원본 → 사용자 소유 복사); 실제 덱 복사는 learning-card 내부 API `POST /internal/decks/copy` 호출로 위임
 - [ ] Bean Validation 적용
 - [ ] 단위 테스트 작성 (Mockito)
 - [ ] 테스트 통과 확인

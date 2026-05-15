@@ -77,7 +77,8 @@
     - 버전 히스토리
 - **Input**: PRD_W1 노트 기능 요구사항, JWT 인증 토큰 (platform-svc)
 - **Instructions**:
-  1. notes 테이블 DDL 작성 (id, title, content_md, content_plain, user_id, status, word_count, created_at, updated_at, deleted_at)
+  1. notes 테이블 DDL 작성 (id, tenant_id, title, content_md, content_plain, user_id, status, word_count, created_at, updated_at, deleted_at)
+     - `tenant_id`: 멀티테넌트 식별 컬럼 (필수)
      - `content_md`: Markdown 원문 저장 (구 `content` → ERD 기준 `content_md`)
      - `content_plain`: 플레인텍스트 버전 (검색/미리보기용)
      - `user_id`: 소유자 식별 (구 `owner_id` → ERD 기준 `user_id`)

@@ -91,7 +91,7 @@
 
 ### 5.2 요구사항 분석
 - [ ] 노트 변경 이벤트 종류 정의 (created, updated, deleted)
-- [ ] Kafka consumer 그룹 및 토픽 (note.updated) 확인
+- [ ] Kafka consumer 그룹 및 토픽 (note.created, note.updated, note.deleted — 3개 토픽 모두) 확인
 - [ ] Elasticsearch 인덱스 매핑 요건 분석 (title, content, tags, userId)
 - [ ] 동기화 지연 허용 범위 (eventual consistency) 정의
 - [ ] Instructions 초안 → TASK 문서 반영
@@ -125,7 +125,7 @@
 
 ### 5.8 Service + Test
 - [ ] NoteIndexService 구현 (index, update, delete)
-- [ ] Kafka Consumer 구현 (note.updated 토픽 소비 → ES 인덱싱)
+- [ ] Kafka Consumer 구현 (note.created, note.updated, note.deleted 3개 토픽 소비 → ES 인덱싱)
 - [ ] 이벤트별 분기 처리 (created→index, updated→update, deleted→delete)
 - [ ] 재시도 로직 구현 (RetryTemplate 또는 @Retryable)
 - [ ] 단위 테스트 작성 (Mockito)

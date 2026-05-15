@@ -76,7 +76,7 @@
 
 ---
 
-## Step 7: Kafka 연동 — gamification.level_up / gamification.badge_earned 이벤트 발행
+## Step 7: Kafka 연동 — gamification.level.up / gamification.badge.earned 이벤트 발행
 
 ### 1.1 TASK 시작
 - [ ] Step Goal / Done When / Scope / Input 확인
@@ -84,8 +84,8 @@
 - [ ] Duration 산정 확인
 
 ### 1.2 요구사항 분석
-- [ ] gamification.level_up 이벤트 스키마 정의 (userId, oldLevel, newLevel, xp)
-- [ ] gamification.badge_earned 이벤트 스키마 정의 (userId, badgeId, badgeName, earnedAt)
+- [ ] gamification.level.up 이벤트 스키마 정의 (userId, oldLevel, newLevel, xp)
+- [ ] gamification.badge.earned 이벤트 스키마 정의 (userId, badgeId, badgeName, earnedAt)
 - [ ] 이벤트 발행 트리거 시점 정의 (레벨업 시, 배지 수여 시)
 - [ ] Instructions 초안 → TASK 문서 반영
 
@@ -96,8 +96,8 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.4 Kafka 토픽 설계
-- [ ] gamification.level_up 토픽 설정 (파티션, 복제, 보존)
-- [ ] gamification.badge_earned 토픽 설정
+- [ ] gamification.level.up 토픽 설정 (파티션, 복제, 보존)
+- [ ] gamification.badge.earned 토픽 설정
 - [ ] 이벤트 키 전략 (userId 기반 파티셔닝)
 - [ ] Duration(final) 갱신
 
@@ -188,7 +188,7 @@
 ### 1.8 Service + Test
 - [ ] ReportService 구현 (신고 접수 — 중복 검사, 생성)
 - [ ] ModerationService 구현 (관리자 처리 — 승인/거부, 콘텐츠 숨김)
-- [ ] 승인 시 community.report.approved Kafka 이벤트 발행
+- [ ] 승인 시 community.report.created 기반 후속 처리 실행 (별도 approved 토픽 없음 — 아키텍처 미정의)
 - [ ] 단위 테스트 작성 (Mockito)
 - [ ] 테스트 통과 확인
 

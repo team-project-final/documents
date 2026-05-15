@@ -15,7 +15,7 @@
 
 ### 1.2 요구사항 분석
 - [ ] Spring Boot 4 + Modulith 프로젝트 구조 분석
-- [ ] auth/user/notification/admin 4개 모듈 역할 정의
+- [ ] auth/audit/billing/notification 4개 모듈 역할 정의
 - [ ] Gradle 의존성 목록 도출
 - [ ] Instructions 초안 → TASK 문서 반영
 
@@ -72,7 +72,7 @@
 - [ ] Duration 산정 확인 (2일)
 
 ### 1.2 요구사항 분석
-- [ ] Google/GitHub OAuth 연동 플로우 분석
+- [ ] Google/GitHub/Apple/Microsoft OAuth 연동 플로우 분석 (아키텍처 표준: 4개 프로바이더 지원)
 - [ ] 신규 사용자 자동 회원가입 로직 설계
 - [ ] 기존 사용자 매핑 로직 (email 기준) 설계
 - [ ] Instructions 초안 → TASK 문서 반영
@@ -160,8 +160,8 @@
 - [ ] Duration(final) 갱신
 
 ### 1.5 Security 2차 검토
-- [ ] 민감 정보 암호화: TOTP secret AES-256 암호화 저장
-- [ ] Refresh Token: DB 테이블(refresh_tokens) 저장 — token_hash, device_fingerprint, ip_address, expires_at 포함
+- [ ] 민감 정보 암호화: TOTP secret AES-256-GCM 암호화 저장
+- [ ] Refresh Token 이중 저장 전략: Redis(활성 세션 빠른 조회용) + DB `refresh_tokens` 테이블(영속성/감사용) 병행 — token_hash, device_fingerprint, ip_address, expires_at 포함
 - [ ] 행 단위 접근 제어: 필요 (본인 MFA만 관리)
 - [ ] 결과 → TASK Constraints 반영
 

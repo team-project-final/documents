@@ -28,10 +28,10 @@
 | ID | 유저 스토리 | 수용 기준 | 우선순위 |
 |----|------------|-----------|----------|
 | FR-EG-201 | 사용자가 배지를 획득할 수 있다 | 조건 달성 → 배지 수여 + 축하 모달 트리거 | P0 |
-| FR-EG-202 | 사용자의 레벨이 XP 누적에 따라 자동 상승한다 | XP 임계값 도달 → 레벨업 + gamification.level_up Kafka 발행 | P0 |
+| FR-EG-202 | 사용자의 레벨이 XP 누적에 따라 자동 상승한다 | XP 임계값 도달 → 레벨업 + gamification.level.up Kafka 발행 | P0 |
 | FR-EG-203 | 사용자의 연속 학습 스트릭이 추적된다 | 일일 복습 → 스트릭 카운트 증가 + 끊김 시 리셋 | P0 |
 | FR-EG-204 | 사용자가 리더보드를 조회할 수 있다 | GET /gamification/leaderboard?scope=weekly → 상위 N명 + 내 순위 | P0 |
-| FR-EG-205 | gamification.* Kafka 이벤트가 발행된다 | level_up / badge_earned 이벤트 Avro 등록 + 발행 | P0 |
+| FR-EG-205 | gamification.* Kafka 이벤트가 발행된다 | level.up / badge.earned 이벤트 Avro 등록 + 발행 | P0 |
 
 ### 2.4 @knowledge-owner-1 — 버전 이력 + 태그
 
@@ -84,7 +84,7 @@
 | From | To | 내용 | 시점 |
 |------|-----|------|------|
 | @learning-card-owner | @engagement-owner | card.reviewed → XP 적립 (W2 발행분 활용) | W3 Day 1~ |
-| @engagement-owner | (W4 platform) | gamification.level_up 발행 → W4 notification 소비 게이트 | W3 종료 시점 |
+| @engagement-owner | (W4 platform) | gamification.level.up 발행 → W4 notification 소비 게이트 | W3 종료 시점 |
 | @learning-card-owner | (W4 platform) | card.review.due 발행 → W4 notification 소비 게이트 | W3 종료 시점 |
 | @knowledge-owner-1 | @learning-ai-owner | note.created → AI 카드 자동 생성 (W2 발행분 활용) | W3 Day 1~ |
 | @knowledge-owner-2 | @learning-ai-owner | 시맨틱 벡터 → RRF 결합 | W3 Day 1~ |
@@ -92,7 +92,7 @@
 ## 5. 성공 기준 체크리스트 (W3 종료 게이트)
 
 - [ ] 모든 producer 토픽이 Schema Registry에 BACKWARD 호환으로 등록
-- [ ] gamification.level_up / badge_earned / card.review.due / note.created 발행 동작
+- [ ] gamification.level.up / gamification.badge.earned / card.review.due / note.created 발행 동작
 - [ ] gamification 완성 (배지·레벨·스트릭·리더보드)
 - [ ] 검색 RRF (BM25 + 시맨틱) 동작 + 정확도 측정 리포트
 - [ ] AI 카드 자동 생성 (note.created → LLM → Card) 안정 동작 + 시맨틱 캐시 작동

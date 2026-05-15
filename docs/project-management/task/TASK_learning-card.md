@@ -22,7 +22,7 @@
 | **Duration** | 0.5일 |
 | **RULE Reference** | [18-기술-스택](../../wiki/18-기술-스택.md) · [10-환경-설정](../../wiki/10-환경-설정.md) |
 | **Assignee** | @learning-card-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 
 ---
 
@@ -41,7 +41,7 @@
 | **Duration** | 2일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) · [09-버전-관리-정책](../../wiki/09-버전-관리-정책.md) |
 | **Assignee** | @learning-card-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 
 ---
 
@@ -60,7 +60,7 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @learning-card-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 
 ---
 
@@ -81,7 +81,7 @@
 | **Duration** | 2일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @learning-card-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -101,7 +101,7 @@
 | **Duration** | 0.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) · [14-배포-가이드](../../wiki/14-배포-가이드.md) |
 | **Assignee** | @learning-card-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -121,7 +121,7 @@
 | **Duration** | 0.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @learning-card-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -143,7 +143,7 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) · [14-배포-가이드](../../wiki/14-배포-가이드.md) |
 | **Assignee** | @learning-card-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -157,13 +157,13 @@
 | **Done When** | 대시보드 API + 스트릭 계산 + 종합 통계 응답 + 테스트 통과 |
 | **Scope** | **In**: 스트릭 계산 로직, 종합 대시보드 API, 캐싱 / **Out**: 프론트엔드 대시보드 UI, 게이미피케이션 연동 |
 | **Input** | Step 6 완료된 통계 API, 복습 로그 데이터, PRD_W3 대시보드 요구사항 |
-| **Instructions** | 1. 스트릭 계산 로직 구현 (연속 복습 일수)<br>2. 종합 통계 개요 API 구현 (`GET /stats/overview` — 구 `/api/v1/stats/dashboard`, Wiki 기준)<br>3. 응답 데이터: 오늘 복습 수, 주간 복습 수, 정답률, 현재 스트릭, 최장 스트릭<br>4. 스트릭 데이터 저장: 별도 `user_streaks` 테이블이 아닌 `user_profiles_gamification`의 `current_streak`, `longest_streak` 컬럼 사용 (ERD 기준 — engagement-svc와 협의)<br>5. 복습 완료 시 스트릭 자동 업데이트 로직<br>6. 캐싱 적용 (대시보드 데이터 5분 TTL)<br>7. 통합 테스트: 복습 시나리오별 대시보드 데이터 정확도 검증 |
+| **Instructions** | 1. 스트릭 계산 로직 구현 (연속 복습 일수)<br>2. 종합 통계 개요 API 구현 (`GET /stats/overview` — 구 `/api/v1/stats/dashboard`, Wiki 기준)<br>3. 응답 데이터: 오늘 복습 수, 주간 복습 수, 정답률, 현재 스트릭, 최장 스트릭<br>4. 스트릭 데이터: 별도 `user_streaks` 테이블 없음 — 스트릭은 engagement-svc의 `user_profiles_gamification` 테이블의 `current_streak`, `longest_streak` 컬럼에 위치 (아키텍처). learning-card-svc는 직접 DB 접근 금지 — card.reviewed Kafka 이벤트 발행을 통해 engagement-svc에 스트릭 갱신 위임<br>5. 복습 완료 시 스트릭 자동 업데이트 로직 (Kafka 이벤트 경유)<br>6. 캐싱 적용 (대시보드 데이터 5분 TTL)<br>7. 통합 테스트: 복습 시나리오별 대시보드 데이터 정확도 검증 |
 | **Output Format** | 대시보드 API 응답 JSON + 스트릭 계산 로직 + 테스트 결과 |
 | **Constraints** | - 스트릭: 연속 복습 일수 (하루라도 빠지면 리셋)<br>- 대시보드 응답 시간 300ms 이내<br>- 캐싱 TTL: 5분<br>- 스트릭은 KST 기준 자정으로 날짜 구분<br>- 복습 0건인 날도 대시보드 표시 |
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @learning-card-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -185,7 +185,7 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [09-버전-관리-정책](../../wiki/09-버전-관리-정책.md) · [14-배포-가이드](../../wiki/14-배포-가이드.md) |
 | **Assignee** | @learning-card-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -205,5 +205,5 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [09-버전-관리-정책](../../wiki/09-버전-관리-정책.md) |
 | **Assignee** | @learning-card-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |

@@ -116,14 +116,18 @@
 - [ ] Duration 산정 확인
 
 ### 6.2 요구사항 분석
-- [ ] 4-서비스 경로 매핑 요건 정의 — Wiki 도메인 경로 기준:
+- [ ] 서비스별 경로 매핑 요건 정의 — Wiki 도메인 경로 기준:
   - platform-svc: `/auth/**`, `/tenant/**`, `/billing/**`, `/me/**`
   - engagement-svc: `/community/**`, `/gamification/**`
   - knowledge-svc: `/notes/**`, `/graph/**`
-  - learning-svc: `/decks/**`, `/cards/**`, `/reviews/**`, `/ai/**`, `/stats/**`
+  - learning-ai (FastAPI port 8090): `/ai/**`
+  - learning-card: `/decks/**`, `/cards/**`, `/reviews/**`, `/stats/**`
   - cross-cutting: `/notifications/**`
   - admin: `/admin/**`
-- [ ] Rate Limit 요건 분석 (서비스별/글로벌 제한)
+- [ ] Rate Limit 요건 분석 — 플랜별 제한: Free 100회/min, Pro 1000회/min, Team 3000회/min
+- [ ] Gateway 필터 체인 순서 확인: CORS → Rate Limiter → JWT Validator → Tenant Resolver → Request Logger → Circuit Breaker
+- [ ] Tenant Resolution 요건 확인 (JWT 클레임에서 tenant_id 추출 → X-Tenant-Id 헤더 하위 서비스 주입)
+- [ ] Circuit Breaker (Resilience4j) 요건 확인
 - [ ] CORS 설정 요건 확인
 - [ ] Instructions 초안 → TASK 문서 반영
 
@@ -135,27 +139,43 @@
 
 ### 6.4 인프라 아키텍처 설계
 - [ ] 서비스별 라우팅 테이블 설계 (Wiki 도메인 경로 기준, `/api/platform/**` 등 구 prefix 제거)
-- [ ] Rate Limit 정책 설계 (req/sec per IP)
+- [ ] learning-svc 경로 분할 설계: `/ai/**` → learning-ai (FastAPI, port 8090), `/decks/**`,`/cards/**`,`/reviews/**`,`/stats/**` → learning-card
+- [ ] Rate Limit 정책 설계 — 플랜 기반: Free 100/min, Pro 1000/min, Team 3000/min (Redis 기반 RequestRateLimiter)
+- [ ] Gateway 필터 체인 순서 설계: CORS → Rate Limiter → JWT Validator → Tenant Resolver → Request Logger → Circuit Breaker
 - [ ] Health check 엔드포인트 바이패스 설계
 - [ ] Duration(final) 갱신
 
 ### 6.5 Security 2차 검토
 - [ ] JWT 검증 Gateway 레벨 적용 확인
+- [ ] Tenant Resolution 필터: JWT에서 tenant_id 추출 → X-Tenant-Id 헤더 하위 서비스 전달 확인
 - [ ] Rate Limit 버스트 정책 확인
+- [ ] Circuit Breaker (Resilience4j) fallback 정책 확인
 - [ ] 민감 헤더 전파 제한 확인
 - [ ] 결과 → TASK Constraints 반영
 
 ### 6.6 N/A (인프라 — DTO/Entity 해당 없음)
 
 ### 6.7 Gateway 구현
-- [ ] Spring Cloud Gateway 라우트 설정 (Wiki 도메인 경로 기준 — platform-svc: `/auth/**`,`/tenant/**`,`/billing/**`,`/me/**`; engagement-svc: `/community/**`,`/gamification/**`; knowledge-svc: `/notes/**`,`/graph/**`; learning-svc: `/decks/**`,`/cards/**`,`/reviews/**`,`/ai/**`,`/stats/**`; `/notifications/**`; `/admin/**`)
-- [ ] Rate Limit 필터 설정 (Redis 기반 RequestRateLimiter)
+- [ ] Spring Cloud Gateway 라우트 설정 (Wiki 도메인 경로 기준):
+  - platform-svc: `/auth/**`, `/tenant/**`, `/billing/**`, `/me/**`
+  - engagement-svc: `/community/**`, `/gamification/**`
+  - knowledge-svc: `/notes/**`, `/graph/**`
+  - learning-ai (FastAPI port 8090): `/ai/**`
+  - learning-card: `/decks/**`, `/cards/**`, `/reviews/**`, `/stats/**`
+  - `/notifications/**`, `/admin/**`
+- [ ] Gateway 필터 체인 구현 순서: CORS → Rate Limiter → JWT Validator → Tenant Resolver → Request Logger → Circuit Breaker
+- [ ] Tenant Resolver 필터 구현 (JWT claims → X-Tenant-Id 헤더 주입)
+- [ ] Circuit Breaker 필터 구현 (Resilience4j, 서비스별 fallback 설정)
+- [ ] Rate Limit 필터 설정 (Redis 기반 RequestRateLimiter — Free 100/min, Pro 1000/min, Team 3000/min)
 - [ ] CORS 글로벌 설정
 - [ ] docker-compose에 Gateway 서비스 추가/갱신
 
 ### 6.8 라우팅 테스트
 - [ ] 각 서비스 경로 라우팅 동작 확인
-- [ ] Rate Limit 초과 시 429 응답 확인
+- [ ] `/ai/**` → learning-ai (port 8090) 라우팅 확인
+- [ ] Rate Limit 초과 시 429 응답 확인 (플랜별 임계치)
+- [ ] X-Tenant-Id 헤더 하위 서비스 전달 확인
+- [ ] Circuit Breaker 동작 확인 (서비스 다운 시 fallback 응답)
 - [ ] CORS preflight 요청 처리 확인
 - [ ] Health endpoint 바이패스 확인
 

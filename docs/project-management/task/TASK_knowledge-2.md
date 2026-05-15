@@ -22,7 +22,7 @@
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @knowledge-owner-2 |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 
 ---
 
@@ -41,7 +41,7 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [09-버전-관리-정책](../../wiki/09-버전-관리-정책.md) |
 | **Assignee** | @knowledge-owner-2 |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 
 ---
 
@@ -60,7 +60,7 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) · [14-배포-가이드](../../wiki/14-배포-가이드.md) |
 | **Assignee** | @knowledge-owner-2 |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 
 ---
 
@@ -81,7 +81,7 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @knowledge-owner-2 |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -101,7 +101,7 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) · [14-배포-가이드](../../wiki/14-배포-가이드.md) |
 | **Assignee** | @knowledge-owner-2 |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -123,7 +123,7 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @knowledge-owner-2 |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -143,7 +143,7 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [09-버전-관리-정책](../../wiki/09-버전-관리-정책.md) |
 | **Assignee** | @knowledge-owner-2 |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -165,7 +165,7 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [09-버전-관리-정책](../../wiki/09-버전-관리-정책.md) · [14-배포-가이드](../../wiki/14-배포-가이드.md) |
 | **Assignee** | @knowledge-owner-2 |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -185,5 +185,5 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [09-버전-관리-정책](../../wiki/09-버전-관리-정책.md) |
 | **Assignee** | @knowledge-owner-2 |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |

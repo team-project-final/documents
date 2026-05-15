@@ -76,7 +76,8 @@
     - 그룹 이미지 업로드
 - **Input**: PRD_W1 그룹 기능 요구사항, JWT 인증 토큰 (platform-svc)
 - **Instructions**:
-  1. study_groups 테이블 DDL 작성 (id, name, description, join_type, maxMembers, avatarUrl, owner_user_id, created_at, updated_at)
+  1. study_groups 테이블 DDL 작성 (id, tenant_id, name, description, join_type, maxMembers, avatarUrl, owner_user_id, created_at, updated_at)
+     - `tenant_id`: 멀티테넌트 식별 컬럼 (필수)
      - `join_type`: `open` (즉시 가입), `approval` (승인 필요), `invite` (초대 전용) — `is_public` 대신 사용
   2. Flyway V1 마이그레이션 파일 생성
   3. Group 엔티티 + JPA Repository 작성
@@ -125,7 +126,8 @@
     - 멤버 수 제한 정책
 - **Input**: study_groups 테이블, JWT 인증 토큰, PRD_W1 멤버 관리 요구사항
 - **Instructions**:
-  1. study_group_members 테이블 DDL 작성 (group_id, user_id, role, status, joined_at)
+  1. study_group_members 테이블 DDL 작성 (group_id, user_id, tenant_id, role, status, joined_at)
+     - `tenant_id`: 멀티테넌트 식별 컬럼 (필수)
      - status 값: `invited` (초대됨), `active` (활성), `banned` (강퇴/차단) — 소문자
   2. Flyway V2 마이그레이션 파일 생성
   3. GroupMember 엔티티 + Repository 작성
@@ -308,16 +310,16 @@
 ## Step 7: 게이미피케이션 Kafka 이벤트 발행
 
 - **Step Name**: gamification 이벤트 발행
-- **Step Goal**: engagement-svc가 gamification.level_up/badge_earned Kafka 이벤트를 발행하여 알림을 트리거한다.
+- **Step Goal**: engagement-svc가 gamification.level.up/badge.earned Kafka 이벤트를 발행하여 알림을 트리거한다.
 - **Done When**:
-  - [ ] 레벨 상승 시 gamification.level_up 이벤트 발행
-  - [ ] 배지 수여 시 gamification.badge_earned 이벤트 발행
+  - [ ] 레벨 상승 시 gamification.level.up 이벤트 발행
+  - [ ] 배지 수여 시 gamification.badge.earned 이벤트 발행
   - [ ] 이벤트 스키마 Schema Registry 등록
   - [ ] platform-svc notification 모듈에서 이벤트 수신 확인
   - [ ] 통합 테스트 통과
 - **Scope**:
   - In Scope:
-    - Kafka Producer 구현 (gamification.level_up, gamification.badge_earned)
+    - Kafka Producer 구현 (gamification.level.up, gamification.badge.earned)
     - Avro 스키마 정의 + Schema Registry 등록
     - 레벨 상승/배지 수여 시 이벤트 발행 로직
     - 이벤트 발행 실패 시 재시도
@@ -328,12 +330,12 @@
     - 이벤트 버전 관리
 - **Input**: 레벨/배지 로직, Kafka 토픽, Schema Registry
 - **Instructions**:
-  1. gamification.level_up Avro 스키마 정의 (userId, newLevel, xp, timestamp)
-  2. gamification.badge_earned Avro 스키마 정의 (userId, badgeId, badgeName, timestamp)
+  1. gamification.level.up Avro 스키마 정의 (userId, newLevel, xp, timestamp)
+  2. gamification.badge.earned Avro 스키마 정의 (userId, badgeId, badgeName, timestamp)
   3. Schema Registry에 스키마 등록
   4. Kafka Producer 구현 (KafkaTemplate)
-  5. 레벨 상승 로직에 이벤트 발행 추가
-  6. 배지 수여 로직에 이벤트 발행 추가
+  5. 레벨 상승 로직에 이벤트 발행 추가 (토픽: gamification.level.up)
+  6. 배지 수여 로직에 이벤트 발행 추가 (토픽: gamification.badge.earned)
   7. 통합 테스트 작성 (이벤트 발행 검증)
 - **Output Format**: gamification 모듈 Kafka Producer 코드 + Avro 스키마 + 테스트 코드
 - **Constraints**:
@@ -433,7 +435,7 @@
   2. card.reviewed 이벤트 발행 → XP 적립 확인
   3. XP 누적 → 레벨 상승 확인
   4. 배지 조건 시뮬레이션 → 배지 수여 확인
-  5. gamification.level_up/badge_earned 이벤트 → 알림 발송 확인
+  5. gamification.level.up/badge.earned 이벤트 → 알림 발송 확인
   6. 리더보드 데이터 정합성 확인
   7. 실패 케이스 식별 및 이슈 등록
 - **Output Format**: E2E 테스트 코드 + 테스트 결과 리포트

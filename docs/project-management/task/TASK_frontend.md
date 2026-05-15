@@ -22,7 +22,7 @@
 | **Duration** | 1일 |
 | **RULE Reference** | [18-기술-스택](../../wiki/18-기술-스택.md) · [03-아키텍처](../../wiki/03-아키텍처.md) |
 | **Assignee** | @frontend-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 
 ---
 
@@ -41,7 +41,7 @@
 | **Duration** | 2일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) · [17-스케줄](../../wiki/17-스케줄.md) |
 | **Assignee** | @frontend-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 
 ---
 
@@ -60,7 +60,7 @@
 | **Duration** | 2일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) · [17-스케줄](../../wiki/17-스케줄.md) |
 | **Assignee** | @frontend-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 
 ---
 
@@ -81,7 +81,7 @@
 | **Duration** | 2일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @frontend-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -101,7 +101,7 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @frontend-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -121,7 +121,7 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @frontend-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -143,7 +143,7 @@
 | **Duration** | 1.5일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @frontend-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -163,7 +163,7 @@
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @frontend-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -183,7 +183,7 @@
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @frontend-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -203,7 +203,7 @@
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @frontend-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -225,7 +225,7 @@
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @frontend-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -245,7 +245,7 @@
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @frontend-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 
 ---
@@ -265,7 +265,7 @@
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | @frontend-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |
 ---
 
@@ -284,5 +284,5 @@
 | **Duration** | 0.5일 |
 | **RULE Reference** | wiki 17_스케줄 §발표일 규칙 |
 | **Assignee** | @frontend-owner |
-| **Reviewer** | @tech-lead |
+| **Reviewer** | @team-lead |
 | **Status** | TODO |

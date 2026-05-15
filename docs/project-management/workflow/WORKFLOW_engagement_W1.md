@@ -84,7 +84,7 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.4 ERD 설계
-- [ ] study_groups 테이블 설계 (id, name, description, join_type, owner_user_id, max_members DEFAULT 30, status: active|archived|suspended, avatar_url, created_at, updated_at, deleted_at)
+- [ ] study_groups 테이블 설계 (id, tenant_id, name, description, join_type, owner_user_id, max_members DEFAULT 30, status: active|archived|suspended, avatar_url, created_at, updated_at, deleted_at)
 - [ ] 인덱스 설계 (owner_user_id, join_type)
 - [ ] 관계 정의 (study_groups.owner_user_id → users.id FK)
 - [ ] Duration(final) 갱신
@@ -150,7 +150,7 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.4 ERD 설계
-- [ ] study_group_members 테이블 설계 (id, group_id, user_id, role, status, joined_at)
+- [ ] study_group_members 테이블 설계 (id, tenant_id, group_id, user_id, role, status, joined_at)
 - [ ] 인덱스 설계 (group_id+user_id UNIQUE, status)
 - [ ] 관계 정의 (study_group_members → study_groups FK, study_group_members → users FK)
 - [ ] Duration(final) 갱신

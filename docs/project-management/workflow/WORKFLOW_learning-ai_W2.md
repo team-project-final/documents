@@ -15,7 +15,7 @@
 
 ### 4.2 요구사항 분석
 - [ ] pgvector 확장 모듈 설정 요건 분석
-- [ ] 임베딩 벡터 차원 정의 (1536 — OpenAI ada-002 기준)
+- [ ] 임베딩 벡터 차원 정의 (1536 — OpenAI text-embedding-3-small 기준)
 - [ ] 코사인 유사도 검색 요건 (top-K, threshold)
 - [ ] 청크 기반 임베딩 저장 구조 분석
 - [ ] Instructions 초안 → TASK 문서 반영
@@ -55,7 +55,7 @@
 
 ### 4.8 Service + Test
 - [ ] EmbeddingService 구현 (generate_embedding, store_embedding, search_similar)
-- [ ] OpenAI Embedding API 호출 구현 (text-embedding-ada-002)
+- [ ] OpenAI Embedding API 호출 구현 (text-embedding-3-small)
 - [ ] 코사인 유사도 검색 서비스 (top-K + threshold 필터)
 - [ ] 배치 임베딩 생성 (청크 목록 → 벡터 목록)
 - [ ] 단위 테스트 작성 (pytest — OpenAI API mock)

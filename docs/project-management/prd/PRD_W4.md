@@ -22,7 +22,7 @@
 
 | ID | 유저 스토리 | 수용 기준 | 우선순위 |
 |----|------------|-----------|----------|
-| FR-PL-401 | 사용자에게 FCM 푸시 알림이 발송된다 | gamification.level_up / community.shared / card.review.due Kafka 소비 → 푸시 발송 | P0 |
+| FR-PL-401 | 사용자에게 FCM 푸시 알림이 발송된다 | gamification.level.up / community.deck.shared / community.note.shared / card.review.due 이벤트 → notification.send 토픽 경유 → FCM 푸시 발송 | P0 |
 | FR-PL-402 | 사용자에게 이메일 알림이 발송된다 | AWS SES → 주간 학습 리포트 이메일 | P1 |
 | FR-PL-403 | 사용자가 조용한 시간을 설정할 수 있다 | PUT /notifications/preferences (body: quietHoursStart, quietHoursEnd 필드) → 해당 시간 알림 미발송 | P1 |
 | FR-PL-404 | 시스템이 주요 이벤트를 audit_logs에 자동 기록한다 | Kafka 이벤트 소비 → audit_logs 적재 + 90일 보존 정책 | P0 |
@@ -84,7 +84,7 @@
 
 | From | To | 내용 | 시점 |
 |------|-----|------|------|
-| W3 producer 토픽 | @platform-owner | gamification.* / card.review.due → notification 소비 | W4 Day 1 (W3 종료 직후) |
+| W3 producer 토픽 | @platform-owner | gamification.level.up / gamification.badge.earned / card.review.due → notification.send 토픽 경유 소비 | W4 Day 1 (W3 종료 직후) |
 | W3 producer 토픽 | @platform-owner | 모든 도메인 이벤트 → audit 소비 | W4 Day 1 |
 | @engagement-owner | @platform-owner | 신고 알림 → admin notification | W4 Day 2~ |
 | 전체 서비스 | @team-lead | E2E 시나리오 → 통합 조율 | W4 Day 3~ |

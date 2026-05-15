@@ -1,6 +1,6 @@
 # TASK: @platform-owner
 
-> **담당 서비스**: platform-svc (auth / user / notification / admin)  
+> **담당 서비스**: platform-svc (auth / audit / billing / notification)  
 > **GitHub Repository**: [synapse-platform-svc](https://github.com/team-project-final/synapse-platform-svc)  
 > **주차**: W1 (2026-05-12 ~ 2026-05-16)  
 > **관련 문서**: [SCOPE](../scope/SCOPE_platform.md) | [PRD_W1](../prd/PRD_W1.md) | [WORKFLOW](../workflow/WORKFLOW_platform_W1.md) | [HISTORY](../history/HISTORY_platform.md)
@@ -12,14 +12,14 @@
 - **Step Goal**: platform-owner가 Spring Boot 4 + Modulith 기반 platform-svc 프로젝트를 생성하여 4개 모듈 골격이 동작한다.
 - **Done When**:
   - [ ] Spring Boot 4 + Modulith 프로젝트 초기화 완료
-  - [ ] auth / user / notification / admin 4개 모듈 패키지 구조 생성
+  - [ ] auth / audit / billing / notification 4개 모듈 패키지 구조 생성
   - [ ] `./gradlew build` 성공
   - [ ] Modulith 구조 검증 테스트 통과 (`ApplicationModulesTest`)
   - [ ] Docker 이미지 빌드 성공
 - **Scope**:
   - In Scope:
     - Spring Boot 4 + Modulith 프로젝트 생성
-    - 4개 모듈 패키지 구조 (auth, user, notification, admin)
+    - 4개 모듈 패키지 구조 (auth, audit, billing, notification)
     - build.gradle 의존성 설정
     - ApplicationModulesTest 작성
     - Dockerfile 작성
@@ -31,7 +31,7 @@
 - **Instructions**:
   1. Spring Initializr로 프로젝트 생성 (Spring Boot 4, Java 21, Gradle)
   2. Modulith 의존성 추가 (spring-modulith-starter, spring-modulith-test)
-  3. auth / user / notification / admin 패키지 생성 + package-info.java
+  3. auth / audit / billing / notification 패키지 생성 + package-info.java
   4. 각 모듈에 빈 Controller + Service 클래스 생성
   5. ApplicationModulesTest 작성 및 통과 확인
   6. Dockerfile 작성 (multi-stage build)
@@ -79,7 +79,7 @@
   3. oauth_identities 테이블 DDL 작성 (id, user_id, provider, provider_id, created_at) + Flyway 마이그레이션
   4. OAuth2UserService 구현 (사용자 조회/생성 로직)
   5. OAuth2 성공 핸들러 구현 (JWT 발급 연계)
-  6. 신규 사용자 자동 회원가입 로직 구현
+  6. 신규 사용자 자동 회원가입 로직 구현 (아키텍처: 가입 시 자동 테넌트 생성 — OAuth 신규 가입 시 테넌트 자동 생성 필수)
   7. 기존 사용자 매핑 로직 구현 (email 기준)
   8. 통합 테스트 작성 (MockOAuth2User)
 - **Output Format**: auth 모듈 코드 + Flyway 마이그레이션 + 테스트 코드
@@ -131,7 +131,7 @@
 - **Output Format**: auth 모듈 JWT/MFA 코드 + Redis 설정 + 테스트 코드
 - **Constraints**:
   - Access Token: 15분, Refresh Token: 7일
-  - Refresh Token은 Redis에만 저장 (DB 저장 X)
+  - Refresh Token 이중 저장 전략: Redis (활성 세션 관리, TTL 7일) + DB refresh_tokens 테이블 (영속성/감사용)
   - TOTP는 RFC 6238 준수
   - JWT 서명: RS256
 - **Duration**: 2일
@@ -180,7 +180,7 @@
   6. checkout.session.completed → 구독 활성화 로직
   7. 구독 상태 조회 API (`GET /billing/subscription` — 구 `/subscriptions/me`)
   8. 통합 테스트 (Stripe Test Mode)
-- **Output Format**: auth 모듈 결제 코드 + Flyway 마이그레이션 + 테스트 코드
+- **Output Format**: billing 모듈 결제 코드 + Flyway 마이그레이션 + 테스트 코드
 - **Constraints**:
   - Stripe Test Mode 사용 (dev/staging)
   - Webhook 서명 검증 필수 (replay attack 방지)
@@ -282,7 +282,7 @@
   6. 조회 API 구현 (`GET /admin/audit-logs` + 필터/페이징)
   7. Consumer 오류 시 DLQ 전송 설정
   8. 통합 테스트 (Embedded Kafka)
-- **Output Format**: admin 모듈 Audit Log 코드 + Kafka Consumer + 테스트 코드
+- **Output Format**: audit 모듈 Audit Log 코드 + Kafka Consumer + 테스트 코드 (audit/는 독립 모듈 — admin 모듈의 일부가 아님)
 - **Constraints**:
   - at-least-once 보장 (멱등 저장)
   - audit_logs 보존: 90일
@@ -299,17 +299,17 @@
 ## Step 7: FCM 푸시 및 SES 이메일 알림 발송
 
 - **Step Name**: FCM 푸시/SES 이메일 알림
-- **Step Goal**: 사용자에게 gamification/community/card.review.due 이벤트 기반 FCM 푸시와 SES 이메일 알림이 발송된다.
+- **Step Goal**: 사용자에게 notification.send 토픽 이벤트 기반 FCM 푸시와 SES 이메일 알림이 발송된다.
 - **Done When**:
-  - [ ] gamification 이벤트 (level_up, badge_earned) → FCM 푸시 발송
-  - [ ] community 이벤트 (invite, mention) → FCM 푸시 발송
-  - [ ] card.review.due 이벤트 → FCM 푸시 + SES 이메일 발송
+  - [ ] notification.send 토픽 이벤트 수신 → FCM 푸시 발송 (gamification/community 토픽을 직접 소비하지 않고 notification.send 토픽을 통해 수신)
+  - [ ] notification.send 토픽 이벤트 수신 → SES 이메일 발송
+  - [ ] card.review.due 이벤트 → notification.send 토픽 경유 → FCM 푸시 + SES 이메일 발송
   - [ ] 알림 발송 이력 저장
   - [ ] 발송 실패 시 재시도 로직 동작
   - [ ] 통합 테스트 통과
 - **Scope**:
   - In Scope:
-    - Kafka Consumer (gamification/community/learning 토픽)
+    - Kafka Consumer (notification.send 토픽 — gamification/community 토픽 직접 소비 아님)
     - FCM 푸시 발송 로직 (Firebase Admin SDK)
     - SES 이메일 발송 로직 (AWS SES SDK)
     - 알림 발송 이력 테이블 + 저장
@@ -322,7 +322,7 @@
 - **Input**: Kafka 이벤트, FCM 서비스 계정, AWS SES 설정, 디바이스 토큰 목록
 - **Instructions**:
   1. notifications 테이블 DDL + Flyway 마이그레이션 (구 `notification_history` → ERD 기준 `notifications`)
-  2. Kafka Consumer 구현 (gamification/community/learning 토픽 구독)
+  2. Kafka Consumer 구현 (notification.send 토픽 구독 — gamification/community 토픽 직접 구독 아님)
   3. FCM 푸시 발송 서비스 구현 (Firebase Admin SDK)
   4. SES 이메일 발송 서비스 구현 (AWS SES SDK)
   5. 이벤트 타입별 알림 라우팅 로직 (푸시/이메일/둘 다)
@@ -377,7 +377,7 @@
   5. 테넌트 목록 조회 API (페이징)
   6. 테넌트 상태 변경 API: `PUT /admin/tenants/{id}/status` (body: `{ "status": "suspended" }`) — 구 `/suspend`
   7. 통합 테스트 작성 (관리자/비관리자 시나리오)
-- **Output Format**: admin 모듈 관리 코드 + 테스트 코드
+- **Output Format**: 관리자 기능 코드 + 테스트 코드 (관리자 기능은 독립 admin 모듈이 아닌 각 담당 모듈에 분산: 사용자 관리 → auth 모듈, 테넌트 관리 → billing 모듈, 감사 조회 → audit 모듈)
 - **Constraints**:
   - 관리자 권한(ADMIN role) 필수
   - 사용자 삭제 시 개인정보 마스킹 (GDPR 준수)
