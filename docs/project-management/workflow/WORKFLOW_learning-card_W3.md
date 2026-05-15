@@ -15,7 +15,7 @@
 
 ### 1.2 요구사항 분석
 - [ ] 스케줄러 실행 시간 정의 (매일 오전 8시 KST)
-- [ ] 복습 대상 판정 기준 분석 (SM-2 알고리즘 next_review_date ≤ today)
+- [ ] 복습 대상 판정 기준 분석 (SM-2 알고리즘 due_date ≤ today)
 - [ ] card.review.due 이벤트 스키마 정의 (userId, cardCount, dueDate)
 - [ ] Instructions 초안 → TASK 문서 반영
 
@@ -51,7 +51,7 @@
 ### 1.8 Service + Test
 - [ ] ReviewDueScheduler 구현 (@Scheduled cron = "0 0 8 * * *" Asia/Seoul)
 - [ ] ShedLock 설정 (중복 실행 방지, lockAtMostFor=30m)
-- [ ] 복습 대상 사용자 조회 쿼리 (next_review_date ≤ today, GROUP BY user_id)
+- [ ] 복습 대상 사용자 조회 쿼리 (due_date ≤ today, GROUP BY user_id)
 - [ ] 사용자별 card.review.due 이벤트 발행
 - [ ] 통합 테스트 작성 (EmbeddedKafka + 스케줄러 트리거)
 - [ ] 테스트 통과 확인

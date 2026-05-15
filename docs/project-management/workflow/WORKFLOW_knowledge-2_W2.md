@@ -27,9 +27,10 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 4.4 ERD 설계
-- [ ] chunks 테이블 설계 (id, noteId, chunkIndex, content, tokenCount, createdAt)
-- [ ] 인덱스 설계 (chunks.noteId, chunks.noteId+chunkIndex UNIQUE)
-- [ ] 관계 정의 (chunks.noteId → notes.id FK)
+- [ ] note_chunks 테이블 설계 (id, note_id, chunk_index, chunk_text, token_count, embedding vector(1536), created_at)
+- [ ] 참고: 임베딩은 별도 테이블(chunk_embeddings)이 아닌 note_chunks.embedding 컬럼에 저장
+- [ ] 인덱스 설계 (note_chunks.note_id, note_chunks.note_id+chunk_index UNIQUE)
+- [ ] 관계 정의 (note_chunks.note_id → notes.id FK)
 - [ ] Duration(final) 갱신
 
 ### 4.5 Security 2차 검토
@@ -39,20 +40,20 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 4.6 DTO / Entity 설계 (API First)
-- [ ] ChunkResponse 정의 (id, noteId, chunkIndex, content, tokenCount)
-- [ ] ChunkCreateEvent 정의 (noteId, content)
-- [ ] Chunk Entity 작성
+- [ ] ChunkResponse 정의 (id, note_id, chunk_index, chunk_text, token_count)
+- [ ] ChunkCreateEvent 정의 (note_id, chunk_text)
+- [ ] NoteChunk Entity 작성
 - [ ] MapStruct 매퍼 작성
 - [ ] Output Format → TASK 반영
 
 ### 4.7 Repository 구현
-- [ ] ChunkRepository 인터페이스 작성
+- [ ] NoteChunkRepository 인터페이스 작성
 - [ ] findByNoteIdOrderByChunkIndex 커스텀 쿼리
 - [ ] deleteByNoteId 벌크 삭제 쿼리
 - [ ] Flyway 마이그레이션 스크립트 작성
 
 ### 4.8 Service + Test
-- [ ] ChunkingService 구현 (chunkNote, getChunksByNoteId, deleteChunksByNoteId)
+- [ ] ChunkingService 구현 (chunkNote, getNoteChunksByNoteId, deleteNoteChunksByNoteId)
 - [ ] 노트 → N개 청크 분할 로직 구현 (문단/토큰 기반)
 - [ ] 비동기 처리 구현 (@Async 또는 Kafka Consumer)
 - [ ] 청크 재생성 로직 (기존 삭제 → 새 청크 생성)

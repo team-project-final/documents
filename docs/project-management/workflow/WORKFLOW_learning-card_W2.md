@@ -14,7 +14,7 @@
 - [ ] Duration 산정 확인
 
 ### 4.2 요구사항 분석
-- [ ] 오늘 복습 대상 카드 큐 조회 로직 정의 (nextReviewDate <= today)
+- [ ] 오늘 복습 대상 카드 큐 조회 로직 정의 (due_date <= today)
 - [ ] 복습 세션 생성/완료 플로우 정의
 - [ ] rating 제출 → SM-2 → 다음 복습일 계산 플로우 확인
 - [ ] 세션 내 카드 순서 정책 (오래된 순 / 랜덤)
@@ -27,10 +27,10 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 4.4 ERD 설계
-- [ ] review_sessions 테이블 설계 (id, userId, startedAt, completedAt, totalCards, reviewedCards, createdAt)
-- [ ] cards 테이블 갱신 확인 (nextReviewDate, interval, easeFactor 컬럼)
-- [ ] 인덱스 설계 (review_sessions.userId, cards.userId+nextReviewDate)
-- [ ] 관계 정의 (review_sessions.userId → users.id)
+- [ ] review_sessions 테이블 설계 (id, user_id, deck_id, started_at, ended_at, total_cards, completed_cards, correct_count, again_count, total_time_ms bigint, status: in_progress|completed|abandoned, created_at)
+- [ ] cards 테이블 갱신 확인 (due_date, interval_days, easiness_factor 컬럼)
+- [ ] 인덱스 설계 (review_sessions.user_id, cards.user_id+due_date)
+- [ ] 관계 정의 (review_sessions.user_id → users.id)
 - [ ] Duration(final) 갱신
 
 ### 4.5 Security 2차 검토
@@ -40,7 +40,7 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 4.6 DTO / Entity 설계 (API First)
-- [ ] ReviewSessionResponse 정의 (id, totalCards, reviewedCards, startedAt, completedAt)
+- [ ] ReviewSessionResponse 정의 (id, total_cards, completed_cards, correct_count, again_count, total_time_ms, started_at, ended_at, status)
 - [ ] ReviewQueueResponse 정의 (cards[], totalCount)
 - [ ] ReviewCardResponse 정의 (cardId, front, back, deckTitle)
 - [ ] ReviewSubmitRequest 정의 (cardId, rating, timeSpentMs)
@@ -51,15 +51,15 @@
 ### 4.7 Repository 구현
 - [ ] ReviewSessionRepository 인터페이스 작성
 - [ ] findByUserIdOrderByStartedAtDesc 커스텀 쿼리
-- [ ] findDueCards 쿼리 (nextReviewDate <= today AND userId = ?)
+- [ ] findDueCards 쿼리 (due_date <= today AND user_id = ?)
 - [ ] Flyway 마이그레이션 스크립트 작성
 
 ### 4.8 Service + Test
 - [ ] ReviewSessionService 구현 (startSession, submitReview, completeSession, getQueue)
 - [ ] 오늘 복습 카드 큐 조회 서비스 (due cards)
 - [ ] 세션 시작 로직 (totalCards 스냅샷)
-- [ ] rating 제출 → SM-2 호출 → nextReviewDate 갱신
-- [ ] 세션 완료 로직 (completedAt + reviewedCards 갱신)
+- [ ] rating 제출 → SM-2 호출 → due_date 갱신
+- [ ] 세션 완료 로직 (ended_at + completed_cards + status: completed 갱신)
 - [ ] Bean Validation 적용
 - [ ] 단위 테스트 작성 (Mockito)
 - [ ] 통합 테스트 (세션 시작 → 복습 → 완료 플로우)
@@ -170,9 +170,9 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 6.4 ERD 설계
-- [ ] 추가 테이블 불필요 (review_logs + review_sessions 기반 집계)
+- [ ] 추가 테이블 불필요 (card_reviews + review_sessions 기반 집계)
 - [ ] 집계 쿼리 설계 (GROUP BY date/week, COUNT, 정답률 계산)
-- [ ] 인덱스 최적화 확인 (review_logs.userId + reviewedAt)
+- [ ] 인덱스 최적화 확인 (card_reviews.user_id + reviewed_at)
 - [ ] Duration(final) 갱신
 
 ### 6.5 Security 2차 검토
@@ -187,8 +187,8 @@
 - [ ] Output Format → TASK 반영
 
 ### 6.7 Repository 구현
-- [ ] ReviewLogRepository 커스텀 쿼리 추가
-- [ ] 일별 집계 쿼리 (GROUP BY DATE(reviewedAt), COUNT, 정답률)
+- [ ] CardReviewRepository 커스텀 쿼리 추가
+- [ ] 일별 집계 쿼리 (GROUP BY DATE(reviewed_at), COUNT, 정답률)
 - [ ] 주별 집계 쿼리 (GROUP BY WEEK, COUNT, 정답률)
 - [ ] Native Query 또는 JPQL 작성
 

@@ -110,7 +110,7 @@
 - [ ] RagQuestionRequest DTO 정의 (question, maxChunks)
 - [ ] RagAnswerResponse DTO 정의 (answer, sources[], cached)
 - [ ] RagSource DTO 정의 (noteId, noteTitle, chunkText, similarity)
-- [ ] SemanticCacheEntry 모델 정의 (questionEmbedding, answer, sources, createdAt)
+- [ ] SemanticCacheEntry 모델 정의 (query_hash, question_embedding, result_data jsonb, hit_count, created_at) — answer/sources는 result_data jsonb 필드로 통합
 - [ ] Output Format → TASK 반영
 
 ### 1.7 Repository / Client 구현

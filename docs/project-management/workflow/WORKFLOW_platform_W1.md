@@ -85,10 +85,11 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.4 ERD 설계
-- [ ] users 테이블 설계 (id, email, name, avatar, provider, provider_id, created_at, updated_at)
-- [ ] oauth_accounts 테이블 설계 (id, user_id, provider, provider_id, access_token_enc)
+- [ ] users 테이블 설계 (id, tenant_id, email, display_name, avatar_url, locale, status: active|suspended|deleted, created_at, updated_at)
+- [ ] 참고: provider, provider_id 컬럼은 users 테이블에 없음 — oauth_identities 테이블로 분리
+- [ ] oauth_identities 테이블 설계 (id, user_id, provider, provider_id, access_token_enc)
 - [ ] 인덱스 설계 (email UNIQUE, provider+provider_id UNIQUE)
-- [ ] 관계 정의 (users 1:N oauth_accounts)
+- [ ] 관계 정의 (users 1:N oauth_identities)
 - [ ] Duration(final) 갱신
 
 ### 1.5 Security 2차 검토
@@ -100,14 +101,14 @@
 ### 1.6 DTO / Entity 설계 (API First)
 - [ ] OAuthCallbackRequest 정의 (code, state)
 - [ ] OAuthTokenResponse 정의 (accessToken, refreshToken, expiresIn)
-- [ ] User Entity 작성
-- [ ] OAuthAccount Entity 작성
+- [ ] User Entity 작성 (display_name, avatar_url, locale, status)
+- [ ] OAuthIdentity Entity 작성
 - [ ] MapStruct 매퍼 작성
 - [ ] Output Format → TASK 반영
 
 ### 1.7 Repository 구현
 - [ ] UserRepository 인터페이스 작성
-- [ ] OAuthAccountRepository 인터페이스 작성
+- [ ] OAuthIdentityRepository 인터페이스 작성
 - [ ] findByEmail, findByProviderAndProviderId 커스텀 쿼리
 
 ### 1.8 Service + Test
@@ -153,14 +154,14 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.4 ERD 설계
-- [ ] refresh_tokens 관리: Redis 저장 (key: userId, TTL: 7d)
-- [ ] mfa_secrets 테이블 설계 (user_id, secret_enc, enabled, created_at)
-- [ ] 인덱스 설계 (user_id UNIQUE on mfa_secrets)
+- [ ] refresh_tokens 테이블 설계 (id, user_id, token_hash, device_fingerprint, ip_address, expires_at, created_at) — ERD에 DB 테이블로 정의됨 (Redis 전용이 아님)
+- [ ] mfa_credentials 테이블 설계 (id, user_id, type: totp, secret_enc, is_active, verified_at, created_at)
+- [ ] 인덱스 설계 (user_id UNIQUE on mfa_credentials)
 - [ ] Duration(final) 갱신
 
 ### 1.5 Security 2차 검토
 - [ ] 민감 정보 암호화: TOTP secret AES-256 암호화 저장
-- [ ] Refresh Token: Redis만 저장 (DB 저장 X)
+- [ ] Refresh Token: DB 테이블(refresh_tokens) 저장 — token_hash, device_fingerprint, ip_address, expires_at 포함
 - [ ] 행 단위 접근 제어: 필요 (본인 MFA만 관리)
 - [ ] 결과 → TASK Constraints 반영
 
@@ -169,17 +170,17 @@
 - [ ] TokenResponse 정의 (accessToken, refreshToken, expiresIn)
 - [ ] MfaSetupResponse 정의 (qrCodeUrl, secret)
 - [ ] MfaVerifyRequest 정의 (code)
-- [ ] MfaSecret Entity 작성
+- [ ] MfaCredential Entity 작성 (type, is_active, verified_at)
 - [ ] Output Format → TASK 반영
 
 ### 1.7 Repository 구현
-- [ ] MfaSecretRepository 인터페이스 작성
-- [ ] Redis Template 설정 (Refresh Token 저장/조회/삭제)
+- [ ] MfaCredentialRepository 인터페이스 작성
+- [ ] RefreshTokenRepository 인터페이스 작성 (DB 저장 + Redis 캐싱 병행)
 
 ### 1.8 Service + Test
 - [ ] JwtService 구현 (생성, 파싱, 검증 — RS256)
 - [ ] RefreshTokenService 구현 (Redis CRUD)
-- [ ] MfaService 구현 (TOTP 생성, QR URL, 검증)
+- [ ] MfaService 구현 (TOTP 생성, QR URL, 검증 — mfa_credentials 기반)
 - [ ] 단위 테스트 작성 (Mockito)
 - [ ] 테스트 통과 확인
 

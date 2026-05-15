@@ -27,10 +27,10 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 4.4 ERD 설계
-- [ ] chunk_embeddings 테이블 설계 (id, chunkId, embedding vector(1536), model, createdAt)
+- [ ] 임베딩은 별도 chunk_embeddings 테이블이 아닌 note_chunks.embedding vector(1536) 컬럼에 저장 (ERD 기준)
+- [ ] note_chunks 테이블 확인 (id, note_id, chunk_index, chunk_text, token_count, embedding vector(1536), created_at)
 - [ ] pgvector 확장 활성화 (CREATE EXTENSION vector)
-- [ ] 인덱스 설계 (ivfflat 또는 hnsw 인덱스 — 코사인 유사도)
-- [ ] 관계 정의 (chunk_embeddings.chunkId → chunks.id FK)
+- [ ] 인덱스 설계 (note_chunks.embedding 컬럼에 ivfflat 또는 hnsw 인덱스 — 코사인 유사도)
 - [ ] Duration(final) 갱신
 
 ### 4.5 Security 2차 검토
@@ -40,17 +40,17 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 4.6 DTO / Entity 설계 (API First)
-- [ ] EmbeddingRequest 정의 (chunkId, content)
+- [ ] EmbeddingRequest 정의 (note_id, chunk_index, chunk_text)
 - [ ] SemanticSearchRequest 정의 (query, topK, threshold)
-- [ ] SemanticSearchResultResponse 정의 (chunkId, noteId, content, score)
-- [ ] ChunkEmbedding Entity 작성 (SQLAlchemy + pgvector)
+- [ ] SemanticSearchResultResponse 정의 (chunk_id, note_id, chunk_text, score)
+- [ ] NoteChunk Entity 작성 (SQLAlchemy + pgvector — embedding 컬럼 포함)
 - [ ] Pydantic 모델 작성
 - [ ] Output Format → TASK 반영
 
 ### 4.7 Repository 구현
-- [ ] ChunkEmbeddingRepository 구현 (SQLAlchemy)
+- [ ] NoteChunkRepository 구현 (SQLAlchemy — embedding 컬럼 포함)
 - [ ] pgvector 코사인 유사도 검색 쿼리 (1 - (embedding <=> query_vector))
-- [ ] 배치 임베딩 저장 구현
+- [ ] 배치 임베딩 저장 구현 (note_chunks.embedding 갱신)
 - [ ] Alembic 마이그레이션 스크립트 작성
 
 ### 4.8 Service + Test
@@ -101,8 +101,8 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 5.4 ERD 설계
-- [ ] ai_card_generations 테이블 설계 (id, userId, noteId, status, cardCount, model, promptTokens, completionTokens, createdAt)
-- [ ] 인덱스 설계 (ai_card_generations.userId, ai_card_generations.noteId)
+- [ ] ai_card_generations 테이블 설계 (id, user_id, note_id, status, card_count, model, prompt_tokens, completion_tokens, created_at)
+- [ ] 인덱스 설계 (ai_card_generations.user_id, ai_card_generations.note_id)
 - [ ] Duration(final) 갱신
 
 ### 5.5 Security 2차 검토

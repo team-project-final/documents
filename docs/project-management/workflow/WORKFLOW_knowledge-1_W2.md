@@ -27,9 +27,9 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 4.4 ERD 설계
-- [ ] note_links 테이블 확인/갱신 (sourceNoteId, targetNoteId, createdAt)
-- [ ] 양방향 조회를 위한 인덱스 설계 (sourceNoteId, targetNoteId)
-- [ ] 복합 유니크 제약 (sourceNoteId + targetNoteId)
+- [ ] note_links 테이블 확인/갱신 (source_note_id, target_note_id, link_type: wikilink|reference|embed, context_snippet, created_at)
+- [ ] 양방향 조회를 위한 인덱스 설계 (source_note_id, target_note_id)
+- [ ] 복합 유니크 제약 (source_note_id + target_note_id)
 - [ ] Duration(final) 갱신
 
 ### 4.5 Security 2차 검토

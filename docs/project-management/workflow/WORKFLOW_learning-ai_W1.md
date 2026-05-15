@@ -151,9 +151,9 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.4 ERD 설계 (pgvector 스키마)
-- [ ] embeddings 테이블 설계 (id, source_id, source_type, vector(1536), created_at)
+- [ ] 임베딩은 별도 embeddings 테이블이 아닌 note_chunks.embedding vector(1536) 컬럼에 저장 (ERD 기준)
 - [ ] pgvector 확장 활성화 (`CREATE EXTENSION vector`)
-- [ ] 인덱스 설계 (ivfflat 또는 hnsw)
+- [ ] 인덱스 설계 (note_chunks.embedding 컬럼에 ivfflat 또는 hnsw 인덱스)
 - [ ] Alembic 마이그레이션 작성
 - [ ] Duration(final) 갱신
 
@@ -170,8 +170,8 @@
 - [ ] Output Format → TASK 반영
 
 ### 1.7 Repository 구현
-- [ ] EmbeddingRepository 클래스 작성 (async SQLAlchemy)
-- [ ] pgvector 확장 + embeddings 테이블 Alembic 마이그레이션
+- [ ] NoteChunkRepository 클래스 작성 (async SQLAlchemy — embedding 컬럼 포함)
+- [ ] pgvector 확장 + note_chunks 테이블 Alembic 마이그레이션
 - [ ] `openai` Python SDK 의존성 추가
 
 ### 1.8 Service + Test
