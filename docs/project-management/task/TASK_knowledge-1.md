@@ -81,7 +81,7 @@
      - `content_md`: Markdown 원문 저장 (구 `content` → ERD 기준 `content_md`)
      - `content_plain`: 플레인텍스트 버전 (검색/미리보기용)
      - `user_id`: 소유자 식별 (구 `owner_id` → ERD 기준 `user_id`)
-     - `status`: 노트 상태 (예: `draft`, `published`)
+     - `status`: 노트 상태 (`active|archived|trashed` — ERD 기준)
      - `word_count`: 단어 수 집계
   2. Flyway V1 마이그레이션 파일 생성
   3. Note 엔티티 + JPA Repository 작성
