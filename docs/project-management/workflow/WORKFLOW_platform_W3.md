@@ -194,8 +194,8 @@
 
 ### 1.9 Controller + Test
 - [ ] GET /admin/users 엔드포인트 구현 (목록 + 페이징)
-- [ ] GET /admin/users/search 엔드포인트 구현 (검색)
-- [ ] PATCH /admin/users/{id}/suspend 엔드포인트 구현
+- [ ] GET /admin/users?q=검색어 엔드포인트 구현 (쿼리 파라미터 방식 검색)
+- [ ] PUT /admin/users/{id}/status 엔드포인트 구현 (suspend/activate)
 - [ ] DELETE /admin/users/{id} 엔드포인트 구현 (soft delete)
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 403 Forbidden 테스트 (비관리자 접근)

@@ -123,7 +123,7 @@
 
 ### 1.9 Controller + Test
 - [ ] DeckController REST API 구현 (POST/GET/PUT/DELETE)
-- [ ] CardController REST API 구현 (`/api/v1/decks/{deckId}/cards`)
+- [ ] CardController REST API 구현 (`/decks/{deckId}/cards`)
 - [ ] 슬라이스 테스트 (@WebMvcTest)
 - [ ] 401/403 응답 테스트
 - [ ] 통합 테스트 (각 엔드포인트별)

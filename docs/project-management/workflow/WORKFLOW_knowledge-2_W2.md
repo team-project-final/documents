@@ -63,7 +63,7 @@
 
 ### 4.9 Controller + Test
 - [ ] 내부 서비스 — 외부 Controller 해당 없음
-- [ ] 관리용 청크 조회 엔드포인트 (선택): GET /api/v1/notes/{noteId}/chunks
+- [ ] 관리용 청크 조회 엔드포인트 (선택): GET /notes/{noteId}/chunks
 - [ ] 통합 테스트 (노트 입력 → 청크 분할 결과 검증)
 - [ ] 테스트 통과 확인
 

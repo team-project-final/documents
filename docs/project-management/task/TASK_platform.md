@@ -339,7 +339,7 @@
 - **Step Goal**: 관리자가 테넌트와 사용자를 관리(목록/검색/정지/삭제)할 수 있다.
 - **Done When**:
   - [ ] `GET /admin/users` → 사용자 목록 조회 (페이징 + 검색, Wiki 추가 예정 `/admin/users/*`)
-  - [ ] `PUT /admin/users/{id}/suspend` → 사용자 정지 (Wiki 추가 예정)
+  - [ ] `PUT /admin/users/{id}/status` → 사용자 상태 변경 (suspend/activate)
   - [ ] `DELETE /admin/users/{id}` → 사용자 삭제 (soft delete, Wiki 추가 예정)
   - [ ] `GET /admin/tenants` → 테넌트 목록 조회
   - [ ] `PUT /admin/tenants/{id}/status` → 테넌트 상태 변경 (body: `{ "status": "suspended" }`) (구 `/suspend` → Wiki 기준 `/status`)

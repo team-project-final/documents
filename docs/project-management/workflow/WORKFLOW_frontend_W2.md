@@ -48,7 +48,7 @@
 
 ### 4.7 Repository 구현
 - [ ] NoteRepository 클래스 작성 (HTTP client + knowledge-svc 연동)
-- [ ] CRUD API 호출 (POST/GET/PUT/DELETE /notes)
+- [ ] CRUD API 호출 (POST/GET/PATCH/DELETE /notes)
 - [ ] Riverpod Provider 등록 (NoteNotifier)
 
 ### 4.8 Service + Test
@@ -188,10 +188,10 @@
 - [ ] Riverpod Provider 등록 (CommunityNotifier)
 
 ### 6.8 Service + Test
-- [ ] CommunityNotifier 구현 (search, loadSharedContent, forkContent)
+- [ ] CommunityNotifier 구현 (search, loadSharedContent, copyContent)
 - [ ] 검색 + 필터링 상태 관리
 - [ ] 페이지네이션 (무한 스크롤 또는 페이지 번호)
-- [ ] 콘텐츠 복사(fork) 확인 다이얼로그 로직
+- [ ] 콘텐츠 복사(copy) 확인 다이얼로그 로직
 - [ ] Unit 테스트 (CommunityNotifier 상태 전이)
 - [ ] 테스트 통과 확인
 
@@ -206,7 +206,7 @@
 ### 6.10 View + Test
 - [ ] 커뮤니티 목록 렌더링 + 검색 동작 확인
 - [ ] 카테고리 필터 동작 확인
-- [ ] 콘텐츠 복사(fork) 전체 플로우 확인
+- [ ] 콘텐츠 복사(copy) 전체 플로우 확인
 - [ ] Smoke Test 1건 (검색 → 상세 보기 → 복사)
 - [ ] RULE Reference → TASK 반영
 

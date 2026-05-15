@@ -57,7 +57,7 @@
   - [ ] `POST /notes` → Markdown 노트 생성 (제목 + 본문)
   - [ ] `GET /notes` → 노트 목록 조회 (페이징, 소유자 필터)
   - [ ] `GET /notes/{id}` → 노트 상세 조회 (Markdown 원문 반환)
-  - [ ] `PUT /notes/{id}` → 노트 수정 (소유자만)
+  - [ ] `PATCH /notes/{id}` → 노트 수정 (소유자만)
   - [ ] `DELETE /notes/{id}` → 노트 삭제 (소유자만)
   - [ ] notes 테이블 Flyway 마이그레이션 완료
   - [ ] 통합 테스트 통과
