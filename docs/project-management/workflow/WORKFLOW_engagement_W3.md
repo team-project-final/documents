@@ -27,10 +27,10 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.4 ERD 설계
-- [ ] badges 테이블 설계 (id, name, description, icon_url, condition_type, condition_value)
+- [ ] badges 테이블 설계 (id, code UK, name, description, icon_url, category, criteria_json, xp_reward)
 - [ ] user_badges 테이블 설계 (id, user_id, badge_id, earned_at)
-- [ ] user_streaks 테이블 설계 (id, user_id, current_streak, longest_streak, last_activity_date)
-- [ ] 인덱스 설계 (user_id on user_badges, user_id on user_streaks)
+- [ ] 스트릭 데이터 — user_profiles_gamification 테이블 컬럼으로 관리 (current_streak, longest_streak, last_activity_date) — 별도 user_streaks 테이블 없음
+- [ ] 인덱스 설계 (user_id on user_badges)
 - [ ] Duration(final) 갱신
 
 ### 1.5 Security 2차 검토
@@ -42,7 +42,6 @@
 ### 1.6 DTO / Entity 설계 (API First)
 - [ ] Badge Entity 작성
 - [ ] UserBadge Entity 작성
-- [ ] UserStreak Entity 작성
 - [ ] BadgeResponse DTO 정의
 - [ ] LeaderboardEntryResponse DTO 정의 (rank, userId, displayName, xp, level)
 - [ ] UserGamificationResponse DTO 정의 (xp, level, streak, badges)
@@ -51,14 +50,13 @@
 ### 1.7 Repository 구현
 - [ ] BadgeRepository 인터페이스 작성
 - [ ] UserBadgeRepository 인터페이스 작성 (findByUserId)
-- [ ] UserStreakRepository 인터페이스 작성 (findByUserId)
-- [ ] 리더보드 쿼리 (상위 N명, XP 기준 정렬)
+- [ ] 리더보드 쿼리 (상위 N명, XP 기준 정렬) — user_profiles_gamification 기반
 
 ### 1.8 Service + Test
-- [ ] BadgeService 구현 (배지 조건 평가 → 수여)
+- [ ] BadgeService 구현 (badges.criteria_json 기반 배지 조건 평가 → 수여)
 - [ ] LevelService 구현 (XP → 레벨 계산, 레벨업 판정)
-- [ ] StreakService 구현 (일일 활동 기록, 연속 일수 계산, 자정 리셋)
-- [ ] LeaderboardService 구현 (XP 기준 랭킹 조회)
+- [ ] StreakService 구현 (user_profiles_gamification 스트릭 컬럼 갱신, 연속 일수 계산, 자정 리셋)
+- [ ] LeaderboardService 구현 (user_profiles_gamification XP 기준 랭킹 조회)
 - [ ] 단위 테스트 작성 (각 서비스별 Mockito)
 - [ ] 테스트 통과 확인
 
@@ -162,10 +160,11 @@
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.4 ERD 설계
-- [ ] reports 테이블 설계 (id, reporter_id, target_type, target_id, reason, status, admin_note, created_at, resolved_at)
-- [ ] status ENUM 정의 (pending, resolved, dismissed)
-- [ ] 인덱스 설계 (status, reporter_id, target_type+target_id)
-- [ ] UNIQUE 제약: reporter_id + target_type + target_id
+- [ ] reports 테이블 설계 (id, reporter_user_id, target_type, target_id, reason, status, action_taken, created_at, reviewed_at)
+- [ ] target_type 값: shared_deck|shared_note|study_group|user
+- [ ] status ENUM 정의 (pending, reviewed, resolved, dismissed)
+- [ ] 인덱스 설계 (status, reporter_user_id, target_type+target_id)
+- [ ] UNIQUE 제약: reporter_user_id + target_type + target_id
 - [ ] Duration(final) 갱신
 
 ### 1.5 Security 2차 검토
@@ -176,15 +175,15 @@
 
 ### 1.6 DTO / Entity 설계 (API First)
 - [ ] Report Entity 작성
-- [ ] ReportCreateRequest DTO 정의 (targetType, targetId, reason)
+- [ ] ReportCreateRequest DTO 정의 (target_type, target_id, reason)
 - [ ] ReportResponse DTO 정의
-- [ ] ReportModerateRequest DTO 정의 (status, adminNote)
+- [ ] ReportModerateRequest DTO 정의 (status, action_taken)
 - [ ] Output Format → TASK 반영
 
 ### 1.7 Repository 구현
 - [ ] ReportRepository 인터페이스 작성
 - [ ] findByStatus 커스텀 쿼리 (pending 목록)
-- [ ] existsByReporterIdAndTargetTypeAndTargetId 중복 검사 쿼리
+- [ ] existsByReporterUserIdAndTargetTypeAndTargetId 중복 검사 쿼리
 
 ### 1.8 Service + Test
 - [ ] ReportService 구현 (신고 접수 — 중복 검사, 생성)

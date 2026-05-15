@@ -56,7 +56,7 @@
 | ID | 유저 스토리 | 수용 기준 | 우선순위 |
 |----|------------|-----------|----------|
 | FR-LC-101 | 사용자가 복습 세션을 시작하여 오늘 복습할 카드를 받을 수 있다 | GET /reviews/queue → 오늘 복습 대상 카드 큐 반환 | P0 |
-| FR-LC-102 | 사용자가 카드에 난이도(1=Again/2=Hard/3=Good/4=Easy/5=Perfect, 정수)를 매기면 다음 복습일이 계산된다 | POST /reviews/sessions/{sessionId}/submit + rating → SM-2 → 다음 복습일 갱신 | P0 |
+| FR-LC-102 | 사용자가 카드에 난이도(1=Again/2=Hard/3=Good/4=Easy, 정수)를 매기면 다음 복습일이 계산된다 | POST /reviews/sessions/{sessionId}/submit + rating → SM-2 → 다음 복습일 갱신 | P0 |
 | FR-LC-103 | 복습 완료 시 card.reviewed Kafka 이벤트가 발행된다 | 복습 → Kafka knowledge.card.reviewed.v1 발행 → engagement XP 적립 트리거 | P0 |
 | FR-LC-104 | 사용자가 복습 통계(일별 카드 수, 정답률)를 조회할 수 있다 | GET /stats/overview → review_sessions 기반 통계 | P1 |
 

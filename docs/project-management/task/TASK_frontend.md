@@ -95,7 +95,7 @@
 | **Done When** | 카드 플립 애니메이션 + 난이도 버튼(Again/Hard/Good/Easy) + learning-card API 연동 |
 | **Scope** | **In**: 카드 플립 UI, 난이도 선택 버튼, learning-card-svc API 연동 / **Out**: 통계 대시보드, 스트릭 UI, 게이미피케이션 |
 | **Input** | Step 3 완료된 대시보드 구조, learning-card-svc 복습 API 명세, DESIGN.md UI 규격 |
-| **Instructions** | 1. 카드 플립 위젯 구현 (3D Transform 애니메이션)<br>2. 카드 앞면/뒷면 렌더링 (Markdown 지원)<br>3. 난이도 선택 버튼 구현 (Again=0, Hard=1, Good=2, Easy=3)<br>4. learning-card-svc 복습 세션 API 연동<br>5. 복습 진행 상태 표시 (n/전체 카드 수)<br>6. 복습 완료 화면 (결과 요약: 정답률, 소요 시간)<br>7. 카드 스와이프 제스처 지원 (좌: Again, 우: Good)<br>8. Widget 테스트 작성 |
+| **Instructions** | 1. 카드 플립 위젯 구현 (3D Transform 애니메이션)<br>2. 카드 앞면/뒷면 렌더링 (Markdown 지원)<br>3. 난이도 선택 버튼 구현 (1=Again, 2=Hard, 3=Good, 4=Easy — 1-based, ERD 기준)<br>4. learning-card-svc 복습 세션 API 연동<br>5. 복습 진행 상태 표시 (n/전체 카드 수)<br>6. 복습 완료 화면 (결과 요약: 정답률, 소요 시간)<br>7. 카드 스와이프 제스처 지원 (좌: Again, 우: Good)<br>8. Widget 테스트 작성 |
 | **Output Format** | 복습 화면 스크린샷 + 플립 애니메이션 캡처 + Widget 테스트 결과 |
 | **Constraints** | - 플립 애니메이션: 300ms ease-in-out<br>- 난이도 버튼 4종 고정 (Again/Hard/Good/Easy)<br>- 복습 세션당 최대 50장<br>- 오프라인 시 로컬 캐시에서 카드 로드<br>- DESIGN.md 토큰 일관 적용 |
 | **Duration** | 1.5일 |

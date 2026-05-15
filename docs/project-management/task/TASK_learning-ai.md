@@ -54,7 +54,7 @@
 | **Done When** | `POST /ai/embeddings` → 벡터 반환 + pgvector 저장 준비 + pytest 테스트 (구 `/api/v1/ai/embed` → Wiki 추가 예정 `/ai/embeddings`로 변경) |
 | **Scope** | **In**: OpenAI Embedding API 연동, 벡터 변환, pgvector 스키마 준비 / **Out**: 유사도 검색, RAG 파이프라인, 벡터 인덱싱 최적화 |
 | **Input** | OpenAI Embedding API 문서, pgvector 설정 가이드, PRD_W1 임베딩 요구사항 |
-| **Instructions** | 1. `openai` Python SDK 의존성 추가<br>2. `EmbeddingService` 클래스 생성 (비동기)<br>3. POST `/ai/embeddings` 엔드포인트 구현 (구 `/api/v1/ai/embed` → 변경, Wiki 추가 예정)<br>4. 텍스트 → 1536차원 벡터 변환 로직<br>5. pgvector 확장 활성화 및 `embeddings` 테이블 마이그레이션 (Alembic)<br>6. 배치 임베딩 지원 (최대 20개 텍스트 동시 처리)<br>7. pytest mock 테스트 작성 (단일/배치/에러 시나리오)<br>8. 입력 텍스트 길이 검증 (최대 8192 토큰) |
+| **Instructions** | 1. `openai` Python SDK 의존성 추가<br>2. `EmbeddingService` 클래스 생성 (비동기)<br>3. POST `/ai/embeddings` 엔드포인트 구현 (구 `/api/v1/ai/embed` → 변경, Wiki 추가 예정)<br>4. 텍스트 → 1536차원 벡터 변환 로직<br>5. pgvector 확장 활성화 — 임베딩은 별도 `embeddings` 테이블이 아닌 `note_chunks.embedding vector(1536)` 컬럼에 저장 (ERD 기준)<br>   - knowledge-owner-2가 생성한 `note_chunks` 테이블의 `embedding` 컬럼에 값을 채우는 API 구현<br>6. 배치 임베딩 지원 (최대 20개 텍스트 동시 처리)<br>7. pytest mock 테스트 작성 (단일/배치/에러 시나리오)<br>8. 입력 텍스트 길이 검증 (최대 8192 토큰) |
 | **Output Format** | API 엔드포인트 + 벡터 응답 예시 + DB 스키마 + 테스트 결과 |
 | **Constraints** | - 모델: text-embedding-3-small (1536차원)<br>- 입력 최대: 8192 토큰<br>- 배치 최대: 20건<br>- pgvector 확장 필수<br>- 벡터 저장 시 normalize 적용<br>- API Key 환경변수 관리 (OPENAI_API_KEY) |
 | **Duration** | 2일 |

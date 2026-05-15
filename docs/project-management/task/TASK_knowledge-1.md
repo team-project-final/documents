@@ -77,11 +77,16 @@
     - 버전 히스토리
 - **Input**: PRD_W1 노트 기능 요구사항, JWT 인증 토큰 (platform-svc)
 - **Instructions**:
-  1. notes 테이블 DDL 작성 (id, title, content, owner_id, created_at, updated_at, deleted_at)
+  1. notes 테이블 DDL 작성 (id, title, content_md, content_plain, user_id, status, word_count, created_at, updated_at, deleted_at)
+     - `content_md`: Markdown 원문 저장 (구 `content` → ERD 기준 `content_md`)
+     - `content_plain`: 플레인텍스트 버전 (검색/미리보기용)
+     - `user_id`: 소유자 식별 (구 `owner_id` → ERD 기준 `user_id`)
+     - `status`: 노트 상태 (예: `draft`, `published`)
+     - `word_count`: 단어 수 집계
   2. Flyway V1 마이그레이션 파일 생성
   3. Note 엔티티 + JPA Repository 작성
   4. NoteService 구현 (create, findAll, findById, update, delete)
-  5. 소유자 권한 검증 로직 (수정/삭제 시 owner_id 확인)
+  5. 소유자 권한 검증 로직 (수정/삭제 시 user_id 확인)
   6. NoteController REST API 구현 (5개 엔드포인트)
   7. 페이징 처리 (Pageable, 기본 20건)
   8. 통합 테스트 작성 (@SpringBootTest + TestContainers)
@@ -277,7 +282,9 @@
     - 버전 보존 기간 정책
 - **Input**: notes 테이블, NoteService, JWT 인증 토큰
 - **Instructions**:
-  1. note_versions 테이블 DDL 작성 (id, note_id, version_number, title, content, created_by, created_at)
+  1. note_versions 테이블 DDL 작성 (id, note_id, version_number, title, content_md, change_summary, created_by, created_at)
+     - `content_md`: Markdown 원문 (구 `content` → ERD 기준 `content_md`)
+     - `change_summary`: 버전 변경 요약 메모
   2. Flyway 마이그레이션 파일 생성
   3. NoteVersion 엔티티 + Repository 작성
   4. NoteService.update에 이전 버전 저장 로직 추가
@@ -324,14 +331,16 @@
     - 태그 동의어 관리
 - **Input**: notes 테이블, JWT 인증 토큰, PRD 태그 기능 요구사항
 - **Instructions**:
-  1. tags 테이블 DDL 작성 (id, name, usage_count, created_at)
+  1. tags 테이블 DDL 작성 (id, name, color, created_at)
+     - `color`: 태그 색상 (ERD에 포함 — `usage_count`는 ERD에 없으므로 제외 또는 별도 집계)
+     - 주의: `usage_count`는 ERD에 정의되지 않음 — 필요 시 note_tags 집계 쿼리로 대체
   2. note_tags 테이블 DDL 작성 (note_id, tag_id)
   3. Flyway 마이그레이션 파일 생성
   4. Tag 엔티티 + Repository 작성
   5. TagService 구현 (addTag, removeTag, autocomplete)
-  6. 태그 추가 시 usage_count 증가 로직
+  6. 자동완성 정렬: 사용 빈도 기준 (note_tags 집계 쿼리 활용)
   7. 노트 필터링 API 수정 (tag 파라미터 추가)
-  8. 자동완성 API 구현 (LIKE '{prefix}%' + ORDER BY usage_count)
+  8. 자동완성 API 구현 (LIKE '{prefix}%' + 사용 빈도 내림차순)
   9. 통합 테스트 작성
 - **Output Format**: note 모듈 태그 코드 + Flyway 마이그레이션 + 테스트 코드
 - **Constraints**:

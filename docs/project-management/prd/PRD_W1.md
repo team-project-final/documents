@@ -61,7 +61,7 @@
 |----|------------|-----------|----------|
 | FR-LC-001 | 사용자가 덱(Deck)을 생성/조회/수정/삭제할 수 있다 | CRUD API + 덱 목록 페이지네이션 | P0 |
 | FR-LC-002 | 사용자가 덱 내 카드(앞면/뒷면)를 생성/조회/수정/삭제할 수 있다 | CRUD API + 카드-덱 1:N 관계 | P0 |
-| FR-LC-003 | 시스템이 복습 rating으로 SM-2 알고리즘을 계산한다 | rating(1=Again/2=Hard/3=Good/4=Easy/5=Perfect, 정수) → ease factor + interval + 다음 복습일 계산 | P0 |
+| FR-LC-003 | 시스템이 복습 rating으로 SM-2 알고리즘을 계산한다 | rating(1=Again/2=Hard/3=Good/4=Easy, 정수) → ease factor + interval + 다음 복습일 계산 | P0 |
 
 ### 2.7 @learning-ai-owner — AI Service
 

@@ -57,7 +57,7 @@
   - [ ] Google OAuth 로그인 → 신규 사용자 자동 회원가입
   - [ ] GitHub OAuth 로그인 → 신규 사용자 자동 회원가입
   - [ ] 기존 사용자 OAuth 로그인 시 기존 계정과 매핑
-  - [ ] users 테이블에 provider/provider_id 저장
+  - [ ] oauth_identities 테이블에 provider/provider_id 저장 (users 테이블이 아닌 별도 테이블 — ERD 기준)
   - [ ] 통합 테스트 통과
 - **Scope**:
   - In Scope:
@@ -75,11 +75,13 @@
 - **Instructions**:
   1. application.yml에 OAuth2 Client 설정 (Google, GitHub)
   2. users 테이블 DDL 작성 + Flyway V1 마이그레이션
-  3. OAuth2UserService 구현 (사용자 조회/생성 로직)
-  4. OAuth2 성공 핸들러 구현 (JWT 발급 연계)
-  5. 신규 사용자 자동 회원가입 로직 구현
-  6. 기존 사용자 매핑 로직 구현 (email 기준)
-  7. 통합 테스트 작성 (MockOAuth2User)
+     - provider/provider_id는 users 테이블에 넣지 않음 (ERD 기준: oauth_identities 별도 테이블로 분리)
+  3. oauth_identities 테이블 DDL 작성 (id, user_id, provider, provider_id, created_at) + Flyway 마이그레이션
+  4. OAuth2UserService 구현 (사용자 조회/생성 로직)
+  5. OAuth2 성공 핸들러 구현 (JWT 발급 연계)
+  6. 신규 사용자 자동 회원가입 로직 구현
+  7. 기존 사용자 매핑 로직 구현 (email 기준)
+  8. 통합 테스트 작성 (MockOAuth2User)
 - **Output Format**: auth 모듈 코드 + Flyway 마이그레이션 + 테스트 코드
 - **Constraints**:
   - OAuth2 Authorization Code Grant만 사용
@@ -204,7 +206,7 @@
   - [ ] 통합 테스트 통과
 - **Scope**:
   - In Scope:
-    - devices 테이블 설계 + Flyway 마이그레이션
+    - device_tokens 테이블 설계 + Flyway 마이그레이션 (구 `devices` → ERD 기준 `device_tokens`)
     - FCM 토큰 등록 API (`POST /notifications/devices`)
     - 디바이스 해제 API (`DELETE /notifications/devices/{id}`)
     - 중복 토큰 방지 로직
@@ -215,18 +217,22 @@
     - APNs (iOS) 직접 연동
 - **Input**: FCM 프로젝트 설정, JWT 인증 토큰
 - **Instructions**:
-  1. devices 테이블 DDL 작성 (id, user_id, fcm_token, device_type, created_at)
+  1. device_tokens 테이블 DDL 작성 (id, user_id, token, platform, is_active, created_at)
+     - 구 `devices` → ERD 기준 `device_tokens`
+     - 구 `fcm_token` → `token`, 구 `device_type` → `platform`
+     - `platform` 값: `ios`, `android`, `web` (소문자, 구 ANDROID/IOS/WEB → 소문자)
+     - `is_active`: 토큰 활성 여부
   2. Flyway 마이그레이션 파일 생성
-  3. Device 엔티티 + Repository 작성
-  4. DeviceService 구현 (register, unregister)
-  5. DeviceController REST API 구현 (`POST /notifications/devices`, `DELETE /notifications/devices/{id}`)
-  6. 중복 FCM 토큰 방지 (UNIQUE 제약)
+  3. DeviceToken 엔티티 + Repository 작성
+  4. DeviceTokenService 구현 (register, unregister)
+  5. DeviceTokenController REST API 구현 (`POST /notifications/devices`, `DELETE /notifications/devices/{id}`)
+  6. 중복 토큰 방지 (UNIQUE 제약)
   7. 통합 테스트 작성
-- **Output Format**: notification 모듈 디바이스 코드 + Flyway 마이그레이션 + 테스트 코드
+- **Output Format**: notification 모듈 device_tokens 코드 + Flyway 마이그레이션 + 테스트 코드
 - **Constraints**:
   - 한 사용자 최대 5개 디바이스 등록
-  - FCM 토큰 UNIQUE 제약
-  - device_type: ANDROID, IOS, WEB
+  - token UNIQUE 제약
+  - platform: `ios`, `android`, `web` (소문자, ERD 기준)
 - **Duration**: 0.5일
 - **RULE Reference**: wiki 03_아키텍처_정의서 §알림, wiki 18_기술_스택_정의서 §FCM
 - **Assignee**: @platform-owner
@@ -263,7 +269,12 @@
     - 외부 SIEM 연동
 - **Input**: Kafka 토픽 목록, 이벤트 스키마, 관리자 권한 정보
 - **Instructions**:
-  1. audit_logs 테이블 DDL 작성 (id, event_type, actor_id, payload, timestamp)
+  1. audit_logs 테이블 DDL 작성 (id, action, user_id, old_value, new_value, ip_address, user_agent, created_at)
+     - 구 `event_type` → `action` (ERD 기준)
+     - 구 `actor_id` → `user_id` (ERD 기준)
+     - 구 `payload` → `old_value`/`new_value` 분리 (ERD 기준)
+     - 구 `timestamp` → `created_at` (ERD 기준)
+     - 추가: `ip_address`, `user_agent`
   2. Flyway 마이그레이션 파일 생성
   3. Kafka Consumer 구현 (KafkaListener, 다중 토픽)
   4. 이벤트 → AuditLog 변환 로직 구현
@@ -310,7 +321,7 @@
     - 실시간 웹소켓 알림
 - **Input**: Kafka 이벤트, FCM 서비스 계정, AWS SES 설정, 디바이스 토큰 목록
 - **Instructions**:
-  1. notification_history 테이블 DDL + Flyway 마이그레이션
+  1. notifications 테이블 DDL + Flyway 마이그레이션 (구 `notification_history` → ERD 기준 `notifications`)
   2. Kafka Consumer 구현 (gamification/community/learning 토픽 구독)
   3. FCM 푸시 발송 서비스 구현 (Firebase Admin SDK)
   4. SES 이메일 발송 서비스 구현 (AWS SES SDK)

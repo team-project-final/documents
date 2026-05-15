@@ -197,7 +197,7 @@
 
 ### 1.9 Controller + Test
 - [ ] 관리자 신고 목록 페이지 Widget 구현 (DataTable + 필터 드롭다운)
-- [ ] 상태 필터 Widget 구현 (pending/resolved/dismissed 탭)
+- [ ] 상태 필터 Widget 구현 (pending/reviewed/resolved/dismissed 탭)
 - [ ] 신고 상세 다이얼로그 Widget 구현 (사유 + 대상 콘텐츠 미리보기)
 - [ ] 승인/거부 버튼 + 사유 입력 + 확인 다이얼로그 구현
 - [ ] 관리자 라우트 가드 구현 (GoRouter redirect)
