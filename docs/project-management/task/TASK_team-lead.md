@@ -43,8 +43,8 @@
   - dev 환경 전용 (최소 사양)
   - VPC 내부 통신만 허용 (퍼블릭 접근 제한)
   - 비용: 월 $200 이내
-  - RDS, Redis, MSK, OpenSearch는 private subnet에 배치하고 EKS node security group에서만 접근 허용
-  - RDS storage encryption, Redis AUTH/in-transit encryption, MSK TLS, OpenSearch HTTPS를 기본값으로 적용
+  - RDS, Redis, MSK, Elasticsearch는 private subnet에 배치하고 EKS node security group에서만 접근 허용
+  - RDS storage encryption, Redis AUTH/in-transit encryption, MSK TLS, Elasticsearch HTTPS를 기본값으로 적용
   - 실제 엔드포인트/비밀번호/토큰/ArgoCD admin password는 Git 문서에 기록하지 않고 플레이스홀더만 사용
 - **Duration**: 2일
 - **RULE Reference**: wiki 14_배포_가이드 §2, wiki 10_환경_설정_템플릿
