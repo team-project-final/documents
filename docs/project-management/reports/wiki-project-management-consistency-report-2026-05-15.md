@@ -99,10 +99,7 @@ project-management 상태:
 
 권장 수정:
 
-선택지는 둘 중 하나로 정리해야 한다.
-
 1. Wiki 기준 유지: `TASK_frontend.md`, `WORKFLOW_frontend_*`, `HISTORY_frontend.md`의 `@frontend-owner` 표현을 “전체 협업 / 도메인별 owner”로 바꾼다.
-2. 별도 frontend 트랙 채택: Wiki `17_스케줄.md`와 `09_Git_규칙_정의서`에 `@frontend-owner`를 공식 트랙으로 추가하고 `scope/SCOPE_frontend.md`를 생성한다.
 
 ### F-004. “4-서비스”와 “5-서비스” 용어가 혼재됨
 
@@ -155,8 +152,7 @@ Wiki `17_스케줄.md`의 장기 로드맵:
 권장 수정:
 
 1. `17_스케줄.md`의 Phase 1 설명을 project-management 범위에 맞게 확장한다.
-2. 또는 PRD/TASK의 P0/P1 우선순위를 Wiki Phase 기준에 맞게 낮춘다.
-3. 가장 현실적인 방식은 “5주 학기 프로젝트 MVP”와 “제품 장기 Phase”를 분리해 표기하는 것이다.
+2. “5주 학기 프로젝트 MVP”와 “제품 장기 Phase”를 분리해 표기한다.
 
 ### F-006. OAuth Provider 범위가 문서별로 다름
 
