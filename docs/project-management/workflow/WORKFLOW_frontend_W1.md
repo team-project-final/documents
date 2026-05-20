@@ -9,61 +9,61 @@
 ## Step 1: Flutter 프로젝트 기본 구조 생성
 
 ### 1.1 TASK 시작
-- [ ] Step Goal / Done When / Scope / Input 확인
-- [ ] PRD_W1 해당 요구사항 확인 (프로젝트 골격)
-- [ ] Duration 산정 확인 (1일)
+- [x] Step Goal / Done When / Scope / Input 확인
+- [x] PRD_W1 해당 요구사항 확인 (프로젝트 골격)
+- [x] Duration 산정 확인 (1일)
 
 ### 1.2 요구사항 분석
-- [ ] Flutter 3.24+ / Dart 3.5+ 프로젝트 구조 분석
-- [ ] Riverpod + GoRouter + Material 3 의존성 확인
-- [ ] DESIGN.md 테마 규격 (ColorScheme, Typography) 확인
-- [ ] Instructions 초안 → TASK 문서 반영
+- [x] Flutter 3.24+ / Dart 3.5+ 프로젝트 구조 분석
+- [x] Riverpod + GoRouter + Material 3 의존성 확인
+- [x] DESIGN.md 테마 규격 (ColorScheme, Typography) 확인
+- [x] Instructions 초안 → TASK 문서 반영
 
 ### 1.3 Security 1차 검토
-- [ ] 인증 필요 여부: No (골격만 생성)
-- [ ] 권한 종류: 없음
-- [ ] 공개 API 여부: No (프론트엔드 앱)
-- [ ] 결과 → TASK Constraints 반영
+- [x] 인증 필요 여부: No (골격만 생성)
+- [x] 권한 종류: 없음
+- [x] 공개 API 여부: No (프론트엔드 앱)
+- [x] 결과 → TASK Constraints 반영
 
 ### 1.4 ERD 설계
-- [ ] 프론트엔드 — ERD 해당 없음
-- [ ] 폴더 구조 설계 (lib/core/, lib/features/, lib/shared/)
-- [ ] 라우트 구조 정의 (/, /login, /dashboard)
-- [ ] Duration(final) 갱신
+- [x] 프론트엔드 — ERD 해당 없음
+- [x] 폴더 구조 설계 (lib/core/, lib/features/, lib/shared/)
+- [x] 라우트 구조 정의 (/, /login, /dashboard)
+- [x] Duration(final) 갱신
 
 ### 1.5 Security 2차 검토
-- [ ] 민감 정보 암호화: 비해당 (골격 단계)
-- [ ] 환경변수 관리 (.env, API base URL)
-- [ ] 코드 내 시크릿 하드코딩 금지 확인
-- [ ] 결과 → TASK Constraints 반영
+- [x] 민감 정보 암호화: 비해당 (골격 단계)
+- [x] 환경변수 관리 (.env, API base URL)
+- [x] 코드 내 시크릿 하드코딩 금지 확인
+- [x] 결과 → TASK Constraints 반영
 
 ### 1.6 DTO / Entity 설계 (API First)
-- [ ] 골격 단계 — 빈 Scaffold 페이지만 생성
-- [ ] GoRouter 라우트 설정 (/, /login, /dashboard)
-- [ ] ThemeData 생성 (DESIGN.md 기반)
-- [ ] Output Format → TASK 반영
+- [x] 골격 단계 — 빈 Scaffold 페이지만 생성
+- [x] GoRouter 라우트 설정 (/, /login, /dashboard)
+- [x] ThemeData 생성 (DESIGN.md 기반)
+- [x] Output Format → TASK 반영
 
 ### 1.7 Repository 구현
-- [ ] pubspec.yaml 의존성 추가 (flutter_riverpod, go_router, google_fonts)
-- [ ] ProviderScope 최상위 래핑
+- [x] pubspec.yaml 의존성 추가 (flutter_riverpod, go_router, google_fonts)
+- [x] ProviderScope 최상위 래핑
 
 ### 1.8 Service + Test
-- [ ] GoRouter 설정 구현
-- [ ] ThemeData (ColorScheme + Typography) 구현
-- [ ] 라우트별 빈 Scaffold 페이지 생성
-- [ ] Widget 테스트 (라우팅 전환 확인)
+- [x] GoRouter 설정 구현
+- [x] ThemeData (ColorScheme + Typography) 구현
+- [x] 라우트별 빈 Scaffold 페이지 생성
+- [x] Widget 테스트 (라우팅 전환 확인)
 
 ### 1.9 Controller + Test
-- [ ] `flutter run -d chrome` 동작 확인
-- [ ] 라우팅 전환 동작 확인
-- [ ] DESIGN.md 테마 적용 확인
+- [x] `flutter run -d chrome` 동작 확인
+- [x] 라우팅 전환 동작 확인
+- [x] DESIGN.md 테마 적용 확인
 
 ### 1.10 View + Test
-- [ ] 각 라우트 빈 화면 렌더링 확인
-- [ ] Smoke Test 1건 (앱 실행 → 에러 없음)
-- [ ] RULE Reference → TASK 반영
+- [x] 각 라우트 빈 화면 렌더링 확인
+- [x] Smoke Test 1건 (앱 실행 → 에러 없음)
+- [x] RULE Reference → TASK 반영
 
-**Step 1 Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+**Step 1 Status**: [x] Done
 
 ---
 
@@ -131,7 +131,7 @@
 - [ ] Smoke Test 1건 (로그인 → 대시보드 이동)
 - [ ] RULE Reference → TASK 반영
 
-**Step 2 Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+**Step 2 Status**: [x] In Progress (폼 UI 뼈대 완료, OAuth 연동 잔여)
 
 ---
 
@@ -196,4 +196,4 @@
 - [ ] Smoke Test 1건 (사이드바 토글 + 페이지 이동)
 - [ ] RULE Reference → TASK 반영
 
-**Step 3 Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+**Step 3 Status**: [x] In Progress (ShellRoute + SideNav 뼈대 완료, API 연동 잔여)

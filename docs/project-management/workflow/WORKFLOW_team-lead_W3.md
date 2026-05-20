@@ -1,7 +1,7 @@
 # WORKFLOW: @team-lead — Week 3
 
-> **Task 문서**: [TASK_team-lead.md](../task/TASK_team-lead.md)
-> **기간**: 2026-05-26 ~ 2026-05-29, 4 영업일
+> **Task 문서**: [TASK_team-lead.md](../task/TASK_team-lead.md)  
+> **기간**: 2026-05-26 ~ 2026-05-30  
 > **PRD**: [PRD_W3.md](../prd/PRD_W3.md)
 
 ---
@@ -114,7 +114,7 @@
 - [ ] dev 환경 전체 서비스 Health OK 확인
 - [ ] staging 환경 전체 서비스 Health OK 확인
 - [ ] Kafka 연결 상태 확인 (각 서비스 consumer group lag = 0)
-- [ ] RDS/Redis/Elasticsearch 8 연결 상태 확인
+- [ ] RDS/Redis/OpenSearch 연결 상태 확인
 
 ### 1.9 배포 이슈 대응
 - [ ] 배포 실패 시 롤백 절차 실행 및 검증

@@ -11,11 +11,11 @@
 
 - **Step Goal**: knowledge-owner-1이 Spring Boot 4 + Modulith 기반 knowledge-svc를 생성하여 note/graph/chunking 모듈 골격이 동작한다.
 - **Done When**:
-  - [ ] Spring Boot 4 + Modulith 프로젝트 초기화 완료
-  - [ ] note / graph / chunking 3개 모듈 패키지 구조 생성
-  - [ ] `./gradlew build` 성공
-  - [ ] Modulith 구조 검증 테스트 통과 (`ApplicationModulesTest`)
-  - [ ] Docker 이미지 빌드 성공
+  - [x] Spring Boot 4 + Modulith 프로젝트 초기화 완료
+  - [x] note / graph / chunking 3개 모듈 패키지 구조 생성
+  - [x] `./gradlew build` 성공
+  - [x] Modulith 구조 검증 테스트 통과 (`ApplicationModulesTest`)
+  - [x] Docker 이미지 빌드 성공
 - **Scope**:
   - In Scope:
     - Spring Boot 4 + Modulith 프로젝트 생성
@@ -27,7 +27,7 @@
     - 비즈니스 로직 구현
     - DB 마이그레이션
     - OpenSearch 연동
-- **Input**: 03_아키텍처_정의서 §Modulith 구조, platform-svc 골격 참조
+- **Input**: 03*아키텍처*정의서 §Modulith 구조, platform-svc 골격 참조
 - **Instructions**:
   1. Spring Initializr로 프로젝트 생성 (Spring Boot 4, Java 21, Gradle)
   2. Modulith 의존성 추가 (spring-modulith-starter, spring-modulith-test)
@@ -42,11 +42,11 @@
   - 모듈 간 순환 의존 금지
   - platform-svc와 동일한 빌드 구조 유지
 - **Duration**: 0.5일
-- **RULE Reference**: wiki 03_아키텍처_정의서 §Modulith, wiki 18_기술_스택_정의서
+- **RULE Reference**: wiki 03*아키텍처*정의서 §Modulith, wiki 18*기술*스택\_정의서
 - **Assignee**: @knowledge-owner-1
 - **Reviewer**: @team-lead
 
-**Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+**Status**: [ ] Not Started / [ ] In Progress / [x] Done
 
 ---
 
@@ -54,13 +54,13 @@
 
 - **Step Goal**: 로그인 사용자가 Markdown 노트를 생성/조회/수정/삭제할 수 있다.
 - **Done When**:
-  - [ ] `POST /notes` → Markdown 노트 생성 (제목 + 본문)
-  - [ ] `GET /notes` → 노트 목록 조회 (페이징, 소유자 필터)
-  - [ ] `GET /notes/{id}` → 노트 상세 조회 (Markdown 원문 반환)
-  - [ ] `PATCH /notes/{id}` → 노트 수정 (소유자만)
-  - [ ] `DELETE /notes/{id}` → 노트 삭제 (소유자만)
-  - [ ] notes 테이블 Flyway 마이그레이션 완료
-  - [ ] 통합 테스트 통과
+  - [x] `POST /notes` → Markdown 노트 생성 (제목 + 본문)
+  - [x] `GET /notes` → 노트 목록 조회 (페이징, 소유자 필터)
+  - [x] `GET /notes/{id}` → 노트 상세 조회 (Markdown 원문 반환)
+  - [x] `PATCH /notes/{id}` → 노트 수정 (소유자만)
+  - [x] `DELETE /notes/{id}` → 노트 삭제 (소유자만)
+  - [x] notes 테이블 Flyway 마이그레이션 완료
+  - [x] 통합 테스트 통과
 - **Scope**:
   - In Scope:
     - notes 테이블 설계 + Flyway 마이그레이션
@@ -97,11 +97,11 @@
   - Markdown 원문 그대로 저장 (서버에서 렌더링 X)
   - Soft delete (deleted_at 컬럼)
 - **Duration**: 2일
-- **RULE Reference**: wiki 03_아키텍처_정의서 §REST API 규칙, wiki 09_Git_규칙_정의서 §커밋 컨벤션
+- **RULE Reference**: wiki 03*아키텍처*정의서 §REST API 규칙, wiki 09*Git*규칙\_정의서 §커밋 컨벤션
 - **Assignee**: @knowledge-owner-1
 - **Reviewer**: @team-lead
 
-**Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+**Status**: [ ] Not Started / [ ] In Progress / [x] Done
 
 ---
 
@@ -109,13 +109,13 @@
 
 - **Step Goal**: 노트 저장 시 [[note-title]] 형식의 위키링크를 자동으로 추출하여 note_links 테이블에 저장한다.
 - **Done When**:
-  - [ ] 노트 생성/수정 시 본문에서 `[[...]]` 패턴 자동 추출
-  - [ ] 추출된 링크 → note_links 테이블 저장 (source_note_id, target_title)
-  - [ ] 대상 노트 존재 시 target_note_id 자동 매핑
-  - [ ] 노트 수정 시 기존 링크 갱신 (삭제 + 재생성)
-  - [ ] `GET /notes/{id}/backlinks` → 해당 노트를 참조하는 노트 목록 반환 (Wiki는 `/backlinks`만 정의 — `/links` 아님)
-  - [ ] note_links 테이블 Flyway 마이그레이션 완료
-  - [ ] 단위/통합 테스트 통과
+  - [x] 노트 생성/수정 시 본문에서 `[[...]]` 패턴 자동 추출
+  - [x] 추출된 링크 → note_links 테이블 저장 (source_note_id, target_title)
+  - [x] 대상 노트 존재 시 target_note_id 자동 매핑
+  - [x] 노트 수정 시 기존 링크 갱신 (삭제 + 재생성)
+  - [x] `GET /notes/{id}/backlinks` → 해당 노트를 참조하는 노트 목록 반환 (Wiki는 `/backlinks`만 정의 — `/links` 아님)
+  - [x] note_links 테이블 Flyway 마이그레이션 완료
+  - [x] 단위/통합 테스트 통과
 - **Scope**:
   - In Scope:
     - note_links 테이블 설계 + Flyway 마이그레이션
@@ -147,11 +147,11 @@
   - 하나의 노트에서 중복 링크는 1건만 저장
   - 링크 갱신은 트랜잭션 내 처리
 - **Duration**: 1.5일
-- **RULE Reference**: wiki 03_아키텍처_정의서 §지식 그래프, wiki 09_Git_규칙_정의서 §커밋 컨벤션
+- **RULE Reference**: wiki 03*아키텍처*정의서 §지식 그래프, wiki 09*Git*규칙\_정의서 §커밋 컨벤션
 - **Assignee**: @knowledge-owner-1
 - **Reviewer**: @team-lead
 
-**Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+**Status**: [ ] Not Started / [ ] In Progress / [x] Done
 
 ---
 
@@ -166,7 +166,7 @@
 - **Done When**:
   - [ ] `GET /notes/{id}/backlinks` → 해당 노트를 참조하는 노트 목록 반환
   - [ ] `GET /graph/data` → 전체 노트 그래프 데이터 반환 (nodes + edges 단일 엔드포인트, Wiki 기준 — `/graph/nodes`·`/graph/edges` 분리 없음)
-     - 쿼리 파라미터로 `userId={id}` 지원 (구 `GET /graph?userId={id}` 대체)
+    - 쿼리 파라미터로 `userId={id}` 지원 (구 `GET /graph?userId={id}` 대체)
   - [ ] D3.js force-directed graph 호환 JSON 포맷
   - [ ] 통합 테스트 통과
 - **Scope**:
@@ -200,7 +200,7 @@
   - API 응답 시간 < 500ms (1,000 노드 기준)
   - D3.js force-directed graph JSON 포맷 준수
 - **Duration**: 2일
-- **RULE Reference**: wiki 03_아키텍처_정의서 §지식 그래프, wiki 18_기술_스택_정의서
+- **RULE Reference**: wiki 03*아키텍처*정의서 §지식 그래프, wiki 18*기술*스택\_정의서
 - **Assignee**: @knowledge-owner-1
 - **Reviewer**: @team-lead
 
@@ -246,7 +246,7 @@
   - 검색 API 응답 시간 < 200ms
   - nori 한글 형태소 분석 필수
 - **Duration**: 1일
-- **RULE Reference**: wiki 03_아키텍처_정의서 §이벤트 설계, wiki 18_기술_스택_정의서 §Elasticsearch
+- **RULE Reference**: wiki 03*아키텍처*정의서 §이벤트 설계, wiki 18*기술*스택\_정의서 §Elasticsearch
 - **Assignee**: @knowledge-owner-1
 - **Reviewer**: @team-lead
 
@@ -299,7 +299,7 @@
   - 복원 시 새 버전으로 생성 (이력 보존)
   - 최대 50개 버전 보존 (초과 시 가장 오래된 버전 삭제)
 - **Duration**: 1.5일
-- **RULE Reference**: wiki 03_아키텍처_정의서 §REST API 규칙, wiki 09_Git_규칙_정의서 §커밋 컨벤션
+- **RULE Reference**: wiki 03*아키텍처*정의서 §REST API 규칙, wiki 09*Git*규칙\_정의서 §커밋 컨벤션
 - **Assignee**: @knowledge-owner-1
 - **Reviewer**: @team-lead
 
@@ -349,7 +349,7 @@
   - 한 노트 최대 10개 태그
   - 자동완성: 최대 10개 결과, 응답 < 100ms
 - **Duration**: 1.5일
-- **RULE Reference**: wiki 03_아키텍처_정의서 §REST API 규칙, wiki 09_Git_규칙_정의서 §커밋 컨벤션
+- **RULE Reference**: wiki 03*아키텍처*정의서 §REST API 규칙, wiki 09*Git*규칙\_정의서 §커밋 컨벤션
 - **Assignee**: @knowledge-owner-1
 - **Reviewer**: @team-lead
 
@@ -399,7 +399,7 @@
   - ES 인덱싱 지연 포함 E2E: 10초 이내 완료
   - 테스트 데이터 자동 정리 (teardown)
 - **Duration**: 1.5일
-- **RULE Reference**: wiki 03_아키텍처_정의서 §테스트 전략, wiki 09_Git_규칙_정의서 §이슈 관리
+- **RULE Reference**: wiki 03*아키텍처*정의서 §테스트 전략, wiki 09*Git*규칙\_정의서 §이슈 관리
 - **Assignee**: @knowledge-owner-1
 - **Reviewer**: @team-lead
 
@@ -445,7 +445,7 @@
   - 수정 시 회귀 방지 (테스트 추가 필수)
   - ES 동기화 성공률 > 99%
 - **Duration**: 1.5일
-- **RULE Reference**: wiki 09_Git_규칙_정의서 §이슈 관리, wiki 03_아키텍처_정의서 §이벤트 설계
+- **RULE Reference**: wiki 09*Git*규칙*정의서 §이슈 관리, wiki 03*아키텍처\_정의서 §이벤트 설계
 - **Assignee**: @knowledge-owner-1
 - **Reviewer**: @team-lead
 

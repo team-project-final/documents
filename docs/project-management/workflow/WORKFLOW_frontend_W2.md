@@ -9,16 +9,16 @@
 ## Step 4: 노트 에디터 화면 — Markdown 편집 + 미리보기 + 저장
 
 ### 4.1 TASK 시작
-- [ ] Step Goal / Done When / Scope / Input 확인
-- [ ] PRD_W2 해당 요구사항 확인 (노트 에디터)
-- [ ] Duration 산정 확인
+- [x] Step Goal / Done When / Scope / Input 확인
+- [x] PRD_W2 해당 요구사항 확인 (노트 에디터)
+- [x] Duration 산정 확인
 
 ### 4.2 요구사항 분석
-- [ ] Markdown 편집기 위젯 선정 (flutter_markdown, markdown_editable_textinput 등)
-- [ ] 편집/미리보기 전환 모드 요건 (split / tab)
-- [ ] 자동 저장 요건 (debounce 2초 또는 수동 저장)
-- [ ] 노트 CRUD API 연동 엔드포인트 확인 (knowledge-svc)
-- [ ] Instructions 초안 → TASK 문서 반영
+- [x] Markdown 편집기 위젯 선정 (flutter_markdown 채택)
+- [x] 편집/미리보기 전환 모드 요건 (Desktop: split / Mobile: tab)
+- [ ] 자동 저장 요건 (debounce 2초 또는 수동 저장) — 팀원 구현
+- [ ] 노트 CRUD API 연동 엔드포인트 확인 (knowledge-svc) — 팀원 구현
+- [x] Instructions 초안 → TASK 문서 반영
 
 ### 4.3 Security 1차 검토
 - [ ] 인증 필요 여부: Yes (인증된 사용자만 접근)
@@ -60,11 +60,11 @@
 - [ ] 테스트 통과 확인
 
 ### 4.9 Controller + Test
-- [ ] 노트 에디터 페이지 Widget 구현 (편집 영역 + 미리보기 영역)
-- [ ] 편집/미리보기 모드 전환 탭/토글 구현
-- [ ] Markdown 툴바 구현 (Bold, Italic, Heading, Link, Code)
-- [ ] 저장 버튼 + 자동 저장 인디케이터 구현
-- [ ] 노트 제목/태그 입력 폼 구현
+- [x] 노트 에디터 페이지 Widget 구현 (편집 영역 + 미리보기 영역) — 뼈대 완료
+- [x] 편집/미리보기 모드 전환 탭/토글 구현 — Desktop split, Mobile tab
+- [x] Markdown 툴바 구현 (Bold, Italic, Heading, Link, Code) — 뼈대 완료
+- [ ] 저장 버튼 + 자동 저장 인디케이터 구현 — 팀원 구현
+- [ ] 노트 제목/태그 입력 폼 구현 — 팀원 구현
 - [ ] Widget 테스트 (편집 → 미리보기 전환, 저장 동작)
 
 ### 4.10 View + Test
@@ -73,23 +73,23 @@
 - [ ] Smoke Test 1건 (노트 생성 → 편집 → 저장 → 재로드)
 - [ ] RULE Reference → TASK 반영
 
-**Step 4 Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+**Step 4 Status**: [x] In Progress (뼈대 완료: 분할 뷰 + 툴바 + Markdown 미리보기. API 연동/자동저장은 팀원 잔여)
 
 ---
 
 ## Step 5: SRS 복습 화면 — 카드 제시 → 뒤집기 → 난이도 선택 → 다음 카드
 
 ### 5.1 TASK 시작
-- [ ] Step Goal / Done When / Scope / Input 확인
-- [ ] PRD_W2 해당 요구사항 확인 (SRS 복습 화면)
-- [ ] Duration 산정 확인
+- [x] Step Goal / Done When / Scope / Input 확인
+- [x] PRD_W2 해당 요구사항 확인 (SRS 복습 화면)
+- [x] Duration 산정 확인
 
 ### 5.2 요구사항 분석
-- [ ] 복습 세션 시작 플로우 정의 (세션 생성 API → 카드 큐 로드)
-- [ ] 카드 제시 UI 요건 (앞면 → 탭/클릭 → 뒷면 뒤집기 애니메이션)
-- [ ] 난이도 선택 버튼 요건 (Again, Hard, Good, Easy)
-- [ ] 세션 완료 화면 요건 (복습 결과 요약)
-- [ ] Instructions 초안 → TASK 문서 반영
+- [ ] 복습 세션 시작 플로우 정의 (세션 생성 API → 카드 큐 로드) — 팀원 구현
+- [x] 카드 제시 UI 요건 (앞면 → 탭/클릭 → 뒷면 뒤집기 애니메이션) — FlipCard 위젯 완료
+- [x] 난이도 선택 버튼 요건 (Again, Hard, Good, Easy) — 4버튼 레이아웃 완료
+- [ ] 세션 완료 화면 요건 (복습 결과 요약) — 팀원 구현
+- [x] Instructions 초안 → TASK 문서 반영
 
 ### 5.3 Security 1차 검토
 - [ ] 인증 필요 여부: Yes (인증된 사용자만 접근)
@@ -128,11 +128,11 @@
 - [ ] 테스트 통과 확인
 
 ### 5.9 Controller + Test
-- [ ] 복습 시작 화면 Widget 구현 (오늘 복습 카드 수 표시 + 시작 버튼)
-- [ ] 카드 제시 Widget 구현 (앞면 표시 → 뒤집기 애니메이션)
-- [ ] 난이도 선택 버튼 Widget 구현 (Again/Hard/Good/Easy 4버튼)
-- [ ] 진행률 표시 Widget 구현 (n/total 프로그레스 바)
-- [ ] 세션 완료 화면 Widget 구현 (결과 요약 + 돌아가기 버튼)
+- [ ] 복습 시작 화면 Widget 구현 (오늘 복습 카드 수 표시 + 시작 버튼) — 팀원 구현
+- [x] 카드 제시 Widget 구현 (앞면 표시 → 뒤집기 애니메이션) — FlipCard 뼈대 완료
+- [x] 난이도 선택 버튼 Widget 구현 (Again/Hard/Good/Easy 4버튼) — 레이아웃 완료
+- [x] 진행률 표시 Widget 구현 (n/total 프로그레스 바) — LinearProgressIndicator 완료
+- [ ] 세션 완료 화면 Widget 구현 (결과 요약 + 돌아가기 버튼) — 팀원 구현
 - [ ] Widget 테스트 (뒤집기 → 난이도 선택 → 다음 카드 플로우)
 
 ### 5.10 View + Test
@@ -142,16 +142,16 @@
 - [ ] Smoke Test 1건 (세션 시작 → 3장 복습 → 완료)
 - [ ] RULE Reference → TASK 반영
 
-**Step 5 Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+**Step 5 Status**: [x] In Progress (뼈대 완료: FlipCard + 난이도 버튼 + 진행 바. SM-2 API/세션 관리는 팀원 잔여)
 
 ---
 
 ## Step 6: 커뮤니티 그룹 목록/상세 화면
 
 ### 6.1 TASK 시작
-- [ ] Step Goal / Done When / Scope / Input 확인
-- [ ] PRD_W2 해당 요구사항 확인 (커뮤니티 화면)
-- [ ] Duration 산정 확인
+- [x] Step Goal / Done When / Scope / Input 확인
+- [x] PRD_W2 해당 요구사항 확인 (커뮤니티 화면)
+- [x] Duration 산정 확인
 
 ### 6.2 요구사항 분석
 - [ ] 커뮤니티 그룹 목록 화면 요건 (검색, 카테고리 필터, 정렬)
@@ -196,11 +196,11 @@
 - [ ] 테스트 통과 확인
 
 ### 6.9 Controller + Test
-- [ ] 커뮤니티 그룹 목록 페이지 Widget 구현
-- [ ] 검색 바 + 카테고리 필터 칩 Widget 구현
-- [ ] 공유 콘텐츠 카드 리스트 Widget 구현 (제목, 설명, 태그, 다운로드 수)
-- [ ] 공유 콘텐츠 상세 화면 Widget 구현 (미리보기 + 복사 버튼)
-- [ ] 복사 확인 다이얼로그 Widget 구현
+- [x] 커뮤니티 그룹 목록 페이지 Widget 구현 — 탭(내 그룹/탐색) + 빈 상태 UI 뼈대 완료
+- [ ] 검색 바 + 카테고리 필터 칩 Widget 구현 — 팀원 구현
+- [ ] 공유 콘텐츠 카드 리스트 Widget 구현 (제목, 설명, 태그, 다운로드 수) — 팀원 구현
+- [x] 공유 콘텐츠 상세 화면 Widget 구현 — 멤버/공유 콘텐츠 탭 뼈대 완료
+- [ ] 복사 확인 다이얼로그 Widget 구현 — 팀원 구현
 - [ ] Widget 테스트 (검색 → 결과 표시 → 콘텐츠 복사 플로우)
 
 ### 6.10 View + Test
@@ -210,4 +210,4 @@
 - [ ] Smoke Test 1건 (검색 → 상세 보기 → 복사)
 - [ ] RULE Reference → TASK 반영
 
-**Step 6 Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+**Step 6 Status**: [x] In Progress (뼈대 완료: 그룹 목록/상세 탭 레이아웃. API 연동/페이지네이션은 팀원 잔여)
