@@ -41,8 +41,9 @@ Synapse는 학습자의 **노트·카드·커뮤니티 활동**을 통합 관리
 
 **받아들이는 비용**
 - 통합 테스트가 모놀리식보다 복잡 (docker-compose 기반 로컬 e2e 필요).
-- 6인 팀이 4개 서비스를 분담하면 1인 다역. Learning/AI 두 개를 한 명이 보는 식.
+- 7인 팀(팀장 1 + 6)이 4개 서비스를 분담하면 트랙당 1–2명. learning-svc는 D-1(card/srs Java) + D-2(ai Python)로 모듈 경계 분리.
 - 분산 트랜잭션 처리에 Saga 패턴이 강제됨 (ADR-0002 참조).
+- 각 서비스 내부는 **Modulith 패턴**으로 추가 분리 (특히 knowledge-svc).
 
 ## Links
 
