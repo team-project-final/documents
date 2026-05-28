@@ -6,13 +6,13 @@
 
 ## 1. 한 줄 요약
 
-`documents.wiki/18_기술_스택_정의서.md` v2.2 → v2.3 카테고리 검증 프로젝트. 6 세션 중 **4 세션 완료(27/45 기술, 108 findings, 모두 main 머지됨)**, **3 세션 남음**(S4 이벤트/S5 운영/S6 외부·AI).
+`documents.wiki/18_기술_스택_정의서.md` v2.2 → v2.3 카테고리 검증 프로젝트. 6 세션 중 **5 세션 완료(34/45 기술, 122 findings)**, **2 세션 남음**(S5 운영/S6 외부·AI). S4까지의 4 세션은 모두 main 머지됨, S4는 PR 생성 + 사용자 머지 대기.
 
 ---
 
 ## 2. 어디까지 왔나
 
-### 완료된 4 세션 (모두 main 머지됨)
+### 완료된 5 세션
 
 | 세션 | 카테고리 | 기술 수 | findings | PR# | 위키 커밋 (마지막) |
 |------|---------|---------|----------|-----|---------------------|
@@ -20,23 +20,31 @@
 | S2a | 백엔드 프레임워크 (Spring·FastAPI·Gateway) | 12 | 37 | [#7](https://github.com/team-project-final/documents/pull/7) | `documents.wiki@7f091cd` |
 | S2b | 프론트엔드 프레임워크 (Flutter 스택) | 7 | 24 | [#8](https://github.com/team-project-final/documents/pull/8) | `documents.wiki@4eca299` |
 | S3 | 데이터스토어 (PG·pgvector·Redis·ES/OpenSearch·S3) | 5 | 17 | [#9](https://github.com/team-project-final/documents/pull/9) | `documents.wiki@ed5ed04` |
-| **합계** | | **27** | **108** | | |
+| S4 | 이벤트/동기화 (Kafka·SR·Avro·Resilience4j·RateLimit + 신설 ShedLock·Outbox) | 7 | 14 | (PR#TBD — Task C1 직후 기입) | `documents.wiki@0a7e5a2` |
+| **합계** | | **34** | **122** | | |
 
-누적 클래스: E1:30 · E2:24 · D:13 · R:17 · OK:24
-누적 심각도: P0:14 · P1:24 · P2:50
+누적 클래스: E1:33 · E2:28 · D:14 · R:19 · OK:28
+누적 심각도: P0:14 · P1:31 · P2:57
 
-마스터 스펙(PR #5)·S1 플랜·S2a 플랜·S2b 플랜·S3 플랜도 모두 main에 있음.
+마스터 스펙(PR #5)·S1·S2a·S2b·S3·S4 플랜도 모두 main에 있음(S4 플랜은 본 PR로 함께 머지 예정).
+
+### S4 신설 절 결정 (5세션 시점 정착)
+
+| 신설 | 위치 | 본문 핵심 |
+|------|------|----------|
+| §4.1.9 ShedLock 7.7.x | §4.1.8 끝 직후 | 어노테이션·LockProvider.usingDbTime·DDL·learning-card 실 구현 표·트러블슈팅 5건·운영 임계값 표준 3종 |
+| §5.4.1 Outbox/Polling Relay 운영 패턴 | §5.4 끝 직후 | 폴링 2-5초·batch 50-200·SKIP LOCKED·DLQ attempts≥10·해시샤딩 트리거(백로그 1000건/5분)·CloudEvents binary 매핑·Prometheus 알람 4종·운영 함정 6건 |
 
 ### 핸드오프 시점 정착된 결정 (이전 세션 결과의 메모리화)
 
 | 메모리 | 내용 | 다음 세션 영향 |
 |--------|------|---------------|
 | [[python-ai-stack-direct-sdk]] | LangChain 미사용, OpenAI/Anthropic SDK 직접 | S6 (AI/ML) **필수** |
-| [[flutter-frontend-policy]] | Riverpod manual · CustomPainter · integration_test Phase D 이후 | S6 (RAG·시맨틱 캐시는 backend 영역이지만 wiki §6 정합 검증 시 참조) |
-| [[spring-modulith-outbox-coexistence]] | Modulith Event Registry vs Outbox 분리, events-kafka 금지 | S4 (이벤트) **필수** |
+| [[flutter-frontend-policy]] | Riverpod manual · CustomPainter · integration_test Phase D 이후 | S6 (wiki §6 정합 검증 시 참조) |
+| [[spring-modulith-outbox-coexistence]] | Modulith Event Registry vs Outbox 분리, events-kafka 금지 | ✅ S4 정합 확인 완료 (CONSISTENT) |
 | [[redis-topology-decision]] | 현재 standalone, Cluster는 S5 ADR | S5 (운영) **필수** |
 | [[s3-implementation-status]] | AWS S3 W4 이후 구현, 위키 §5.7은 목표 형태 | S5/S6 (S3 운영·이벤트 알림 라우팅) |
-| [[data-sync-outbox-cqrs]] | Outbox/Relay/복제/순서보장 전체 표준 (기존) | S4 **핵심** |
+| [[data-sync-outbox-cqrs]] | Outbox/Relay/복제/순서보장 전체 표준 (기존) | ✅ S4 정합 확인 완료 (CONSISTENT) — §5.4.1 신설로 위키에도 단일 출처 정착 |
 | [[deploy-mirror-standardization]] | 배포 PR 세트 (기존) | S5 **핵심** |
 | [[git-pr-workflow]] | 브랜치→커밋→푸쉬→PR→대기 (기존) | 전 세션 |
 
@@ -44,36 +52,25 @@
 
 ## 3. 다음에 무엇을 해야 하나
 
-### 선택지 A — S4 이벤트/동기화 세션 (권장 다음)
+> ✅ ~~선택지 A — S4 이벤트/동기화 세션~~ **완료** (위 §2 참조). 남은 두 세션 중 선택.
 
-**대상 (7개 + 검토 2개)**:
-- §5.4 Apache Kafka 3.x — **v2.2에서 정합화됨, 추가 검증 필요**
-- §5.5 Confluent Schema Registry 7.x
-- §5.6 Apache Avro 1.11.x
-- §3.2 Resilience4j
-- §3.3 Redis Token Bucket
-- (검토) ShedLock 7.7.x 독립 절 신설 — 마스터 스펙 §2에서 사전 발견
-- (검토) Outbox/Polling Relay 운영 패턴 절 신설 — 마스터 스펙 §2에서 사전 발견
-
-**핵심 메모리**: [[data-sync-outbox-cqrs]], [[spring-modulith-outbox-coexistence]]
-
-**검증 초점**:
-- Boot 4 + Spring Kafka 4 + Avro 1.11 + Schema Registry 7 호환 매트릭스
-- `outbox_event`·`processed_events` 테이블·인덱스·파티션 키 표준 정합
-- KafkaAvroSerializer + CloudEvents 헤더 패턴
-
-### 선택지 B — S5 운영/관측성 세션
+### 선택지 A (현 권장) — S5 운영/관측성 세션
 
 **대상 (12개)**: §7.1 Docker, §7.2 EKS, §7.3 ArgoCD, §7.4 GitHub Actions, §7.5 Cloudflare, §7.6 Istio, §7.7 ECR, §8.1 Prometheus+Grafana, §8.2 Fluent Bit, §8.3 OTel+Jaeger, §8.4 Sentry, §8.5 AlertManager (+ Testcontainers·pytest 이관 후보)
 
 **핵심 메모리**: [[deploy-mirror-standardization]], [[redis-topology-decision]], [[s3-implementation-status]]
 
-**위임 받은 결정 ADR**:
+**위임 받은 결정 ADR** (누적):
 - §3.1 Gateway JWT 미구현·CircuitBreaker 미설정 (S2a 위임)
+- §3.2 Resilience4j Gateway 도입 결정 (S4 위임)
+- §3.3 RedisRateLimiter 플랜별 분기 결정 (S4 위임)
 - Redis Cluster 전환 트리거 (S3 위임)
 - ES vs OpenSearch 결정 (S3 위임)
+- S3 운영(KMS·Object Lock·Lifecycle·이벤트 알림 라우팅) (S3 위임)
 
-### 선택지 C — S6 외부 API + AI/ML 세션
+**참조**: S4에서 신설한 §4.1.9 ShedLock / §5.4.1 Outbox 운영 패턴의 모니터링 지표(`outbox_backlog_count` 등)가 §8.1 Prometheus 알람 설정과 연결되어야 함.
+
+### 선택지 B — S6 외부 API + AI/ML 세션
 
 **대상 (9개)**: §6.1 Claude, §6.2 OpenAI Embeddings, §6.3 RAG, §6.4 Semantic Cache, §9.1 Stripe, §9.2 OAuth, §9.3 FCM/APNs, §9.4 SES, §9.5 Secrets Manager
 
@@ -100,7 +97,6 @@
    → 6단계 파이프라인·분류 체계·산출물 구조·운영 워크플로
 
 4. 메모리 확인 (선택한 세션에 따라):
-   - S4 → [[data-sync-outbox-cqrs]], [[spring-modulith-outbox-coexistence]]
    - S5 → [[deploy-mirror-standardization]], [[redis-topology-decision]], [[s3-implementation-status]]
    - S6 → [[python-ai-stack-direct-sdk]]
    - 모든 세션 → [[git-pr-workflow]]
@@ -122,18 +118,22 @@
 
 ### P1
 4. `synapse-learning-svc/learning-card/build.gradle.kts:81` Spring Modulith `1.3.0` → `2.0.6` (S2a 발견)
+5. `synapse-learning-svc/learning-card/build.gradle.kts:L55` Avro `1.12.0` → `1.11.3` 정렬 (S4-F10)
+6. `synapse-learning-svc/learning-card/src/main/resources/application.yml` Kafka producer에 `properties.auto.register.schemas: false` 운영 프로필 추가 (S4-F08)
+7. Outbox 패턴 도입 시 platform-svc/knowledge-svc/engagement-svc에 ShedLock 7.7.x 도입 + `shedlock` 마이그레이션 (S4-F12·F13 신설 §4.1.9·§5.4.1이 표준)
 
 ### P2
-5. Spring Boot 패치 라인 정합 (gateway 4.0.6 ↔ 나머지 4.0.0)
-6. Spring Modulith 패치 라인 정합 (engagement 2.0.5 → 2.0.6)
-7. note_chunks embedding NOT NULL 통일 (S3-F05, 비동기 백필 후)
-8. HNSW partial index 추가 (knowledge-svc, S3-F06)
-9. ES vs OpenSearch 결정 후 인프라 통일
+8. Spring Boot 패치 라인 정합 (gateway 4.0.6 ↔ 나머지 4.0.0)
+9. Spring Modulith 패치 라인 정합 (engagement 2.0.5 → 2.0.6)
+10. note_chunks embedding NOT NULL 통일 (S3-F05, 비동기 백필 후)
+11. HNSW partial index 추가 (knowledge-svc, S3-F06)
+12. ES vs OpenSearch 결정 후 인프라 통일
 
 ### 별도 결정 사항
 - 4개 굵은 서비스 application.yml에 `spring.threads.virtual.enabled: true` 추가 여부 (S1·S2a 위임)
 - 5주 단축 일정 트레이드오프 ADR화 검토 (§2.8 Deep Dive 정착)
 - integration_test 실제 작성 (Phase D 이후)
+- §3.2 Resilience4j Gateway 도입 / §3.3 RedisRateLimiter 플랜별 분기 (S4 위임, S5 ADR)
 
 ---
 
@@ -153,7 +153,7 @@
 
 ## 7. 운영 표준 예외 기록
 
-마스터 스펙 §5.3 "위키 세션당 단일 커밋" 원칙의 의도된 예외 — S1·S2a·S2b·S3 모두 §11 변경 이력에 PR# 기입을 위한 후행 커밋 발생. S4·S5·S6도 동일 패턴 예상.
+마스터 스펙 §5.3 "위키 세션당 단일 커밋" 원칙의 의도된 예외 — S1·S2a·S2b·S3·S4 모두 §11 변경 이력에 PR# 기입을 위한 후행 커밋 발생. S5·S6도 동일 패턴 예상.
 
 ---
 
@@ -162,3 +162,4 @@
 | 버전 | 날짜 | 변경 |
 |------|------|------|
 | v1.0 | 2026-05-28 | S3 완료 시점 핸드오프 초안 — 4 세션 완료 / 3 세션 남음 (S4·S5·S6) |
+| v1.1 | 2026-05-28 | S4 완료 반영 — 5 세션 완료 / 2 세션 남음 (S5·S6). §4.1.9 ShedLock / §5.4.1 Outbox 운영 패턴 신설 절 정착. data-sync-outbox-cqrs·spring-modulith-outbox-coexistence 메모리 정합 CONSISTENT 확인. S5 위임 ADR 큐에 §3.2/§3.3 Gateway 도입 결정 2건 추가. |
