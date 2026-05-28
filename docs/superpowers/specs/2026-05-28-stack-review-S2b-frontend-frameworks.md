@@ -2,7 +2,8 @@
 
 > 작성일: 2026-05-28 / 검증자: claude-opus-4-7 / 마스터 스펙: 2026-05-28-tech-stack-doc-review-design.md
 > 대상 위키: documents.wiki/18_기술_스택_정의서.md (S1+S2a 후 v2.3-S2a 상태)
-> 위키 패치 커밋: documents.wiki@463c43d9f0056e97ba261212c0d9dcba5e03cda0
+> 위키 패치 커밋: documents.wiki@463c43d9f0056e97ba261212c0d9dcba5e03cda0 (+ §11 PR# 후행 커밋 documents.wiki@4eca299)
+> 보고서 PR: [documents#8](https://github.com/team-project-final/documents/pull/8)
 
 ## 0. 요약 (Summary)
 
