@@ -20,7 +20,7 @@
 | S2a | 백엔드 프레임워크 (Spring·FastAPI·Gateway) | 12 | 37 | [#7](https://github.com/team-project-final/documents/pull/7) | `documents.wiki@7f091cd` |
 | S2b | 프론트엔드 프레임워크 (Flutter 스택) | 7 | 24 | [#8](https://github.com/team-project-final/documents/pull/8) | `documents.wiki@4eca299` |
 | S3 | 데이터스토어 (PG·pgvector·Redis·ES/OpenSearch·S3) | 5 | 17 | [#9](https://github.com/team-project-final/documents/pull/9) | `documents.wiki@ed5ed04` |
-| S4 | 이벤트/동기화 (Kafka·SR·Avro·Resilience4j·RateLimit + 신설 ShedLock·Outbox) | 7 | 14 | (PR#TBD — Task C1 직후 기입) | `documents.wiki@0a7e5a2` |
+| S4 | 이벤트/동기화 (Kafka·SR·Avro·Resilience4j·RateLimit + 신설 ShedLock·Outbox) | 7 | 14 | [#11](https://github.com/team-project-final/documents/pull/11) | `documents.wiki@0a7e5a2` |
 | **합계** | | **34** | **122** | | |
 
 누적 클래스: E1:33 · E2:28 · D:14 · R:19 · OK:28

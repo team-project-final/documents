@@ -3,7 +3,7 @@
 > 작성일: 2026-05-28 / 검증자: claude-opus-4-7 / 마스터 스펙: 2026-05-28-tech-stack-doc-review-design.md
 > 대상 위키: documents.wiki/18_기술_스택_정의서.md (S3 후 v2.3-S3 상태, 베이스 SHA `ed5ed04`)
 > 위키 패치 커밋: [documents.wiki@0a7e5a2](https://github.com/team-project-final/documents.wiki/commit/0a7e5a2d2bf4d5e9ebe03ca191df12ede62349a5)
-> 보고서 PR: (Task C1에서 기입)
+> 보고서 PR: [documents#11](https://github.com/team-project-final/documents/pull/11)
 > 메모리 정합: `data-sync-outbox-cqrs` · `spring-modulith-outbox-coexistence`
 > 플랜: `documents/docs/superpowers/plans/2026-05-28-stack-review-S4-event-sync.md`
 
