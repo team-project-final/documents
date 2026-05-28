@@ -13,7 +13,7 @@
 | S2 | 프레임워크 (S2b 프론트) | completed | [#8](https://github.com/team-project-final/documents/pull/8) | documents.wiki@463c43d | 11/6/0/1/6 | 0/5/13 | 2026-05-28 | 2026-05-28 |
 | S3 | 데이터 | completed | [#9](https://github.com/team-project-final/documents/pull/9) | documents.wiki@f54fd1f | 2/0/4/7/4 | 3/2/8 | 2026-05-28 | 2026-05-28 |
 | S4 | 이벤트 | completed | [#11](https://github.com/team-project-final/documents/pull/11) | documents.wiki@0a7e5a2 | 3/4/1/2/4 | 0/7/7 | 2026-05-28 | 2026-05-28 |
-| S5 | 운영 | pending | - | - | - | - | - | - |
+| S5 | 운영 | in_progress | (TBD) | - | - | - | 2026-05-28 | - |
 | S6 | 외부/AI | pending | - | - | - | - | - | - |
 
 ## 누적 통계
@@ -60,6 +60,13 @@
 ### S4 → S5 위임
 - **§3.2 Resilience4j Gateway 도입 결정** (S4-F01·F14 사실 기록 → S5 ADR화)
 - **§3.3 RedisRateLimiter 플랜별 분기 결정** (S4-F03·F04 사실 기록 → S5 ADR화)
+
+### S5 진척 중단 (2026-05-28, in_progress)
+
+- 작업 브랜치: `docs/stack-review-S5-operations`
+- **완료**: Phase A(브랜치/동기화 — S4 머지로 cherry-pick 불필요) · Phase B1(인벤토리, 12개 라인 범위 확정) · Phase B2(skill-recommender, 8건 verified MCP 발견 — 본 검증 비사용)
+- **중단**: Phase B3 두 subagent 병렬 dispatch 첫 시도 시 API 529 Overloaded × 2회 + 사용자 인터럽트
+- **다음 세션이 이어받기**: 동일 브랜치 checkout → Phase B3부터. 라인 범위·메모리 정합 대상은 HANDOFF v1.2 §"S5 이어받기" 절 참조
 
 ### S3 → S5 위임 (운영 세션)
 - **Redis Cluster 운영 정책 ADR** (전환 트리거 RPS/메모리 임계치)

@@ -6,7 +6,7 @@
 
 ## 1. 한 줄 요약
 
-`documents.wiki/18_기술_스택_정의서.md` v2.2 → v2.3 카테고리 검증 프로젝트. 6 세션 중 **5 세션 완료(34/45 기술, 122 findings)**, **2 세션 남음**(S5 운영/S6 외부·AI). S4까지의 4 세션은 모두 main 머지됨, S4는 PR 생성 + 사용자 머지 대기.
+`documents.wiki/18_기술_스택_정의서.md` v2.2 → v2.3 카테고리 검증 프로젝트. 6 세션 중 **5 세션 완료(S1·S2a·S2b·S3·S4 모두 main 머지)** + **S5 진척 중단 (Phase B1·B2 완료, B3 미시작 — 다음 세션 이어받기)**, **S6 미시작**. 본 핸드오프(v1.2)는 S5 이어받기 가이드를 §"3.A S5 이어받기" 절에 명시.
 
 ---
 
@@ -52,25 +52,73 @@
 
 ## 3. 다음에 무엇을 해야 하나
 
-> ✅ ~~선택지 A — S4 이벤트/동기화 세션~~ **완료** (위 §2 참조). 남은 두 세션 중 선택.
+> ✅ ~~선택지 A — S4 이벤트/동기화 세션~~ **완료** (PR #11 머지).
+> ⏸ **S5 운영/관측성 — 진척 중단 (Phase B1·B2 완료, B3 미시작)**. 본 §3.A에서 이어받기 가이드 제공.
+> 다음 세션 결정: **(권장) S5 이어받기** 또는 **S6 외부/AI 별도 시작**.
 
-### 선택지 A (현 권장) — S5 운영/관측성 세션
+### 3.A — S5 이어받기 가이드 (권장 다음)
 
-**대상 (12개)**: §7.1 Docker, §7.2 EKS, §7.3 ArgoCD, §7.4 GitHub Actions, §7.5 Cloudflare, §7.6 Istio, §7.7 ECR, §8.1 Prometheus+Grafana, §8.2 Fluent Bit, §8.3 OTel+Jaeger, §8.4 Sentry, §8.5 AlertManager (+ Testcontainers·pytest 이관 후보)
+**현재 상태 (2026-05-28 중단 시점):**
+- 작업 브랜치: `docs/stack-review-S5-operations` (origin에 푸시됨, 본 PR로 main 머지 예정)
+- 플랜: `documents/docs/superpowers/plans/2026-05-28-stack-review-S5-operations.md` (본 PR 포함)
+- 위키 master: `8785252` (S4 dual-commit 후, 변경 없음)
+- INDEX: S5 = `in_progress`
 
-**핵심 메모리**: [[deploy-mirror-standardization]], [[redis-topology-decision]], [[s3-implementation-status]]
+**이어받기 절차:**
 
-**위임 받은 결정 ADR** (누적):
-- §3.1 Gateway JWT 미구현·CircuitBreaker 미설정 (S2a 위임)
-- §3.2 Resilience4j Gateway 도입 결정 (S4 위임)
-- §3.3 RedisRateLimiter 플랜별 분기 결정 (S4 위임)
-- Redis Cluster 전환 트리거 (S3 위임)
-- ES vs OpenSearch 결정 (S3 위임)
-- S3 운영(KMS·Object Lock·Lifecycle·이벤트 알림 라우팅) (S3 위임)
+```
+# 1. 본 PR 머지 후 또는 본 브랜치 위에서 직접 시작
+Push-Location 'C:\workspace\team-project-final\documents'
+git fetch origin
+git checkout docs/stack-review-S5-operations
+git pull --rebase origin docs/stack-review-S5-operations
+Pop-Location
 
-**참조**: S4에서 신설한 §4.1.9 ShedLock / §5.4.1 Outbox 운영 패턴의 모니터링 지표(`outbox_backlog_count` 등)가 §8.1 Prometheus 알람 설정과 연결되어야 함.
+Push-Location 'C:\workspace\team-project-final\documents.wiki'
+git checkout master
+git pull --rebase origin master
+Pop-Location
+```
 
-### 선택지 B — S6 외부 API + AI/ML 세션
+**Phase B3부터 시작** — 이미 확정된 컨텍스트:
+
+(a) **라인 범위 (Phase B1 결과, 다시 grep 불필요)**:
+- §7.1 Docker + Docker Compose — **L4889-L5005**
+- §7.2 AWS EKS — **L5006-L5148**
+- §7.3 ArgoCD — **L5149-L5246**
+- §7.4 GitHub Actions — **L5247-L5372**
+- §7.5 Cloudflare — **L5373-L5460**
+- §7.6 Istio — **L5461-L5562**
+- §7.7 AWS ECR — **L5563-L5639**
+- §8.1 Prometheus + Grafana — **L5640-L5740**
+- §8.2 Fluent Bit + CloudWatch/Loki — **L5741-L5827**
+- §8.3 OpenTelemetry + Jaeger — **L5828-L5922**
+- §8.4 Sentry — **L5923-L6022**
+- §8.5 AlertManager + Slack — **L6023-L6135** (§9.1 Stripe L6140 직전)
+
+(b) **skill-recommender 결과 (Phase B2 완료)**: 8건 verified MCP 발견(Sentry / Cloudflare 4종 / Supabase / FireCrawl 등). **본 검증에는 비사용** — context7 + WebFetch만 사용(S1·S2·S3·S4와 동일). MCP들은 실시간 데이터 액세스 용도라 18 위키 검증의 진실 원천이 될 수 없음. 보고서 §2에 "채택 가능 도구로 기록만"으로 처리.
+
+(c) **Phase B3 두 subagent 병렬 dispatch** — 본 플랜 §B3 Step 1·Step 2 그대로:
+- subagent A: §7.1-§7.7 인프라 7개 (`INFRA-F##` finding) — 핵심 메모리 [[deploy-mirror-standardization]]
+- subagent B: §8.1-§8.5 관측성 5개 (`OBS-F##` finding) — §5.4.1 Outbox 모니터링 지표 정합 검증 필수
+
+⚠ 첫 시도 시 API 529 Overloaded × 2회. 재시도 시 즉시 또는 단일 subagent로 fallback(12개 묶음 — S2a 패턴) 검토.
+
+(d) **ADR 5건 위임 누적** — controller가 Phase B4 §6 Deep Dive에서 처리:
+1. (S2a 위임) §3.1 Gateway JWT 미구현 + CircuitBreaker 미설정
+2. (S4 위임) §3.2 Resilience4j Gateway 도입 결정
+3. (S4 위임) §3.3 RedisRateLimiter 플랜별 분기
+4. (S3 위임) Redis Cluster 전환 트리거 ADR
+5. (S3 위임) ES vs OpenSearch 결정 ADR
+
+(e) **메모리 정합 검증 대상**:
+- [[deploy-mirror-standardization]] — §7.4·§7.7 검증의 진실 원천(W3 reusable workflow + AWS_ROLE_ARN 차단)
+- [[redis-topology-decision]] — §6 Deep Dive ADR-S5-4 결정 컨텍스트
+- [[s3-implementation-status]] — §7.5(Cloudflare CDN)·§8.2(Fluent Bit) 검증 시 참조만
+
+**Phase B3 이후는 본 플랜 §B4·§B5·§B6·§C1·§C2·§C3 그대로**.
+
+### 3.B — S6 외부 API + AI/ML 세션 (S5 완료 후, 또는 병렬 진행 시)
 
 **대상 (9개)**: §6.1 Claude, §6.2 OpenAI Embeddings, §6.3 RAG, §6.4 Semantic Cache, §9.1 Stripe, §9.2 OAuth, §9.3 FCM/APNs, §9.4 SES, §9.5 Secrets Manager
 
@@ -97,7 +145,7 @@
    → 6단계 파이프라인·분류 체계·산출물 구조·운영 워크플로
 
 4. 메모리 확인 (선택한 세션에 따라):
-   - S5 → [[deploy-mirror-standardization]], [[redis-topology-decision]], [[s3-implementation-status]]
+   - **S5 이어받기 (권장)** → [[deploy-mirror-standardization]], [[redis-topology-decision]], [[s3-implementation-status]] + 본 핸드오프 §3.A 가이드
    - S6 → [[python-ai-stack-direct-sdk]]
    - 모든 세션 → [[git-pr-workflow]]
 
@@ -163,3 +211,4 @@
 |------|------|------|
 | v1.0 | 2026-05-28 | S3 완료 시점 핸드오프 초안 — 4 세션 완료 / 3 세션 남음 (S4·S5·S6) |
 | v1.1 | 2026-05-28 | S4 완료 반영 — 5 세션 완료 / 2 세션 남음 (S5·S6). §4.1.9 ShedLock / §5.4.1 Outbox 운영 패턴 신설 절 정착. data-sync-outbox-cqrs·spring-modulith-outbox-coexistence 메모리 정합 CONSISTENT 확인. S5 위임 ADR 큐에 §3.2/§3.3 Gateway 도입 결정 2건 추가. |
+| v1.2 | 2026-05-28 | S5 진척 중단 반영 — Phase B1(인벤토리, 12개 라인 범위 확정) + Phase B2(skill-recommender, 8건 verified MCP 발견·본 검증 비사용) 완료, Phase B3 두 subagent dispatch 시 API 529 Overloaded × 2회로 중단. §"3.A S5 이어받기" 절 신설 — 라인 범위·skill-recommender 결과·ADR 5건 위임 누적·메모리 정합 검증 대상 명시. INDEX S5 행 `in_progress` 표시. 다음 세션은 본 브랜치(`docs/stack-review-S5-operations`)에서 Phase B3부터 이어받음. |
