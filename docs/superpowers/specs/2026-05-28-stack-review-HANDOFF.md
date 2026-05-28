@@ -59,10 +59,11 @@
 ### 3.A — S5 이어받기 가이드 (권장 다음)
 
 **현재 상태 (2026-05-28 중단 시점):**
-- 작업 브랜치: `docs/stack-review-S5-operations` (origin에 푸시됨, 본 PR로 main 머지 예정)
-- 플랜: `documents/docs/superpowers/plans/2026-05-28-stack-review-S5-operations.md` (본 PR 포함)
+- 작업 브랜치: `docs/stack-review-S5-operations` (origin에 푸시됨)
+- 진척 핸드오프 PR: [documents#12](https://github.com/team-project-final/documents/pull/12) (머지 대기)
+- 플랜: `documents/docs/superpowers/plans/2026-05-28-stack-review-S5-operations.md` (본 PR #12 포함)
 - 위키 master: `8785252` (S4 dual-commit 후, 변경 없음)
-- INDEX: S5 = `in_progress`
+- INDEX: S5 = `in_progress` (#12 진척 핸드오프 링크)
 
 **이어받기 절차:**
 

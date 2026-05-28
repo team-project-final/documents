@@ -13,7 +13,7 @@
 | S2 | 프레임워크 (S2b 프론트) | completed | [#8](https://github.com/team-project-final/documents/pull/8) | documents.wiki@463c43d | 11/6/0/1/6 | 0/5/13 | 2026-05-28 | 2026-05-28 |
 | S3 | 데이터 | completed | [#9](https://github.com/team-project-final/documents/pull/9) | documents.wiki@f54fd1f | 2/0/4/7/4 | 3/2/8 | 2026-05-28 | 2026-05-28 |
 | S4 | 이벤트 | completed | [#11](https://github.com/team-project-final/documents/pull/11) | documents.wiki@0a7e5a2 | 3/4/1/2/4 | 0/7/7 | 2026-05-28 | 2026-05-28 |
-| S5 | 운영 | in_progress | (TBD) | - | - | - | 2026-05-28 | - |
+| S5 | 운영 | in_progress | [#12](https://github.com/team-project-final/documents/pull/12) (진척 핸드오프) | - | - | - | 2026-05-28 | - |
 | S6 | 외부/AI | pending | - | - | - | - | - | - |
 
 ## 누적 통계
