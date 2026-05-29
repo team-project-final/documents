@@ -612,8 +612,8 @@ applied: false
 
 ## 7. 위키 패치 diff 요약
 
-**커밋**: `<controller가 기입>`
-**변경 통계**: `git diff --stat` 기반 — `<controller가 채움>`
+**커밋**: `documents.wiki@dc5b0bd` (내용 패치) + `documents.wiki@387849b` (§11 PR# dual-commit, #12)
+**변경 통계**: `18_기술_스택_정의서.md` — 242 insertions / 120 deletions (6135 → 7014 라인)
 
 ### 7.1 finding ↔ 위키 패치 위치 매핑
 
