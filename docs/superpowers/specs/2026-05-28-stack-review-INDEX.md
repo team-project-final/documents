@@ -13,18 +13,19 @@
 | S2 | 프레임워크 (S2b 프론트) | completed | [#8](https://github.com/team-project-final/documents/pull/8) | documents.wiki@463c43d | 11/6/0/1/6 | 0/5/13 | 2026-05-28 | 2026-05-28 |
 | S3 | 데이터 | completed | [#9](https://github.com/team-project-final/documents/pull/9) | documents.wiki@f54fd1f | 2/0/4/7/4 | 3/2/8 | 2026-05-28 | 2026-05-28 |
 | S4 | 이벤트 | completed | [#11](https://github.com/team-project-final/documents/pull/11) | documents.wiki@0a7e5a2 | 3/4/1/2/4 | 0/7/7 | 2026-05-28 | 2026-05-28 |
-| S5 | 운영 | pending | - | - | - | - | - | - |
+| S5 | 운영 | completed | [#12](https://github.com/team-project-final/documents/pull/12) | documents.wiki@dc5b0bd | 9/9/6/2/5 | 0/19/12 | 2026-05-28 | 2026-05-28 |
 | S6 | 외부/AI | pending | - | - | - | - | - | - |
 
 ## 누적 통계
-- 검증한 기술 수: 34 / 약 45
+- 검증한 기술 수: 46 / 약 45 (6 세션 완료 — S6만 남음)
   - S1 (언어 3): Java 21, Python 3.12, Dart 3.x
   - S2a (백엔드 12): SCG 5, Boot 4, Security 7, JPA+Hibernate 7, Flyway 11, WebFlux, Testcontainers, Modulith 2.0, FastAPI, uvicorn, LangChain→Direct SDK, httpx
   - S2b (프론트 7): Flutter 3.x, Riverpod, GoRouter, Sliver, google_fonts, CanvasKit, D3.js→CustomPainter, flutter_test
   - S3 (데이터 5): PostgreSQL 16, pgvector, Redis 7, Elasticsearch 8 / OpenSearch 2.x + nori, AWS S3
   - S4 (이벤트 7): Apache Kafka 3.x, Confluent Schema Registry 7.x, Apache Avro 1.11.x, Resilience4j, Redis Token Bucket + **신설**: ShedLock 7.7.x, Outbox/Polling Relay 운영 패턴
-- E1: 33 · E2: 28 · D: 14 · R: 19 · OK: 28
-- P0: 14 · P1: 31 · P2: 57
+  - S5 (운영 12): Docker+Compose, AWS EKS, ArgoCD, GitHub Actions, Cloudflare, Istio, AWS ECR, Prometheus+Grafana, Promtail+Loki(←Fluent Bit), OpenTelemetry+Jaeger, Sentry, AlertManager + **신설**: §8.6 운영 ADR 5건
+- E1: 42 · E2: 37 · D: 20 · R: 21 · OK: 33
+- P0: 14 · P1: 50 · P2: 69
 - 문서 자체 결함 누계: 2건 (§2.4·§2.5 절 번호 충돌 — S2b에서 해소 완료)
 
 ## 세션 간 발생한 교차 발견사항
@@ -54,17 +55,18 @@
 - ✅ **§5.5 auto.register 운영=false + Subject Naming Strategy 보강**
 - ✅ **§5.6 Avro 1.11.3 vs 1.12.0 분기 메모** — learning-card 1.11.3 정렬 권장
 
-### S2a → S5 위임 (유지)
-- **§3.1 Gateway JWT 미구현 + CircuitBreaker 미설정**
+### S5 처리 완료 (2026-05-28) — 위임 ADR 5건 청산
 
-### S4 → S5 위임
-- **§3.2 Resilience4j Gateway 도입 결정** (S4-F01·F14 사실 기록 → S5 ADR화)
-- **§3.3 RedisRateLimiter 플랜별 분기 결정** (S4-F03·F04 사실 기록 → S5 ADR화)
-
-### S3 → S5 위임 (운영 세션)
-- **Redis Cluster 운영 정책 ADR** (전환 트리거 RPS/메모리 임계치)
-- **ES vs OpenSearch 결정 ADR** (라이선스·AWS Managed Service·기능 fast-follow 평가)
-- **S3 운영** (KMS 키 정책·Object Lock·Lifecycle·이벤트 알림 라우팅)
+- 작업 브랜치: `docs/stack-review-S5-operations` (이어받기 성공: Phase B3 두 subagent 병렬 정상 완료, 529 재발 없음)
+- ✅ **§8.6 운영 ADR 절 신설** — S2a/S4/S3 위임 ADR 5건 모두 결정:
+  - **ADR-S5-1** (S2a 위임) §3.1 Gateway JWT 서명/만료 검증(공통) + 서비스 세분 인가, CB는 ADR-S5-2 통합 — W4 구현 목표
+  - **ADR-S5-2** (S4 위임) §3.2 Resilience4j Gateway 도입 확정 (gateway 모듈 한정 timeout+CB)
+  - **ADR-S5-3** (S4 위임) §3.3 RedisRateLimiter 플랜별 분기 (KeyResolver userId+plan, free/pro/enterprise)
+  - **ADR-S5-4** (S3 위임) §5.2 Redis standalone 유지, Cluster 전환 트리거 = 지속 RPS·메모리 70%·HA 요구
+  - **ADR-S5-5** (S3 위임) §5.3 **OpenSearch 채택** (Apache 2.0·AWS Managed·nori, 인프라 기 프로비저닝)
+- ✅ **메모리 정합 CONSISTENT**: `deploy-mirror-standardization`(§7.4·§7.7 — reusable workflow latent·AWS_ROLE_ARN 부재·`synapse/gateway` ECR 명칭 불일치 모두 일치), `redis-topology-decision`(§7.1·§5.2 standalone)
+- ✅ **§8 "적용 현황(목표 vs 실재)" 박스 통일** — Prometheus 404·OTel/Jaeger·Sentry 미구현 + Cloudflare/Istio 미배포 (`s3-implementation-status` 패턴)
+- ✅ 잔여 S3 운영(KMS·Object Lock·Lifecycle·이벤트 알림 라우팅)은 별도 코드 PR 후속으로 이관(아래 큐)
 
 ### S2a/S2b → S6 위임 (유지)
 - **§6 RAG 절들의 LangChain 잔존 언급**
@@ -79,6 +81,13 @@
 - **(P1)** Outbox 패턴 도입 시 platform-svc/knowledge-svc/engagement-svc에 ShedLock 7.7.x 도입 + `shedlock` 마이그레이션 (S4-F12·F13 신설 절이 표준)
 - **(P1)** `outbox_event` / `user_ref` / `event_publication` 마이그레이션 작성 (S3 발견) — Outbox/CQRS 패턴 본격 도입
 - **(P1)** AWS S3 AttachmentService 구현 (synapse-knowledge-svc, S3 발견) — `software.amazon.awssdk:s3:2.28.x` 의존성 추가
+- **(P1)** `synapse-shared` reusable workflow(deploy-service.yml/mirror-service.yml) PR #8 머지 + 나머지 서비스 caller 전환 (S5 INFRA-F14, deploy-mirror-standardization Phase 4)
+- **(P1)** `AWS_ROLE_ARN`(OIDC deploy role) 생성 → gateway deploy.yml 정적 키 → OIDC 전환 (S5 INFRA-F12)
+- **(P1)** ECR `synapse/gateway` 리포 신규 생성 + `ECR_REGISTRY` 시크릿 등록 + 명칭 통일(synapse-gateway↔synapse/gateway) (S5 INFRA-F18)
+- **(P1)** 5 Spring 런타임 `micrometer-registry-prometheus` 의존성 + exposure에 prometheus 추가 → /actuator/prometheus 노출(현재 404) (S5 OBS-F01)
+- **(P1)** §8.1 PrometheusRule(Outbox 4 알람) 매니페스트 추가 — §5.4.1 임계값 기반 (S5 OBS-F02)
+- **(P2)** 분산추적(OTel) W4+ 도입, Sentry SDK W4+ 통합 (S5 OBS-F08·F09)
+- **(P2)** AlertManager 채널 3분리(#alert-critical/warning/info) + PagerDuty 에스컬레이션, 채널명 단일 출처 통일(위키↔runbook↔실 values) (S5 OBS-F11)
 - **(P2)** Spring Boot 패치 라인 정합 (gateway 4.0.6 ↔ 나머지 4.0.0)
 - **(P2)** Spring Modulith 패치 라인 정합 (engagement 2.0.5 → 2.0.6)
 - **(P2)** note_chunks embedding NOT NULL 통일 (S3-F05, 비동기 백필 후)
@@ -106,5 +115,6 @@
 - ✅ **`flutter-frontend-policy`** — S2b 정착 정책: Riverpod manual / CustomPainter / integration_test Phase D 이후.
 - ✅ **`data-sync-outbox-cqrs`** — S4에서 §5.4 본문/§5.4.1 신설로 위키 정합 재확인 (CONSISTENT).
 - (검토) **`outbox-polling-relay-operations`** — §5.4.1 신설 본문이 메모리화할 만한 운영 표준 5개 항목(폴링 2-5초, batch 50-200, SKIP LOCKED, DLQ attempts>=10, 해시샤딩 트리거 1000건/5분). S5 운영 ADR 결정 후 정착 시점에 메모리화 검토.
-- (검토) **`redis-topology-decision`** — S3 발견 standalone→Cluster 전환. S5 운영 세션 결정 후 메모리화.
-- (검토) **`s3-implementation-status`** — S3-F11 "AWS S3 계획 상태" 정착. W4 구현 PR 시 폐기 또는 갱신.
+- ✅ **`redis-topology-decision`** — S5 ADR-S5-4로 결정 정착(standalone 유지, 전환 트리거=지속 RPS·메모리 70%·HA). 메모리 내용과 CONSISTENT, 갱신 불필요.
+- (검토) **`s3-implementation-status`** — S3-F11 "AWS S3 계획 상태" 정착. S5에서 §8 "적용 현황(목표 vs 실재)" 박스 패턴의 근거로 재사용. W4 구현 PR 시 폐기 또는 갱신.
+- (검토) **`deploy-mirror-standardization`** — S5 §7.4·§7.7 검증으로 latent 상태(shared reusable 미머지·AWS_ROLE_ARN 부재·`synapse/gateway` 명칭 불일치) 재확인 CONSISTENT. Phase 4 완료 시 갱신.
