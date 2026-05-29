@@ -6,13 +6,13 @@
 
 ## 1. 한 줄 요약
 
-`documents.wiki/18_기술_스택_정의서.md` v2.2 → v2.3 카테고리 검증 프로젝트. 6 세션 중 **6 세션 완료(S1·S2a·S2b·S3·S4 main 머지 + S5 위키 푸시·PR 생성)**, **S6(외부 API + AI/ML)만 남음**. 본 핸드오프(v1.3)는 S5 완료 반영 + 다음 세션 S6 가이드를 §"3.B S6" 절에 명시. 누적 153 findings(E1:42·E2:37·D:20·R:21·OK:33).
+`documents.wiki/18_기술_스택_정의서.md` v2.2 → v2.3 카테고리 검증 프로젝트. **6/6 세션 전부 완료 — 카테고리 검증 단계 종료**(S1·S2a·S2b·S3·S4·S5 main 머지 + S6 위키 푸시·PR 생성). 본 핸드오프(v1.4)는 S6 완료 반영. **다음 작업은 검증이 아니라 v2.3 통합 정리**(§3 참조). 누적 **182 findings**(E1:50·E2:45·D:26·R:23·OK:38 / P0:16·P1:63·P2:83).
 
 ---
 
 ## 2. 어디까지 왔나
 
-### 완료된 5 세션
+### 완료된 6 세션 (전부)
 
 | 세션 | 카테고리 | 기술 수 | findings | PR# | 위키 커밋 (마지막) |
 |------|---------|---------|----------|-----|---------------------|
@@ -22,10 +22,11 @@
 | S3 | 데이터스토어 (PG·pgvector·Redis·ES/OpenSearch·S3) | 5 | 17 | [#9](https://github.com/team-project-final/documents/pull/9) | `documents.wiki@ed5ed04` |
 | S4 | 이벤트/동기화 (Kafka·SR·Avro·Resilience4j·RateLimit + 신설 ShedLock·Outbox) | 7 | 14 | [#11](https://github.com/team-project-final/documents/pull/11) | `documents.wiki@0a7e5a2` |
 | S5 | 운영/관측성 (Docker·EKS·ArgoCD·GHA·Cloudflare·Istio·ECR·Prometheus·Loki·OTel·Sentry·AlertManager + 신설 §8.6 ADR 5건) | 12 | 31 | [#12](https://github.com/team-project-final/documents/pull/12) | `documents.wiki@dc5b0bd` |
-| **합계** | | **46** | **153** | | |
+| S6 | 외부/AI (Claude·OpenAI Embeddings·RAG·Semantic Cache·Stripe·OAuth·FCM/APNs·SES·Secrets Manager) | 9 | 29 | #&lt;TBD&gt; | `documents.wiki@bac72d3` |
+| **합계** | | **55** | **182** | | |
 
-누적 클래스: E1:42 · E2:37 · D:20 · R:21 · OK:33
-누적 심각도: P0:14 · P1:50 · P2:69
+누적 클래스: E1:50 · E2:45 · D:26 · R:23 · OK:38
+누적 심각도: P0:16 · P1:63 · P2:83
 
 마스터 스펙(PR #5)·S1·S2a·S2b·S3·S4 플랜도 모두 main에 있음(S4 플랜은 본 PR로 함께 머지 예정).
 
@@ -53,27 +54,25 @@
 
 ## 3. 다음에 무엇을 해야 하나
 
-> ✅ ~~선택지 A — S4 이벤트/동기화~~ **완료** (PR #11 머지).
-> ✅ ~~S5 운영/관측성~~ **완료** (위키 `dc5b0bd` 푸시 + 보고서 PR 생성). §3.A 참조.
-> ⬜ **다음 세션 = S6 외부 API + AI/ML (마지막 세션)**. §3.B 참조.
+> ✅ S1~S5 **완료** (전부 main 머지).
+> ✅ ~~S6 외부 API + AI/ML~~ **완료** (위키 `bac72d3` 푸시 + 보고서 PR 생성). §3.A 참조.
+> 🏁 **6/6 세션 종료 — 카테고리 검증 단계 끝. 다음 = v2.3 통합 정리(검증 아님)**. §3.B 참조.
 
-### 3.A — S5 완료 요약 (2026-05-28)
+### 3.A — S6 완료 요약 (2026-05-28, 마지막 검증 세션)
 
-- 작업 브랜치 `docs/stack-review-S5-operations`에서 **중단됐던 Phase B3를 이어받아 정상 완료**(두 subagent 병렬, 529 재발 없음).
-- 위키 커밋 `documents.wiki@dc5b0bd` (242 ins / 120 del). 보고서 PR 생성(번호는 §2 표·INDEX 참조).
-- 인프라 7 + 관측성 5 = 12 항목, 31 findings(E1:9·E2:9·D:6·R:2·OK:5 / P0:0·P1:19·P2:12).
-- **§8.6 운영 ADR 절 신설** — S2a/S4/S3 위임 ADR 5건 전부 결정(ADR-S5-1~5: Gateway JWT·Resilience4j 도입·RedisRateLimiter 플랜별·Redis standalone 유지·OpenSearch 채택).
-- 메모리 `deploy-mirror-standardization`·`redis-topology-decision` 정합 **CONSISTENT**. §8 미구현 항목은 `s3-implementation-status` 패턴의 "적용 현황(목표 vs 실재)" 박스로 통일.
-- 잔여 실코드 작업은 §5 후속 코드 PR 큐로 이관(reusable workflow 머지·AWS_ROLE_ARN·ECR synapse/gateway·micrometer-registry-prometheus·PrometheusRule 등).
+- 브랜치 `docs/stack-review-S6-external-ai`, 두 subagent 병렬(AI/ML 4 + 외부 5) 정상 완료.
+- 위키 커밋 `documents.wiki@bac72d3` (247 ins / 165 del, 7096 라인). 보고서 PR 생성(번호는 §2 표·INDEX 참조).
+- AI/ML 4 + 외부 5 = 9 항목, 29 findings(E1:8·E2:8·D:6·R:2·OK:5 / **P0:2**·P1:13·P2:14).
+- **P0 2건(§6 아키텍처 드리프트)**: §6.3 RAG(ES+RRF 하이브리드 서술 ↔ 실코드 pgvector cosine 단일), §6.4 Semantic Cache(pgvector 캐시 테이블 서술 ↔ 실코드 Redis numpy in-memory). 둘 다 "적용 현황(목표 vs 실재)" 박스로 reconcile.
+- **LangChain 위임 정정 청산**: §6.3 LangChain "사용" 잔존 0건(대안표 미선택 행만) — 검증 완료, 정정 불필요. [[python-ai-stack-direct-sdk]] CONSISTENT.
+- 미구현 외부연동(§9.1 Portal/Proration·§9.3 FCM 발송·§9.4 SES 전면·§9.2 Microsoft·§6.1 프롬프트캐싱) "목표 vs 실재" 박스. `deploy-mirror-standardization` §9.5 DRIFT 정정(ESO v1·5m·per-service 경로).
+- 잔여 실코드 작업은 §5 후속 코드 PR 큐로 이관.
 
-### 3.B — S6 외부 API + AI/ML 세션 (다음 = 마지막 세션)
+### 3.B — 다음 작업: v2.3 통합 정리 (검증 아님, 마스터 스펙 §6.4)
 
-**대상 (9개)**: §6.1 Claude, §6.2 OpenAI Embeddings, §6.3 RAG, §6.4 Semantic Cache, §9.1 Stripe, §9.2 OAuth, §9.3 FCM/APNs, §9.4 SES, §9.5 Secrets Manager
-
-**핵심 메모리**: [[python-ai-stack-direct-sdk]] **필수**
-
-**위임 받은 정정**:
-- §6 RAG 절들의 LangChain 잔존 언급 일괄 정정 (S2a §4.2.4 Direct SDK 패턴과 일관성)
+6 세션 검증이 전부 끝났으므로 다음은 **위키 v2.3 통합 마감 작업**:
+- §10.1 요약 매트릭스 S1~S6 반영 / §11 v2.3 통합 행 / §12.2~§12.4 버전 매핑 갱신 / §1.4 전체 목록 표 / 마스터 INDEX 잠금. 상세 체크리스트는 INDEX "별도 작업 (v2.3 통합 정리)" 절.
+- 그 외 실코드 PR은 §5 큐(별도 트랙, W4/W5 구현).
 
 ---
 
@@ -122,6 +121,10 @@
 10. (S5) ECR `synapse/gateway` 리포 신규 생성 + `ECR_REGISTRY` 시크릿 + 명칭 통일(synapse-gateway↔synapse/gateway) (INFRA-F18)
 11. (S5) 5 Spring 런타임 `micrometer-registry-prometheus` + exposure에 prometheus → /actuator/prometheus 노출(현재 404) (OBS-F01)
 12. (S5) §8.1 PrometheusRule(Outbox 4 알람) 매니페스트 추가 — §5.4.1 임계값 기반 (OBS-F02)
+13. (S6) Stripe `invoice.payment_failed` 핸들러 + Customer Portal + Proration + Checkout Idempotency-Key (S6-F17·F18·F19, platform-svc billing)
+14. (S6) FCM/APNs 실제 발송(firebase-admin/pushy + PushNotificationService) + 410 Gone 토큰 자동 삭제 (S6-F25)
+15. (S6) AWS SES 연동(awssdk ses v2·sns) + DKIM/샌드박스 해제 + email_suppression_list (S6-F27, S3 AttachmentService 동일 트랙)
+16. (S6) RAG 하이브리드 검색(pgvector + ES BM25 + RRF) 구현 — 현재 pgvector cosine 단일 (S6-F10, learning-ai)
 
 ### P2
 13. Spring Boot 패치 라인 정합 (gateway 4.0.6 ↔ 나머지 4.0.0)
@@ -131,6 +134,9 @@
 17. ES → OpenSearch 인프라 통일 (ADR-S5-5 결정 완료 — OpenSearch 채택)
 18. (S5) 분산추적(OpenTelemetry)·Sentry SDK W4+ 도입 (OBS-F08·F09)
 19. (S5) AlertManager 채널 3분리 + PagerDuty 에스컬레이션 + 채널명 단일 출처 통일(위키↔runbook↔실 values) (OBS-F11)
+20. (S6) 시맨틱 캐시 영속화 검토 — 현재 Redis JSON+numpy in-memory(최대 100 FIFO) (S6-F13)
+21. (S6) Microsoft(Azure AD) OAuth Provider 활성화 — 현재 application.yml TODO 주석 (S6-F22)
+22. (S6) Claude 프롬프트 캐싱(cache_control: ephemeral) 적용 (S6-F02, learning-ai)
 
 ### 별도 결정 사항
 - 4개 굵은 서비스 application.yml에 `spring.threads.virtual.enabled: true` 추가 여부 (S1·S2a 위임)
@@ -156,7 +162,7 @@
 
 ## 7. 운영 표준 예외 기록
 
-마스터 스펙 §5.3 "위키 세션당 단일 커밋" 원칙의 의도된 예외 — S1·S2a·S2b·S3·S4 모두 §11 변경 이력에 PR# 기입을 위한 후행 커밋 발생. S5·S6도 동일 패턴 예상.
+마스터 스펙 §5.3 "위키 세션당 단일 커밋" 원칙의 의도된 예외 — S1~S6 모두 §11 변경 이력에 PR# 기입을 위한 후행 커밋(dual-commit) 발생. 6 세션 전부 동일 패턴 적용 완료.
 
 ---
 
@@ -168,3 +174,4 @@
 | v1.1 | 2026-05-28 | S4 완료 반영 — 5 세션 완료 / 2 세션 남음 (S5·S6). §4.1.9 ShedLock / §5.4.1 Outbox 운영 패턴 신설 절 정착. data-sync-outbox-cqrs·spring-modulith-outbox-coexistence 메모리 정합 CONSISTENT 확인. S5 위임 ADR 큐에 §3.2/§3.3 Gateway 도입 결정 2건 추가. |
 | v1.2 | 2026-05-28 | S5 진척 중단 반영 — Phase B1(인벤토리, 12개 라인 범위 확정) + Phase B2(skill-recommender, 8건 verified MCP 발견·본 검증 비사용) 완료, Phase B3 두 subagent dispatch 시 API 529 Overloaded × 2회로 중단. §"3.A S5 이어받기" 절 신설 — 라인 범위·skill-recommender 결과·ADR 5건 위임 누적·메모리 정합 검증 대상 명시. INDEX S5 행 `in_progress` 표시. 다음 세션은 본 브랜치(`docs/stack-review-S5-operations`)에서 Phase B3부터 이어받음. |
 | v1.3 | 2026-05-28 | **S5 완료 반영** — 중단된 Phase B3 이어받아 정상 완료(두 subagent 병렬, 529 재발 없음). 위키 `dc5b0bd`(242 ins/120 del) 푸시 + 보고서 PR 생성. 31 findings(E1:9·E2:9·D:6·R:2·OK:5 / P0:0·P1:19·P2:12), 누적 153. §8.6 운영 ADR 절 신설 — 위임 ADR 5건(ADR-S5-1~5: Gateway JWT·Resilience4j 도입·RedisRateLimiter 플랜별·Redis standalone 유지·OpenSearch 채택) 전부 결정. 메모리 deploy-mirror-standardization·redis-topology-decision 정합 CONSISTENT. §8 미구현 항목 "적용 현황(목표 vs 실재)" 박스 통일. §3.A를 이어받기 가이드 → 완료 요약으로 교체, 다음 세션 S6(마지막)만 남음. §5 P1 큐에 S5 실코드 5건 추가. |
+| v1.4 | 2026-05-28 | **S6 완료 — 6/6 세션 전부 종료, 카테고리 검증 단계 끝**. 위키 `bac72d3`(247 ins/165 del, 7096 라인) 푸시 + 보고서 PR 생성. 29 findings(E1:8·E2:8·D:6·R:2·OK:5 / **P0:2**·P1:13·P2:14), 누적 **182**. P0 2건(§6.3 RAG ES+RRF 하이브리드 픽션→pgvector 단일 실재, §6.4 Semantic Cache pgvector 테이블 픽션→Redis numpy 실재) "목표 vs 실재" 박스 reconcile. §6.1 모델 ID 20240620 정정·프롬프트 캐싱 목표. §9 Stripe(invoice.paid)·Microsoft OAuth 계획·FCM 발송 목표·SES 전면 목표·ESO v1/5m/per-service 정정. **LangChain 위임 정정 청산**(§6.3 잔존 0건, 정정 불필요). python-ai-stack-direct-sdk CONSISTENT, deploy-mirror-standardization §9.5 DRIFT 정정. §3을 S6 완료 + 다음=v2.3 통합 정리로 전환. §5 큐에 S6 실코드 7건 추가. |
