@@ -3,7 +3,7 @@
 > 작성일: 2026-05-28 / 검증자: claude-opus-4-8 / 마스터 스펙: 2026-05-28-tech-stack-doc-review-design.md
 > 대상 위키: documents.wiki/18_기술_스택_정의서.md (S5 후 v2.3-S5 상태, 베이스 SHA `387849b`, 7014 라인)
 > 위키 패치 커밋: documents.wiki@`bac72d3` (387849b..bac72d3, master) — 247 insertions / 165 deletions
-> 보고서 PR: <controller가 기입>
+> 보고서 PR: [documents#13](https://github.com/team-project-final/documents/pull/13)
 > 메모리 정합: `python-ai-stack-direct-sdk`(핵심) · `s3-implementation-status`(패턴) · `redis-topology-decision`(§6.4) · `deploy-mirror-standardization`(§9.5)
 > 플랜: `documents/docs/superpowers/plans/2026-05-28-stack-review-S6-external-ai.md`
 > **6세션 검증 프로젝트의 마지막 세션 (S6/6).**
@@ -581,7 +581,7 @@ S2a/S2b가 위임한 **§6 RAG 절 LangChain 잔존 정정**을 본 세션에서
 
 ## 7. 위키 패치 diff 요약
 
-**커밋**: `documents.wiki@bac72d3` (내용 패치) + `<dual-commit SHA>` (§11 PR# 기입, C2)
+**커밋**: `documents.wiki@bac72d3` (내용 패치) + `documents.wiki@5e3840e` (§11 PR#13 기입, dual-commit)
 **변경 통계**: `18_기술_스택_정의서.md` — 247 insertions / 165 deletions (7014 → 7096 라인)
 
 ### 7.1 finding ↔ 위키 패치 위치 매핑

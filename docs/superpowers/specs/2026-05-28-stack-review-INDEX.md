@@ -14,7 +14,7 @@
 | S3 | 데이터 | completed | [#9](https://github.com/team-project-final/documents/pull/9) | documents.wiki@f54fd1f | 2/0/4/7/4 | 3/2/8 | 2026-05-28 | 2026-05-28 |
 | S4 | 이벤트 | completed | [#11](https://github.com/team-project-final/documents/pull/11) | documents.wiki@0a7e5a2 | 3/4/1/2/4 | 0/7/7 | 2026-05-28 | 2026-05-28 |
 | S5 | 운영 | completed | [#12](https://github.com/team-project-final/documents/pull/12) | documents.wiki@dc5b0bd | 9/9/6/2/5 | 0/19/12 | 2026-05-28 | 2026-05-28 |
-| S6 | 외부/AI | completed | #&lt;TBD&gt; | documents.wiki@bac72d3 | 8/8/6/2/5 | 2/13/14 | 2026-05-28 | 2026-05-28 |
+| S6 | 외부/AI | completed | [#13](https://github.com/team-project-final/documents/pull/13) | documents.wiki@bac72d3 | 8/8/6/2/5 | 2/13/14 | 2026-05-28 | 2026-05-28 |
 
 ## 누적 통계
 - 검증한 기술 수: 55 / 약 45 (**6 세션 전부 완료 — 검증 단계 종료**)

@@ -22,7 +22,7 @@
 | S3 | 데이터스토어 (PG·pgvector·Redis·ES/OpenSearch·S3) | 5 | 17 | [#9](https://github.com/team-project-final/documents/pull/9) | `documents.wiki@ed5ed04` |
 | S4 | 이벤트/동기화 (Kafka·SR·Avro·Resilience4j·RateLimit + 신설 ShedLock·Outbox) | 7 | 14 | [#11](https://github.com/team-project-final/documents/pull/11) | `documents.wiki@0a7e5a2` |
 | S5 | 운영/관측성 (Docker·EKS·ArgoCD·GHA·Cloudflare·Istio·ECR·Prometheus·Loki·OTel·Sentry·AlertManager + 신설 §8.6 ADR 5건) | 12 | 31 | [#12](https://github.com/team-project-final/documents/pull/12) | `documents.wiki@dc5b0bd` |
-| S6 | 외부/AI (Claude·OpenAI Embeddings·RAG·Semantic Cache·Stripe·OAuth·FCM/APNs·SES·Secrets Manager) | 9 | 29 | #&lt;TBD&gt; | `documents.wiki@bac72d3` |
+| S6 | 외부/AI (Claude·OpenAI Embeddings·RAG·Semantic Cache·Stripe·OAuth·FCM/APNs·SES·Secrets Manager) | 9 | 29 | [#13](https://github.com/team-project-final/documents/pull/13) | `documents.wiki@bac72d3` |
 | **합계** | | **55** | **182** | | |
 
 누적 클래스: E1:50 · E2:45 · D:26 · R:23 · OK:38
