@@ -6,7 +6,7 @@
 
 ## 1. 한 줄 요약
 
-`documents.wiki/18_기술_스택_정의서.md` v2.2 → v2.3 카테고리 검증 프로젝트. **6/6 세션 전부 완료 — 카테고리 검증 단계 종료**(S1·S2a·S2b·S3·S4·S5 main 머지 + S6 위키 푸시·PR 생성). 본 핸드오프(v1.4)는 S6 완료 반영. **다음 작업은 검증이 아니라 v2.3 통합 정리**(§3 참조). 누적 **182 findings**(E1:50·E2:45·D:26·R:23·OK:38 / P0:16·P1:63·P2:83).
+`documents.wiki/18_기술_스택_정의서.md` v2.2 → **v2.3 완료**. **🏁 6/6 카테고리 검증 + v2.3 통합 정리 전부 종료 — 위키 프로젝트 마감**(S1~S6 main 머지, v2.3 통합 `documents.wiki@a4b53f4`, 헤더 v2.0→v2.3). 본 핸드오프(v1.5)는 v2.3 통합 완료 반영. **남은 것은 위키 작업이 아니라 실코드 PR 큐(§5, W4/W5 구현 트랙)뿐**. 누적 **182 findings**(E1:50·E2:45·D:26·R:23·OK:38 / P0:16·P1:63·P2:83).
 
 ---
 
@@ -68,11 +68,11 @@
 - 미구현 외부연동(§9.1 Portal/Proration·§9.3 FCM 발송·§9.4 SES 전면·§9.2 Microsoft·§6.1 프롬프트캐싱) "목표 vs 실재" 박스. `deploy-mirror-standardization` §9.5 DRIFT 정정(ESO v1·5m·per-service 경로).
 - 잔여 실코드 작업은 §5 후속 코드 PR 큐로 이관.
 
-### 3.B — 다음 작업: v2.3 통합 정리 (검증 아님, 마스터 스펙 §6.4)
+### 3.B — ✅ v2.3 통합 정리 완료 (2026-05-28, 위키 `a4b53f4`)
 
-6 세션 검증이 전부 끝났으므로 다음은 **위키 v2.3 통합 마감 작업**:
-- §10.1 요약 매트릭스 S1~S6 반영 / §11 v2.3 통합 행 / §12.2~§12.4 버전 매핑 갱신 / §1.4 전체 목록 표 / 마스터 INDEX 잠금. 상세 체크리스트는 INDEX "별도 작업 (v2.3 통합 정리)" 절.
-- 그 외 실코드 PR은 §5 큐(별도 트랙, W4/W5 구현).
+6 세션 검증 + 위키 통합 마감 전부 종료:
+- ✅ 헤더 v2.0→v2.3 / §10.1 요약표·§1.4 전체 목록에 S1~S6 검증 결과 전파(Redis standalone·OpenSearch·Claude 20240620·RAG pgvector 단일·Semantic Cache Redis numpy·Promtail+Loki·google_fonts 8·CustomPainter) / §11 정렬+v2.3 통합 행 / §12.2~§12.5 버전 매핑 / 마스터 INDEX 잠금.
+- **위키 프로젝트는 여기서 끝.** 남은 것은 실코드 PR 큐(§5) — W4/W5 구현 트랙(RAG 하이브리드·Stripe Portal·FCM 발송·SES·micrometer-prometheus·reusable workflow 등). 위키 검증과 분리된 별도 작업.
 
 ---
 
@@ -175,3 +175,4 @@
 | v1.2 | 2026-05-28 | S5 진척 중단 반영 — Phase B1(인벤토리, 12개 라인 범위 확정) + Phase B2(skill-recommender, 8건 verified MCP 발견·본 검증 비사용) 완료, Phase B3 두 subagent dispatch 시 API 529 Overloaded × 2회로 중단. §"3.A S5 이어받기" 절 신설 — 라인 범위·skill-recommender 결과·ADR 5건 위임 누적·메모리 정합 검증 대상 명시. INDEX S5 행 `in_progress` 표시. 다음 세션은 본 브랜치(`docs/stack-review-S5-operations`)에서 Phase B3부터 이어받음. |
 | v1.3 | 2026-05-28 | **S5 완료 반영** — 중단된 Phase B3 이어받아 정상 완료(두 subagent 병렬, 529 재발 없음). 위키 `dc5b0bd`(242 ins/120 del) 푸시 + 보고서 PR 생성. 31 findings(E1:9·E2:9·D:6·R:2·OK:5 / P0:0·P1:19·P2:12), 누적 153. §8.6 운영 ADR 절 신설 — 위임 ADR 5건(ADR-S5-1~5: Gateway JWT·Resilience4j 도입·RedisRateLimiter 플랜별·Redis standalone 유지·OpenSearch 채택) 전부 결정. 메모리 deploy-mirror-standardization·redis-topology-decision 정합 CONSISTENT. §8 미구현 항목 "적용 현황(목표 vs 실재)" 박스 통일. §3.A를 이어받기 가이드 → 완료 요약으로 교체, 다음 세션 S6(마지막)만 남음. §5 P1 큐에 S5 실코드 5건 추가. |
 | v1.4 | 2026-05-28 | **S6 완료 — 6/6 세션 전부 종료, 카테고리 검증 단계 끝**. 위키 `bac72d3`(247 ins/165 del, 7096 라인) 푸시 + 보고서 PR 생성. 29 findings(E1:8·E2:8·D:6·R:2·OK:5 / **P0:2**·P1:13·P2:14), 누적 **182**. P0 2건(§6.3 RAG ES+RRF 하이브리드 픽션→pgvector 단일 실재, §6.4 Semantic Cache pgvector 테이블 픽션→Redis numpy 실재) "목표 vs 실재" 박스 reconcile. §6.1 모델 ID 20240620 정정·프롬프트 캐싱 목표. §9 Stripe(invoice.paid)·Microsoft OAuth 계획·FCM 발송 목표·SES 전면 목표·ESO v1/5m/per-service 정정. **LangChain 위임 정정 청산**(§6.3 잔존 0건, 정정 불필요). python-ai-stack-direct-sdk CONSISTENT, deploy-mirror-standardization §9.5 DRIFT 정정. §3을 S6 완료 + 다음=v2.3 통합 정리로 전환. §5 큐에 S6 실코드 7건 추가. |
+| v1.5 | 2026-05-28 | **v2.3 통합 정리 완료 — 위키 프로젝트 마감**. 위키 `a4b53f4`(헤더 v2.0→v2.3): §10.1 요약표·§1.4 전체 목록에 S1~S6 검증 결과 전파(Redis standalone·OpenSearch·Claude 20240620·RAG pgvector 단일·Semantic Cache Redis numpy·Promtail+Loki·EKS 1.31·Grafana 11·google_fonts 8·CustomPainter·Microsoft 계획·Istio 미배포), §11 v2.3-S* 정렬 + v2.3 통합 행, §12.2~§12.5 버전 매핑(go_router 17·ESO v1·Avro 1.11.3·LangChain 정리), INDEX 잠금. 검증 6/6 + 통합 전부 종료. 남은 것은 §5 실코드 PR 큐(W4/W5)뿐. |

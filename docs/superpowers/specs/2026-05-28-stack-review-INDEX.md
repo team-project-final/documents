@@ -2,7 +2,9 @@
 
 작성일: 2026-05-28
 마스터 스펙: 2026-05-28-tech-stack-doc-review-design.md
-대상 위키: documents.wiki/18_기술_스택_정의서.md v2.2 → v2.3 (예정)
+대상 위키: documents.wiki/18_기술_스택_정의서.md v2.2 → **v2.3 (완료, documents.wiki@a4b53f4)**
+
+> 🔒 **이 진행판은 v2.3 통합 정리 완료(2026-05-28)로 잠금(최종본).** 6/6 카테고리 검증 + v2.3 통합 마감 종료. 이후 변경은 별도 코드 PR 큐(아래)로만 추적.
 
 ## 세션 진척
 
@@ -110,15 +112,16 @@
 - **(P2)** Claude 프롬프트 캐싱(cache_control: ephemeral) 적용 → 반복 시스템 프롬프트 비용 절감 (S6-F02, learning-ai)
 - **(별도 결정)** 4개 굵은 서비스 application.yml에 `spring.threads.virtual.enabled: true` 추가 여부
 
-### 별도 작업 (v2.3 통합 정리) — ▶ 6 세션 전부 종료, **이제 진행 가능** (마스터 스펙 §6.4)
-- **§10.1 요약표** S1~S6 변경 반영 (ShedLock §4.1.9 / Outbox §5.4.1 / §8.6 운영 ADR / §6.3 RAG 실재·목표 / §9 외부연동 실재 행)
-- **§11 v2.3 통합 행** 추가 (v2.3-S1 ~ v2.3-S6 합본 CHANGELOG)
-- **§12.2 Flutter 생태계 버전 매핑**: go_router 14→17, google_fonts 6→8, freezed/build_runner 제거
-- **§12.3 Python AI 버전 매핑**: anthropic≥0.40 / openai≥1.50 Direct SDK, claude-3-5-sonnet-20240620, text-embedding-3-small 1536 (S6 정합)
-- **§12.4 인프라 버전 요구사항**: Redis 7.4 LTS standalone, ES vs OpenSearch→OpenSearch(ADR-S5-5), pgvector 0.8.x HNSW, ShedLock 7.7.x, Avro 1.11.3, ESO v1
-- **§4.2.4·§2.8 재작성**이 §1.4 본문·§10.1 매트릭스와 일관 여부 재확인
-- **§1.4 기술 스택 전체 목록 표** S3~S6 발견사항 반영 (신설 절 §4.1.9·§5.4.1·§8.6)
-- **마스터 INDEX 최종본 잠금** (CHANGELOG 성격 보존)
+### ✅ v2.3 통합 정리 — 완료 (2026-05-28, 위키 documents.wiki@a4b53f4)
+- ✅ **헤더 버전 v2.0 → v2.3** (v2.1~v2.3 누적 반영 안내)
+- ✅ **§10.1 요약표** S1~S6 전파 (Redis standalone / OpenSearch / Claude 20240620 / RAG pgvector 단일 / Semantic Cache Redis numpy / Promtail+Loki / EKS 1.31 / Grafana 11 / Microsoft 계획 / Istio 미배포)
+- ✅ **§11 v2.3-S* 논리 순서 정렬 + v2.3 통합 행** 추가
+- ✅ **§12.2 Flutter**: go_router 14→17, google_fonts ^8, codegen 미사용 명시
+- ✅ **§12.3 Python AI**: Claude 20240620 / text-embedding-3-small 1536 행 추가
+- ✅ **§12.4 인프라**: OpenSearch·ESO v1·Avro 1.11.3(중복 병합)·Redis standalone
+- ✅ **§12.5**: LangChain 정리 완료 표기
+- ✅ **§1.4 전체 목록**: google_fonts 8·CustomPainter·Redis standalone·OpenSearch 반영
+- ✅ **마스터 INDEX 잠금** (본 진행판 최종본, 상단 🔒 참조)
 
 ### 별도 결정 사항
 - **5주 단축 일정 트레이드오프 ADR화 검토** (§2.8 Deep Dive 정착 사실)
