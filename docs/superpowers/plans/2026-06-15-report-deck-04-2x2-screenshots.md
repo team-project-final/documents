@@ -17,6 +17,21 @@
 
 ---
 
+## ⚠️ 개정 (2026-06-15) — 경량 경로로 전환
+
+Task 0 조사에서 **프론트엔드가 대부분 mock UI**임이 확인됨:
+- knowledge(②노트·⑥검색·그래프) 실 API 클라이언트 0개 → 완전 mock, ⑤커뮤니티도 `mockGroups` 하드코딩, 대시보드 위젯도 `_mock`
+- `login_screen.dart:27`이 곧바로 `bypassLoginForDevelopment()` 호출(실 인증 비활성) → 로그인 버튼만 누르면 전 화면 진입
+- `synapse-frontend/build/web` 빌드 산출물 이미 존재
+
+**결론: DB 시드는 화면을 바꾸지 못함.** local-k8s 풀스택 기동·시드(기존 Task 1~3)는 **불필요 → 폐기**. 대신:
+
+> **Task 1(개정): `synapse-frontend/build/web`를 정적 HTTP 서버로 서빙 → 헤드리스 브라우저로 로그인 버튼 클릭(자동 우회) → 각 라우트로 이동.**
+
+기존 Task 2(데모계정)·Task 3(시드)은 **수행하지 않음**. Task 4(캡처)~Task 7(검증)은 그대로 유효. 화면은 설계된 mock 데이터(기존 04-1~6 스크린샷과 동일 성격).
+
+---
+
 ## File Structure
 
 - **Create** `documents/docs/final-deliverables/screenshots/raw/` — 캡처 원본 PNG (24장, `04-<n>-<slug>-<a|b|c|d>.png`)
