@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>team-project-final GitHub Repository Settings Audit</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --text: #1f2328;
+      --muted: #59636e;
+      --line: #d8dee4;
+      --good: #1a7f37;
+      --warn: #9a6700;
+      --bad: #cf222e;
+      --chip: #eef2f6;
+      --accent: #0969da;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+    header {
+      padding: 32px 40px 20px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+    }
+    h1, h2, h3 { margin: 0; line-height: 1.2; }
+    h1 { font-size: 28px; }
+    h2 { font-size: 19px; margin-bottom: 14px; }
+    h3 { font-size: 16px; margin-bottom: 8px; }
+    main { padding: 24px 40px 40px; }
+    .meta {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .metric {
+      display: block;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .label { color: var(--muted); font-size: 13px; }
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 6px 0; }
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1320px;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 10px 9px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #f6f8fa;
+      font-weight: 600;
+    }
+    tr:last-child td { border-bottom: 0; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--chip);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .yes { color: var(--good); }
+    .no { color: var(--bad); }
+    .warn { color: var(--warn); }
+    .muted { color: var(--muted); }
+    .mono { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; }
+    details {
+      margin-top: 14px;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+    pre {
+      overflow: auto;
+      background: #0d1117;
+      color: #e6edf3;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 12px;
+    }
+    @media (max-width: 900px) {
+      header, main { padding-left: 18px; padding-right: 18px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>team-project-final GitHub Repository Settings Audit</h1>
+    <div class="meta">점검일: 2026-05-13 KST · 대상: <span class="mono">team-project-final</span> 조직 · 조회 도구: GitHub CLI REST API</div>
+  </header>
+
+  <main>
+    <section class="grid" aria-label="요약 지표">
+      <div class="card"><span class="metric">16</span><span class="label">전체 레포</span></div>
+      <div class="card"><span class="metric">13 / 3</span><span class="label">Public / Private</span></div>
+      <div class="card"><span class="metric">16</span><span class="label">기본 브랜치 보호 활성</span></div>
+      <div class="card"><span class="metric">0</span><span class="label">필수 상태 체크 설정</span></div>
+    </section>
+
+    <section class="section">
+      <h2>핵심 확인 결과</h2>
+      <ul>
+        <li>모든 레포의 기본 브랜치는 <span class="mono">main</span>이고, archived 상태인 레포는 없습니다.</li>
+        <li>모든 레포에서 GitHub Actions가 활성화되어 있으며 허용 정책은 <span class="mono">all</span>입니다.</li>
+        <li>모든 레포의 기본 브랜치 보호는 활성화되어 있지만, 필수 status check가 설정된 레포는 없습니다.</li>
+        <li>PR 리뷰 필수 설정은 9개 레포에 적용되어 있습니다. 서비스 레포들은 대체로 1명 승인, stale review dismiss, CODEOWNERS 리뷰 요구가 켜져 있습니다.</li>
+        <li>auto-merge는 모든 레포에서 꺼져 있습니다. 브랜치 삭제 자동화는 8개 레포에서만 켜져 있습니다.</li>
+        <li>private 레포는 <span class="mono">demo-repository</span>, <span class="mono">synapse-gitops</span>, <span class="mono">synapse-mirror</span> 3개입니다.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>권장 점검 항목</h2>
+      <ul>
+        <li><strong>필수 CI 상태 체크:</strong> 모든 레포에서 비어 있습니다. PR 병합 전 테스트나 빌드가 필요하다면 required status checks를 추가하는 것이 맞습니다.</li>
+        <li><strong>Actions 허용 범위:</strong> 모든 레포가 <span class="mono">all</span>입니다. 외부 Action 사용을 제한해야 하는 프로젝트라면 org/repo 정책을 조정하세요.</li>
+        <li><strong>병합 전략 통일:</strong> 서비스 레포는 squash-only에 가깝지만 문서/프로토타입 레포는 merge, squash, rebase가 모두 열려 있습니다. 운영 정책을 정하면 이 설정을 맞추는 편이 좋습니다.</li>
+        <li><strong>브랜치 자동 삭제:</strong> 일부 레포만 <span class="mono">delete_branch_on_merge</span>가 켜져 있습니다. PR 브랜치 정리를 자동화하려면 나머지 레포도 활성화하세요.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>전체 레포 설정</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Repository</th>
+              <th>Visibility</th>
+              <th>Default</th>
+              <th>Actions</th>
+              <th>Branch Protected</th>
+              <th>Required Checks</th>
+              <th>PR Review</th>
+              <th>Admin Enforced</th>
+              <th>Restrictions</th>
+              <th>Merge</th>
+              <th>Auto Merge</th>
+              <th>Delete Branch</th>
+              <th>Wiki</th>
+              <th>Rulesets</th>
+              <th>Size KB</th>
+            </tr>
+          </thead>
+          <tbody id="repoRows"></tbody>
+        </table>
+      </div>
+      <details>
+        <summary>원본 JSON 보기</summary>
+        <pre id="rawJson"></pre>
+      </details>
+    </section>
+  </main>
+
+  <script>
+    const repos = [
+      {"name":"demo-repository","full_name":"team-project-final/demo-repository","html_url":"https://github.com/team-project-final/demo-repository","visibility":"private","archived":false,"default_branch":"main","size_kb":2,"has_issues":true,"has_projects":true,"has_wiki":false,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":true,"allow_rebase_merge":true,"allow_auto_merge":false,"delete_branch_on_merge":false,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":false,"required_approving_review_count":null,"dismiss_stale_reviews":null,"require_code_owner_reviews":null,"enforce_admins":false,"restrictions":false,"rulesets_count":1},
+      {"name":"documents","full_name":"team-project-final/documents","html_url":"https://github.com/team-project-final/documents","visibility":"public","archived":false,"default_branch":"main","size_kb":698,"has_issues":true,"has_projects":true,"has_wiki":true,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":true,"allow_rebase_merge":true,"allow_auto_merge":false,"delete_branch_on_merge":false,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":false,"required_approving_review_count":null,"dismiss_stale_reviews":null,"require_code_owner_reviews":null,"enforce_admins":false,"restrictions":false,"rulesets_count":null},
+      {"name":"preview","full_name":"team-project-final/preview","html_url":"https://github.com/team-project-final/preview","visibility":"public","archived":false,"default_branch":"main","size_kb":22,"has_issues":true,"has_projects":true,"has_wiki":true,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":true,"allow_rebase_merge":true,"allow_auto_merge":false,"delete_branch_on_merge":false,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":true,"required_approving_review_count":1,"dismiss_stale_reviews":false,"require_code_owner_reviews":false,"enforce_admins":false,"restrictions":true,"rulesets_count":null},
+      {"name":"schedule","full_name":"team-project-final/schedule","html_url":"https://github.com/team-project-final/schedule","visibility":"public","archived":false,"default_branch":"main","size_kb":140,"has_issues":true,"has_projects":true,"has_wiki":true,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":true,"allow_rebase_merge":true,"allow_auto_merge":false,"delete_branch_on_merge":false,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":false,"required_approving_review_count":null,"dismiss_stale_reviews":null,"require_code_owner_reviews":null,"enforce_admins":false,"restrictions":false,"rulesets_count":null},
+      {"name":"storyboard","full_name":"team-project-final/storyboard","html_url":"https://github.com/team-project-final/storyboard","visibility":"public","archived":false,"default_branch":"main","size_kb":185,"has_issues":true,"has_projects":true,"has_wiki":true,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":true,"allow_rebase_merge":true,"allow_auto_merge":false,"delete_branch_on_merge":false,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":true,"required_approving_review_count":1,"dismiss_stale_reviews":false,"require_code_owner_reviews":false,"enforce_admins":false,"restrictions":true,"rulesets_count":null},
+      {"name":"syn","full_name":"team-project-final/syn","html_url":"https://github.com/team-project-final/syn","visibility":"public","archived":false,"default_branch":"main","size_kb":32,"has_issues":true,"has_projects":true,"has_wiki":false,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":true,"allow_rebase_merge":true,"allow_auto_merge":false,"delete_branch_on_merge":false,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":false,"required_approving_review_count":null,"dismiss_stale_reviews":null,"require_code_owner_reviews":null,"enforce_admins":false,"restrictions":false,"rulesets_count":null},
+      {"name":"synapse-engagement-svc","full_name":"team-project-final/synapse-engagement-svc","html_url":"https://github.com/team-project-final/synapse-engagement-svc","visibility":"public","archived":false,"default_branch":"main","size_kb":151,"has_issues":true,"has_projects":true,"has_wiki":false,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":false,"allow_rebase_merge":false,"allow_auto_merge":false,"delete_branch_on_merge":true,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":true,"required_approving_review_count":1,"dismiss_stale_reviews":true,"require_code_owner_reviews":true,"enforce_admins":false,"restrictions":false,"rulesets_count":null},
+      {"name":"synapse-frontend","full_name":"team-project-final/synapse-frontend","html_url":"https://github.com/team-project-final/synapse-frontend","visibility":"public","archived":false,"default_branch":"main","size_kb":171,"has_issues":true,"has_projects":true,"has_wiki":false,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":false,"allow_rebase_merge":false,"allow_auto_merge":false,"delete_branch_on_merge":true,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":true,"required_approving_review_count":1,"dismiss_stale_reviews":true,"require_code_owner_reviews":true,"enforce_admins":false,"restrictions":false,"rulesets_count":null},
+      {"name":"synapse-gitops","full_name":"team-project-final/synapse-gitops","html_url":"https://github.com/team-project-final/synapse-gitops","visibility":"private","archived":false,"default_branch":"main","size_kb":7,"has_issues":true,"has_projects":true,"has_wiki":false,"has_discussions":false,"has_downloads":true,"allow_squash_merge":false,"allow_merge_commit":true,"allow_rebase_merge":false,"allow_auto_merge":false,"delete_branch_on_merge":true,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":false,"required_approving_review_count":null,"dismiss_stale_reviews":null,"require_code_owner_reviews":null,"enforce_admins":false,"restrictions":false,"rulesets_count":1},
+      {"name":"synapse-knowledge-svc","full_name":"team-project-final/synapse-knowledge-svc","html_url":"https://github.com/team-project-final/synapse-knowledge-svc","visibility":"public","archived":false,"default_branch":"main","size_kb":163,"has_issues":true,"has_projects":true,"has_wiki":false,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":false,"allow_rebase_merge":false,"allow_auto_merge":false,"delete_branch_on_merge":true,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":true,"required_approving_review_count":1,"dismiss_stale_reviews":true,"require_code_owner_reviews":true,"enforce_admins":false,"restrictions":false,"rulesets_count":null},
+      {"name":"synapse-learning-svc","full_name":"team-project-final/synapse-learning-svc","html_url":"https://github.com/team-project-final/synapse-learning-svc","visibility":"public","archived":false,"default_branch":"main","size_kb":175,"has_issues":true,"has_projects":true,"has_wiki":false,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":false,"allow_rebase_merge":false,"allow_auto_merge":false,"delete_branch_on_merge":true,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":true,"required_approving_review_count":1,"dismiss_stale_reviews":true,"require_code_owner_reviews":true,"enforce_admins":false,"restrictions":false,"rulesets_count":null},
+      {"name":"synapse-mirror","full_name":"team-project-final/synapse-mirror","html_url":"https://github.com/team-project-final/synapse-mirror","visibility":"private","archived":false,"default_branch":"main","size_kb":385,"has_issues":true,"has_projects":true,"has_wiki":false,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":false,"allow_rebase_merge":false,"allow_auto_merge":false,"delete_branch_on_merge":true,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":false,"required_approving_review_count":null,"dismiss_stale_reviews":null,"require_code_owner_reviews":null,"enforce_admins":false,"restrictions":false,"rulesets_count":1},
+      {"name":"synapse-platform-svc","full_name":"team-project-final/synapse-platform-svc","html_url":"https://github.com/team-project-final/synapse-platform-svc","visibility":"public","archived":false,"default_branch":"main","size_kb":162,"has_issues":true,"has_projects":true,"has_wiki":false,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":false,"allow_rebase_merge":false,"allow_auto_merge":false,"delete_branch_on_merge":true,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":true,"required_approving_review_count":1,"dismiss_stale_reviews":true,"require_code_owner_reviews":true,"enforce_admins":false,"restrictions":false,"rulesets_count":null},
+      {"name":"synapse-prototype","full_name":"team-project-final/synapse-prototype","html_url":"https://github.com/team-project-final/synapse-prototype","visibility":"public","archived":false,"default_branch":"main","size_kb":43097,"has_issues":true,"has_projects":true,"has_wiki":true,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":true,"allow_rebase_merge":true,"allow_auto_merge":false,"delete_branch_on_merge":false,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":true,"required_approving_review_count":1,"dismiss_stale_reviews":false,"require_code_owner_reviews":false,"enforce_admins":false,"restrictions":true,"rulesets_count":null},
+      {"name":"synapse-shared","full_name":"team-project-final/synapse-shared","html_url":"https://github.com/team-project-final/synapse-shared","visibility":"public","archived":false,"default_branch":"main","size_kb":94,"has_issues":true,"has_projects":true,"has_wiki":false,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":false,"allow_rebase_merge":false,"allow_auto_merge":false,"delete_branch_on_merge":true,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":true,"required_approving_review_count":1,"dismiss_stale_reviews":true,"require_code_owner_reviews":true,"enforce_admins":false,"restrictions":false,"rulesets_count":null},
+      {"name":"workflow-dashboard","full_name":"team-project-final/workflow-dashboard","html_url":"https://github.com/team-project-final/workflow-dashboard","visibility":"public","archived":false,"default_branch":"main","size_kb":130,"has_issues":true,"has_projects":true,"has_wiki":true,"has_discussions":false,"has_downloads":true,"allow_squash_merge":true,"allow_merge_commit":true,"allow_rebase_merge":true,"allow_auto_merge":false,"delete_branch_on_merge":false,"allow_update_branch":false,"web_commit_signoff_required":false,"actions_enabled":true,"actions_allowed_actions":"all","default_branch_protected":true,"required_status_checks":false,"required_pull_request_reviews":false,"required_approving_review_count":null,"dismiss_stale_reviews":null,"require_code_owner_reviews":null,"enforce_admins":false,"restrictions":false,"rulesets_count":null}
+    ];
+
+    const yesNo = (value) => value ? '<span class="yes">Yes</span>' : '<span class="no">No</span>';
+    const mergeModes = (repo) => {
+      const modes = [];
+      if (repo.allow_squash_merge) modes.push('squash');
+      if (repo.allow_merge_commit) modes.push('merge');
+      if (repo.allow_rebase_merge) modes.push('rebase');
+      return modes.length ? modes.join(', ') : 'none';
+    };
+    const reviewText = (repo) => {
+      if (!repo.required_pull_request_reviews) return '<span class="no">No</span>';
+      const parts = [`${repo.required_approving_review_count || 0} approval`];
+      if (repo.dismiss_stale_reviews) parts.push('dismiss stale');
+      if (repo.require_code_owner_reviews) parts.push('CODEOWNERS');
+      return `<span class="yes">Yes</span><br><span class="muted">${parts.join(', ')}</span>`;
+    };
+
+    document.getElementById('repoRows').innerHTML = repos.map((repo) => `
+      <tr>
+        <td><a href="${repo.html_url}">${repo.name}</a></td>
+        <td><span class="chip">${repo.visibility}</span></td>
+        <td class="mono">${repo.default_branch}</td>
+        <td>${yesNo(repo.actions_enabled)} <span class="muted">(${repo.actions_allowed_actions})</span></td>
+        <td>${yesNo(repo.default_branch_protected)}</td>
+        <td>${repo.required_status_checks ? '<span class="yes">Yes</span>' : '<span class="warn">None</span>'}</td>
+        <td>${reviewText(repo)}</td>
+        <td>${yesNo(repo.enforce_admins)}</td>
+        <td>${yesNo(repo.restrictions)}</td>
+        <td>${mergeModes(repo)}</td>
+        <td>${yesNo(repo.allow_auto_merge)}</td>
+        <td>${yesNo(repo.delete_branch_on_merge)}</td>
+        <td>${yesNo(repo.has_wiki)}</td>
+        <td>${repo.rulesets_count === null ? '<span class="muted">n/a</span>' : repo.rulesets_count}</td>
+        <td>${repo.size_kb.toLocaleString()}</td>
+      </tr>
+    `).join('');
+    document.getElementById('rawJson').textContent = JSON.stringify(repos, null, 2);
+  </script>
+</body>
+</html>
