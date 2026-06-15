@@ -92,6 +92,8 @@ body {
   display: grid;
   place-items: center;
   overflow: hidden;
+  /* 모바일: 가로 스와이프를 pointer 핸들러로 전달(세로 pan은 오버뷰 스크롤용 허용) */
+  touch-action: pan-y;
 }
 
 .slides {
@@ -5920,6 +5922,18 @@ void main() {
         }
         break;
     }
+  });
+
+  // ═══ 4b. 모바일 도움말 접근 (키보드 없는 환경) ═══
+  const shortcutHintEl = document.getElementById("shortcutHint");
+  if (shortcutHintEl) {
+    shortcutHintEl.style.cursor = "pointer";
+    shortcutHintEl.addEventListener("click", () =>
+      helpOverlay.classList.toggle("show"),
+    );
+  }
+  helpOverlay.addEventListener("click", (e) => {
+    if (e.target === helpOverlay) helpOverlay.classList.remove("show");
   });
 
   // ═══ 5. 터치 / 스와이프 ═══
