@@ -480,7 +480,7 @@ section.compact table { font-size: .85em; }
 <td>김해준</td>
 <td>팀원</td>
 <td>A · platform</td>
-<td>인증(OAuth+JWT+MFA), Stripe 결제, 알림(FCM/SES), 감사로그(전 이벤트 소비), GDPR Admin</td>
+<td>인증(OAuth+JWT+MFA), Stripe 결제, 알림(FCM/이메일), 감사로그(전 이벤트 소비), GDPR Admin</td>
 </tr>
 <tr>
 <td>한승완</td>
@@ -596,7 +596,7 @@ section.compact table { font-size: .85em; }
 <tr>
 <td><strong>W4</strong> 통합·소비자</td>
 <td>06-01~05</td>
-<td>notification(FCM/SES)·audit 소비, 모더레이션, ArgoCD dev/staging 검증</td>
+<td>notification(FCM/이메일)·audit 소비, 모더레이션, ArgoCD dev/staging 검증</td>
 <td>(4일)</td>
 </tr>
 <tr>
@@ -726,7 +726,7 @@ section.compact table { font-size: .85em; }
 <ul>
 <li><strong>인증·테넌트</strong> — OAuth(Google/GitHub/Apple) + JWT RS256 + MFA(TOTP), tenant self-service·초대·DB 기반 role</li>
 <li><strong>결제(Stripe)</strong> — Free/Pro/Team 구독, 결제 이력·영수증·사용량 조회</li>
-<li><strong>알림</strong> — 인박스 + FCM/SES 발송(<code>notification-send</code> 소비), 미읽음 배지·클릭 라우팅</li>
+<li><strong>알림</strong> — 인박스 + FCM/이메일 발송(<code>notification-send</code> 소비), 미읽음 배지·클릭 라우팅</li>
 <li><strong>감사·관리자</strong> — 전 이벤트 소비 audit log(90일 보존), GDPR 데이터 요청, 시스템 설정·분석 API</li>
 <li><strong>이벤트</strong> — <code>user-registered</code> 발행(Transactional Outbox), 그룹 <code>platform-svc-group</code></li>
 </ul>
@@ -942,7 +942,7 @@ section.compact table { font-size: .85em; }
 <h1 id="%EA%B9%80%EB%AF%BC%EA%B5%AC-%ED%8C%80%EC%9E%A5--%ED%94%8C%EB%9E%AB%ED%8F%BC-%EA%B8%B0%EB%B0%98--%ED%86%B5%ED%95%A9">김민구 (팀장) — 플랫폼 기반 · 통합</h1>
 <ul>
 <li><strong>Gateway</strong> — <code>/api/{svc}/**</code> 라우팅(StripPrefix) · JWT 엣지검증+신원 전파 · Redis rate-limit(1rps·burst 60) · CORS · frontend 캐치올</li>
-<li><strong>인프라(IaC)</strong> — EKS·RDS·MSK·ElastiCache·ES Terraform, ArgoCD GitOps(dev/staging/prod), bring-up 멱등 자동화(kafka-topics·db-init·es-reindex)</li>
+<li><strong>인프라(IaC)</strong> — Kubernetes·PostgreSQL·Kafka·Redis·Elasticsearch Terraform, ArgoCD GitOps(dev/staging/prod), bring-up 멱등 자동화(kafka-topics·db-init·es-reindex)</li>
 <li><strong>공유·표준</strong> — shared Avro 계약·Schema Registry, reusable CI(deploy/mirror/flyway-guard), 토픽 환경 프리픽스(#199)</li>
 <li><strong>운영·SLA</strong> — PR 크로스리뷰, staging <strong>16/16 Healthy · 24h 소크</strong>, SLA 실측 5/7(P1 79.7ms·P4 1.31s·P7 FCM 100%), 장애 추적·복구</li>
 </ul>
