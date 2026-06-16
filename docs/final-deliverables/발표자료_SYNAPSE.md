@@ -193,7 +193,7 @@ footer: 'SYNAPSE — K-Digital Training 팀별 프로젝트 결과보고서'
 | 훈련생 | 역할 | 트랙 | 담당 |
 |---|---|---|---|
 | **김민구** | **팀장** | Gateway·인프라 | 쿠버네티스·Kafka·DB 인프라(IaC), ArgoCD·CI/CD·Schema Registry, API Gateway, PR 크로스리뷰·통합 조율, staging 복구 |
-| 김해준 | 팀원 | A · platform | 인증(OAuth+JWT+MFA), Stripe 결제, 알림(FCM/SES), 감사로그(전 이벤트 소비), GDPR Admin |
+| 김해준 | 팀원 | A · platform | 인증(OAuth+JWT+MFA), Stripe 결제, 알림(FCM/이메일), 감사로그(전 이벤트 소비), GDPR Admin |
 | 한승완 | 팀원 | B · engagement | 커뮤니티(그룹·공유·신고/모더레이션), 게이미피케이션(XP·레벨·배지·리더보드) |
 | 김현지 | 팀원 | C-1 · knowledge | 노트 CRUD·버전·태그, 위키링크·백링크, 지식 그래프(PageRank), 검색 인덱스 동기화 |
 | 박은서 | 팀원 | C-2 · knowledge | 비동기 청킹, BM25·RRF 하이브리드 검색, Modulith 경계(ArchUnit), Avro 스키마 |
@@ -214,7 +214,7 @@ footer: 'SYNAPSE — K-Digital Training 팀별 프로젝트 결과보고서'
 | **W1** 환경·골격 | 05-12~15 | 쿠버네티스·DB·Kafka·ArgoCD 셋업, 4서비스 골격+CRUD, auth, Flutter 쉘 | 인프라 구축 |
 | **W2** 핵심 구현 | 05-18~22 | SM-2 복습, AI 카드 골격, 그래프·검색 동기화, 청킹·BM25, Avro v1 등록 | 전처리·모델링 |
 | **W3** 이벤트·고도화 | 05-26~29 | 전 producer 발행, 게이미피케이션 완성, RRF 하이브리드, AI 안정화 | 중간보고 (4일) |
-| **W4** 통합·소비자 | 06-01~05 | notification(FCM/SES)·audit 소비, 모더레이션, ArgoCD dev/staging 검증 | (4일) |
+| **W4** 통합·소비자 | 06-01~05 | notification(FCM/이메일)·audit 소비, 모더레이션, ArgoCD dev/staging 검증 | (4일) |
 | **W5** 안정화·발표 | 06-08~12 | **E2E 10 시나리오·P0 0건·SLA 측정·커버리지 80%·Staging 가동** | 최적화·오류 수정 |
 | 발표 | **06-17** | 최종 발표·시연 — **코드 동결**(P0 hotfix만) | |
 
@@ -264,7 +264,7 @@ footer: 'SYNAPSE — K-Digital Training 팀별 프로젝트 결과보고서'
 
 - **인증·테넌트** — OAuth(Google/GitHub/Apple) + JWT RS256 + MFA(TOTP), tenant self-service·초대·DB 기반 role
 - **결제(Stripe)** — Free/Pro/Team 구독, 결제 이력·영수증·사용량 조회
-- **알림** — 인박스 + FCM/SES 발송(`notification-send` 소비), 미읽음 배지·클릭 라우팅
+- **알림** — 인박스 + FCM/이메일 발송(`notification-send` 소비), 미읽음 배지·클릭 라우팅
 - **감사·관리자** — 전 이벤트 소비 audit log(90일 보존), GDPR 데이터 요청, 시스템 설정·분석 API
 - **이벤트** — `user-registered` 발행(Transactional Outbox), 그룹 `platform-svc-group`
 
@@ -348,7 +348,7 @@ footer: 'SYNAPSE — K-Digital Training 팀별 프로젝트 결과보고서'
 # 김민구 (팀장) — 플랫폼 기반 · 통합
 
 - **Gateway** — `/api/{svc}/**` 라우팅(StripPrefix) · JWT 엣지검증+신원 전파 · Redis rate-limit(1rps·burst 60) · CORS · frontend 캐치올
-- **인프라(IaC)** — EKS·RDS·MSK·ElastiCache·ES Terraform, ArgoCD GitOps(dev/staging/prod), bring-up 멱등 자동화(kafka-topics·db-init·es-reindex)
+- **인프라(IaC)** — Kubernetes·PostgreSQL·Kafka·Redis·Elasticsearch Terraform, ArgoCD GitOps(dev/staging/prod), bring-up 멱등 자동화(kafka-topics·db-init·es-reindex)
 - **공유·표준** — shared Avro 계약·Schema Registry, reusable CI(deploy/mirror/flyway-guard), 토픽 환경 프리픽스(#199)
 - **운영·SLA** — PR 크로스리뷰, staging **16/16 Healthy · 24h 소크**, SLA 실측 5/7(P1 79.7ms·P4 1.31s·P7 FCM 100%), 장애 추적·복구
 
