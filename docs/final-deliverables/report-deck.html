@@ -861,7 +861,16 @@ html[data-theme="light"][data-fx] .slide.section-slide {
 .shot-2x2 figcaption{font-size:11px;line-height:1.3;opacity:.72;margin-top:3px;text-align:center;}
 </style>
     <style>:root{--fx-hero-alpha:0.3;--fx-content-alpha:0.6;}</style>
-  </head>
+  <style id="deck-mobile-fix">
+/* 모바일/좁은 뷰포트 우측 쏠림 수정: grid 트랙을 뷰포트 크기로 고정 → 960px 슬라이드 대칭 중앙정렬 */
+body:not(.overview) .presentation{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr)}
+/* 터치 기기: '?' 도움말 힌트를 전 슬라이드에서 노출(탭→도움말 토글은 엔진이 연결) */
+@media (hover:none),(pointer:coarse){
+  .shortcut-hint.hidden{display:block}
+  .shortcut-hint{background:rgba(20,16,10,.62);color:#fff;padding:5px 9px;border-radius:6px}
+}
+</style>
+</head>
   <body>
     <main class="presentation" role="region" aria-roledescription="carousel" aria-label="SYNAPSE — 팀별 프로젝트 결과보고서">
       <div class="slides" aria-live="polite">
