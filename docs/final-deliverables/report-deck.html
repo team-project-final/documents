@@ -870,6 +870,11 @@ body:not(.overview) .presentation{grid-template-columns:minmax(0,1fr);grid-templ
   .shortcut-hint{background:rgba(20,16,10,.62);color:#fff;padding:5px 9px;border-radius:6px}
 }
 </style>
+<style id="deck-mobile-actions-style">
+.help-content tr{cursor:pointer}
+.help-content tr:hover td{color:var(--color-primary)}
+.help-content tr:active{opacity:.55}
+</style>
 </head>
   <body>
     <main class="presentation" role="region" aria-roledescription="carousel" aria-label="SYNAPSE — 팀별 프로젝트 결과보고서">
@@ -1034,7 +1039,7 @@ body:not(.overview) .presentation{grid-template-columns:minmax(0,1fr);grid-templ
           <tr><td><kbd>Esc</kbd></td><td>도움말/오버뷰/풀스크린 닫기</td></tr>
         </table>
         <p style="margin-top: 14px; font-size: 13px; color: var(--color-text-dim);">
-          터치 기기: 좌/우 스와이프로 네비게이션
+          터치 기기: 항목을 탭하면 실행 · 좌/우 스와이프로 이동
         </p>
       </div>
     </div>
@@ -6318,5 +6323,19 @@ void main() {
 })();
 
     </script>
+  <script id="deck-mobile-actions">
+(function(){
+function wire(){
+var help=document.getElementById("helpOverlay");if(!help)return;
+var K={"→":"ArrowRight","Space":"ArrowRight","←":"ArrowLeft","Home":"Home","End":"End","F":"f","T":"t","O":"o","S":"s","P":"p","N":"n","?":"?","Esc":"Escape"};
+help.querySelectorAll("table tr").forEach(function(tr){
+var k=tr.querySelector("kbd");if(!k)return;var key=K[k.textContent.trim()];if(!key)return;
+tr.setAttribute("role","button");tr.tabIndex=0;
+tr.addEventListener("click",function(){help.classList.remove("show");if(key==="?"||key==="Escape")return;document.body.dispatchEvent(new KeyboardEvent("keydown",{key:key,bubbles:true}));});
+});
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",wire);else wire();
+})();
+</script>
   </body>
 </html>
