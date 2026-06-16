@@ -6238,7 +6238,7 @@ void main() {
       ".pres-controls { grid-column: 1 / -1; display: flex; gap: 8px; justify-content: center; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.1); }" +
       ".pres-controls button { padding: 6px 16px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #e0e0e0; border-radius: 4px; cursor: pointer; font-size: 14px; }" +
       ".pres-controls button:hover { background: rgba(255,255,255,0.1); }" +
-      "</style></head><body>" +
+      "@media (max-width:768px){body{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr) auto;padding:10px;gap:8px}.pres-header{grid-row:1}.pres-current{display:none}.pres-sidebar{grid-column:1/-1;grid-row:2;min-height:0}.pres-sidebar>div:first-child{display:none}.pres-sidebar>div{min-height:0}.pres-controls{grid-row:3}.pres-notes{font-size:17px}}</style></head><body>" +
       '<div class="pres-header"><span class="pres-counter" id="presCounter">1 / 1</span><span><span class="pres-timer" id="presTimer">00:00:00</span><span class="pres-budget" id="presBudget"></span></span></div>' +
       '<div class="pres-current" id="presCurrent"></div>' +
       '<div class="pres-sidebar">' +
