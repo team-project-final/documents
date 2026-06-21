@@ -6,13 +6,13 @@
 
 ## 1. 현재 판단
 
-프로젝트는 모든 레포가 같은 수준으로 남아 있는 상태가 아니다. 백엔드 서비스들은 대부분 구현이 끝났고, 남은 일은 E2E 검증, 배포 검증, 문서 마감에 가깝다. 반면 `synapse-frontend`는 화면과 위젯 테스트는 많이 들어와 있지만, README가 아직 "디자인 프로토타입, mock 데이터, 개발용 인증 바이패스" 상태라고 명시하고 있다.
+프로젝트는 모든 레포가 같은 수준으로 남아 있는 상태가 아니다. 백엔드 서비스들은 대부분 구현이 끝났고, 남은 일은 E2E 검증, 배포 검증, 문서 마감에 가깝다. 반면 `synapse-frontend`는 화면과 위젯 테스트는 많이 들어와 있지만, mock-first 화면과 feature별 API 연동 공백이 여전히 가장 크다. 초기 감사에서 README가 "디자인 프로토타입, mock 데이터, 개발용 인증 바이패스" 상태라고 명시하던 문제는 2026-06-21 문서 정정으로 해소했다.
 
 즉 최종 완료의 핵심 병목은 프론트엔드다. 백엔드는 새 기능 개발보다 증거 기반 검증과 운영 마감이 중요하고, 프론트엔드는 mock 기반 화면을 실제 API/상태/검증 경로로 바꾸는 것이 중요하다.
 
 | 레포 | 완료 / 전체 | 남은 항목 | 핵심 갭 |
 |---|---:|---:|---|
-| `synapse-frontend` | 168 / 481 | 313 | mock 화면, 인증 바이패스, API 연동 공백, 반응형/에러/디자인 토큰 검증 |
+| `synapse-frontend` | 168 / 481 | 313 | mock 화면, API 연동 공백, 반응형/에러/디자인 토큰 검증 |
 | `synapse-platform-svc` | 366 / 377 | 11 | 인증/결제 live E2E, 알림 SLA/회귀 검증 |
 | `synapse-knowledge-svc` | 611 / 621 | 10 | ES 동기화 안정화, 노트/그래프 E2E 마감, 문서 최신화 |
 | `synapse-shared` | 281 / 291 | 10 | cross-service E2E 시드 데이터, SLA, staging/docs handoff |
@@ -22,7 +22,7 @@
 
 확인된 주요 신호:
 
-- `synapse-frontend`는 Dart 파일 173개, 테스트 파일 31개가 있지만 `TODO`/mock/인증 바이패스 흔적이 약 277건이다.
+- `synapse-frontend`는 Dart 파일 173개, 테스트 파일 31개가 있지만 `TODO`/mock 신호가 여전히 많이 남아 있다.
 - `synapse-frontend/lib/core/theme`는 현재 보라/핑크 "AI Tutor" 팔레트, 20px radius, orb 중심 표현, 음수 letter spacing을 사용한다.
 - 제품 앱의 디자인 정본은 `documents/DESIGN.md`다. 방향은 Warm Amber, warm stone neutral, Fraunces display, Plus Jakarta Sans body, 8px spacing, 절제된 gamification이다.
 - `synapse-gitops/DESIGN.md`는 local-k8s/developer guide용 별도 다크 개발자 도구 디자인 시스템이다. 제품 앱에 섞으면 안 된다.
@@ -312,13 +312,17 @@ GitOps
 
 ### Phase B. 프론트엔드 API 연동 및 상태 리팩토링
 
-현재 상태: 미완료. frontend README가 아직 mock 데이터와 개발용 인증 바이패스를 명시하고 있고, `TODO`/mock/auth-bypass 신호가 275건 남아 있다. dashboard 기준 `synapse-frontend`는 168/481, 313 checks remaining이다.
+현재 상태: 미완료. `synapse-frontend` README의 mock/auth-bypass 설명은 2026-06-21에 실제 구현 상태에 맞게 정정했다. `core/network/dio_client.dart`의 `X-User-Id` demo header는 `APP_ENV=demo`에만 붙고, login/signup/OAuth callback은 platform API-backed repository와 token store를 경유한다. 다만 dashboard 기준 `synapse-frontend`는 168/481, 313 checks remaining이며, 지식/학습/커뮤니티/대시보드 및 일부 platform 화면에는 mock/TODO 기반 production route가 남아 있다.
+
+완료/검증된 항목:
+
+- `core/network/dio_client.dart`의 mock user header 경로는 production route가 아니라 `AppEnvironment.demo` 뒤로 격리되어 있다.
+- 로그인 버튼만으로 진입하는 개발용 인증 바이패스는 현재 router/auth flow에 남아 있지 않다.
+- Auth login/signup/OAuth callback은 platform API 기준으로 연결되어 있고 관련 repository/widget 테스트가 존재한다.
 
 남은 작업:
 
-- `core/network/dio_client.dart`의 mock user header 경로를 production route에서 제거하거나 명시적 demo/test mode 뒤로 격리한다.
-- 로그인 버튼만으로 진입하는 개발용 인증 바이패스를 제거한다.
-- Auth/login/signup/OAuth callback을 platform API 기준으로 끝까지 연결한다.
+- Auth 주변 기능인 MFA resend/backup, password reset, OAuth consent allow/deny를 platform API 기준으로 연결한다.
 - Platform billing, notification inbox/settings, admin summary/report 화면을 API-backed 상태로 전환한다.
 - Knowledge note CRUD, tag management, graph, search 화면의 `_mock*` 의존을 repository/provider로 교체한다.
 - Learning decks/cards/review/AI card generation 화면을 learning-card/learning-ai API와 연결한다.
