@@ -320,10 +320,11 @@ GitOps
 - 로그인 버튼만으로 진입하는 개발용 인증 바이패스는 현재 router/auth flow에 남아 있지 않다.
 - Auth login/signup/OAuth callback은 platform API 기준으로 연결되어 있고 관련 repository/widget 테스트가 존재한다.
 - Password reset request/verify/confirm 화면은 platform API 3단계 계약에 연결됐고, API/widget focused test와 `flutter analyze`를 통과했다.
+- MFA setup/verify와 backup code 발급/검증은 platform API 계약에 연결됐고, settings/auth 화면 focused test와 `flutter analyze`를 통과했다.
 
 남은 작업:
 
-- Auth 주변 기능인 MFA backup code 발급/검증과 OAuth consent allow/deny를 platform API 기준으로 연결한다.
+- Auth 주변 기능인 OAuth consent allow/deny를 platform API 기준으로 연결한다.
 - Platform billing, notification inbox/settings, admin summary/report 화면을 API-backed 상태로 전환한다.
 - Knowledge note CRUD, tag management, graph, search 화면의 `_mock*` 의존을 repository/provider로 교체한다.
 - Learning decks/cards/review/AI card generation 화면을 learning-card/learning-ai API와 연결한다.
