@@ -174,6 +174,63 @@
 - **이슈**:
 - **다음**:
 
+### W5 / Phase D (2026-06-21)
+
+#### 2026-06-21 (일)
+- **완료**:
+  - `FINAL_REFACTOR_COMPLETION_PLAN.md`의 Phase D 기준으로 GitOps/release hardening 잔여 작업을 재검토했다.
+  - `synapse-gitops` PR #211 머지 결과를 중앙 PM 문서에 반영했다.
+  - [Phase D GitOps 및 릴리즈 하드닝 실행 리포트](../reports/phase-d-gitops-release-hardening-2026-06-21.md)를 작성했다.
+  - `synapse-gitops` Phase D 검증 스크립트 `.\scripts\verify-phase-d-release-hardening.ps1 -RunKustomize` 통과를 기록했다.
+- **진행 중**:
+  - Cost Explorer/untagged resource, ArgoCD Synced + Healthy, Image Updater live writeback 증거 수집.
+  - metrics gap, 24h signoff, destroy decision handoff 정리.
+- **이슈**:
+  - `workflow-dashboard` gitops dry-run은 205/211로 증가했지만, live sync 후보는 `team-lead` track warning과 큰 JSON diff를 만들어 보류했다.
+  - 현재 머신에는 `yamllint`/`kubeconform`이 없어 해당 검증은 CI 또는 도구 설치 환경 증거가 필요하다.
+- **다음**:
+  - live AWS/EKS/ArgoCD 증거를 수집한 뒤 dashboard sync를 dry-run, live sync, validation 0 warning, diff 승인 순서로 재시도한다.
+
+### W5 / Phase E (2026-06-08 ~ 06-21)
+
+#### 2026-06-21 (일)
+- **완료**:
+  - `FINAL_REFACTOR_COMPLETION_PLAN.md`의 Phase E 기준으로 `workflow-dashboard/data/synapse-*.json` 완료율을 재집계했다.
+  - [Phase E 통합 QA 및 문서 마감 실행 리포트](../reports/phase-e-qa-docs-closeout-2026-06-21.md)를 작성해 demo seed contract, staging demo path, evidence map, owner/date/blocker 잔여 레지스터를 고정했다.
+  - [Phase E Staging Demo Runbook](../reports/phase-e-staging-demo-runbook-2026-06-21.md)을 추가해 seed contract 분리, preflight, demo checklist, evidence template, P0/P1 closeout register를 고정했다.
+  - 중앙 PM README와 frontend/platform/knowledge/learning/engagement/shared/gitops local PM README에 Phase E 기준 링크를 동기화했다.
+- **진행 중**:
+  - frontend API-backed production route, responsive/error/design QA 증거 수집.
+  - staging full demo path 반복 실행 증거 수집.
+- **이슈**:
+  - dashboard가 100%가 아니므로 PRD/TASK/WORKFLOW 완료 체크는 증거 없는 상태에서 변경하지 않았다.
+  - staging 직접 실행은 AWS/SSM/kubectl 접근과 ingress/ALB 결정이 필요해 이번 문서 동기화 범위에서는 수행하지 않았다.
+  - `flutter analyze`, `flutter analyze --no-pub` 모두 120초 timeout으로 완료 로그를 만들지 못했다.
+  - shared local seed SQL은 string ID fixture이고 staging evidence는 UUID contract라서 seed path를 먼저 확정해야 한다.
+- **다음**:
+  - frontend `flutter analyze/test/build web` 로그와 desktop/tablet/mobile QA 증거를 확보한다.
+  - signup -> note -> graph/search -> AI cards -> review -> gamification -> notification/admin staging run log를 남긴 뒤 dashboard를 PM 문서에서 재생성한다.
+
+### W5 / Phase F (2026-06-21)
+
+#### 2026-06-21 (일)
+- **완료**:
+  - A~E 완료 여부를 재검토했다. A/E는 부분 완료, B는 미완료, C/D는 검증 tail 상태로 판단했다.
+  - `workflow-dashboard` data validation을 실행해 현재 JSON 계약이 0 warning으로 통과함을 확인했다.
+  - repo별 `DOCS_DIR` dry-run을 실행해 frontend, shared, gitops의 PM 문서와 dashboard JSON count drift를 확인했다.
+  - [Phase F PM Dashboard / 문서 동기화 실행 리포트](../reports/phase-f-pm-dashboard-doc-sync-2026-06-21.md)를 작성했다.
+  - 중앙 PM README와 각 서비스 local PM README에 Phase F 기준 링크를 동기화했다.
+- **진행 중**:
+  - frontend/shared/gitops dry-run drift 원인 확인.
+  - 증거 기반 dashboard live sync gate 준비.
+- **이슈**:
+  - frontend dry-run은 163/475, 현재 JSON은 168/481이라 live sync 시 회귀 위험이 있다.
+  - shared dry-run은 281/281, 현재 JSON은 281/291이라 PM 문서에서 잔여 check가 사라진 상태일 수 있다.
+  - gitops dry-run은 205/211, 현재 JSON은 204/211이라 1개 check의 증거 확인이 필요하다.
+- **다음**:
+  - drift 원인을 레포별 workflow 문서에서 확인한다.
+  - dry-run과 validation이 모두 설명 가능할 때만 live sync를 실행한다.
+
 
 ---
 
@@ -181,5 +238,8 @@
 
 | 날짜 | 변경 사항 |
 |------|-----------|
+| 2026-06-21 | Phase D GitOps/release hardening 리포트/README sync 기록 추가 |
+| 2026-06-21 | Phase F PM dashboard/doc sync 리포트/README sync 기록 추가 |
+| 2026-06-21 | Phase E 통합 QA 및 문서 마감 리포트/README sync 기록 추가 |
 | 2026-05-11 | W2/W3/W4 대시보드 및 로그 템플릿 추가 |
 | 2026-05-11 | 초기 템플릿 생성 |
