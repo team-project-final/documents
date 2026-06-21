@@ -225,16 +225,16 @@
   - `github-markdown` parser가 `[~]` partial checkbox를 지원하는 `parse-workflow-md.mjs`를 재사용하도록 수정했다.
   - `synapse-gitops` live sync를 실행해 dashboard JSON을 205/211로 갱신했다. 증가분은 W5 `Cost 최적화 + 안정화`의 PDB 정의 check다.
   - `synapse-frontend` W5 `컨테이너 이미지 파이프라인 (이슈 #52)` Step 13을 workflow 문서에 복구했다.
+  - `synapse-frontend` W1/W2/W3 raw checkbox를 current JSON 기준으로 정합화했다.
   - frontend/gitops/shared repo별 dry-run이 current JSON과 일치함을 확인했다.
 - **진행 중**:
-  - frontend stale checkbox와 dashboard JSON 기준 정합화.
+  - Phase B frontend API-backed 전환 및 mock/auth-bypass 제거.
 - **이슈**:
-  - frontend count drift는 해소됐지만 raw parser result는 98/481이고 done-guard 적용 후 168/481이 된다. W1/W2/W3 workflow checkbox가 current JSON보다 낮다.
+  - Phase F count drift는 해소됐다. 남은 병목은 frontend 실제 구현/검증 항목이다.
   - shared partial drift는 parser 보강 후 dry-run 281/291로 해소됐다.
   - gitops track drift는 alias 보강 후 live sync 205/211로 해소됐다.
 - **다음**:
-  - frontend W1/W2/W3 raw checkbox를 실제 완료 증거와 비교해 문서 자체를 최신화한다.
-  - frontend raw checkbox 정리 전에는 `FORCE=true` sync를 실행하지 않는다.
+  - Phase B 우선순위에 따라 frontend API-backed route, mock 데이터 격리, auth bypass 제거를 진행한다.
 
 
 ---
@@ -248,6 +248,7 @@
 | 2026-06-21 | Phase F dashboard/PM 문서 count drift 원인 감사 기록 추가 |
 | 2026-06-21 | workflow-dashboard track alias/partial parser 보강 및 gitops 205/211 live sync 기록 추가 |
 | 2026-06-21 | frontend W5 컨테이너 이미지 파이프라인 workflow 복구 및 dry-run 168/481 확인 |
+| 2026-06-21 | frontend W1/W2/W3 raw checkbox 정합화 및 raw parser 168/481 확인 |
 | 2026-06-21 | Phase E 통합 QA 및 문서 마감 리포트/README sync 기록 추가 |
 | 2026-05-11 | W2/W3/W4 대시보드 및 로그 템플릿 추가 |
 | 2026-05-11 | 초기 템플릿 생성 |

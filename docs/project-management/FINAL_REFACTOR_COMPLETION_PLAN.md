@@ -421,15 +421,14 @@ GitOps
 
 ### Phase F. PM dashboard / 문서 동기화
 
-현재 상태: 기준점 기록, dry-run 검증, drift 원인 감사, parser 보강, `synapse-gitops` live sync, `synapse-frontend` W5 workflow 복구 완료. `validate-data`는 0 warning으로 통과했다. 상세 원인과 후속 조치는 [Phase F Dashboard / PM 문서 Count Drift 원인 감사](./reports/phase-f-dashboard-drift-audit-2026-06-21.md)에 고정한다.
+현재 상태: 기준점 기록, dry-run 검증, drift 원인 감사, parser 보강, `synapse-gitops` live sync, `synapse-frontend` W1/W2/W3/W5 workflow 정합화 완료. `validate-data`는 0 warning으로 통과했다. 상세 원인과 후속 조치는 [Phase F Dashboard / PM 문서 Count Drift 원인 감사](./reports/phase-f-dashboard-drift-audit-2026-06-21.md)에 고정한다.
 
 남은 작업:
 
 - `synapse-frontend`: W5 `컨테이너 이미지 파이프라인 (이슈 #52)` step 복구는 완료됐다. dry-run은 481/168, changelog 0으로 current JSON과 일치한다.
-- `synapse-frontend`: W1/W2/W3의 raw checkbox는 current JSON보다 낮다. 일반 sync는 done-guard로 168/481을 유지하지만, force sync 또는 step rename/delete에 취약하므로 실제 완료 증거와 비교해 workflow 문서 자체를 최신화한다.
+- `synapse-frontend`: W1/W2/W3 raw checkbox 정합화가 완료됐다. done-guard 없이도 raw parser 결과가 168/481로 current JSON과 일치한다.
 - `synapse-shared`: `[~]` partial checkbox parser 지원은 완료됐다. dry-run은 281/291, changelog 0으로 current JSON과 일치한다. live sync는 불필요한 `updatedAt` 변경을 피하기 위해 보류한다.
 - `synapse-gitops`: `gitops -> team-lead` track alias와 partial metadata diff 보정은 완료됐다. `PDB 정의` check는 Phase D 증거 기반으로 205/211 live sync까지 반영했다.
-- frontend W1/W2/W3 raw checkbox 정리 전에는 `FORCE=true` sync를 실행하지 않는다.
 - 추가 live sync는 repo별 dry-run, validate-data, diff 확인 순서가 모두 통과할 때만 실행한다.
 
 완료 조건:

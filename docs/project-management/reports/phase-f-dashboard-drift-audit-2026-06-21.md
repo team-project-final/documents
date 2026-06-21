@@ -177,10 +177,10 @@ node scripts/validate-data.mjs
 - `synapse-shared` dry-run: 291 checks, 281 done, changelog 0. `[~]` partial checkbox total drift는 parser 보강으로 해결됐다.
 - `synapse-frontend` W5 workflow: `컨테이너 이미지 파이프라인 (이슈 #52)` Step 13을 복구했다. `Done When` loose checkbox 4개는 Step 13 `배포 파이프라인`에 포함해 current JSON의 10개 check 구조와 맞췄다.
 - `synapse-frontend` dry-run: 481 checks, 168 done, changelog 0. count drift는 해소됐다.
+- `synapse-frontend` W1/W2/W3 workflow: current JSON의 completed item과 설명을 문서 checkbox에 반영했다. done-guard 없이 raw parser 결과도 168/481로 current JSON과 일치한다.
 - Parser fixture: `test-parsers.mjs` 20 passed, `parse-workflow-md.test.mjs` 5 passed.
 - Data validation: `Data validation passed with 0 warning(s).`
 
 남은 위험:
 
-- `synapse-frontend` raw parser result는 98/481이고, done-guard 적용 후 168/481이 된다. W1/W2/W3 workflow checkbox가 current JSON보다 낮기 때문이다.
-- 일반 sync는 안전하지만, `FORCE=true` sync 또는 step rename/delete는 frontend done count를 회귀시킬 수 있다. frontend workflow 문서 자체의 checkbox 최신화는 별도 후속 작업으로 남긴다.
+- Phase F count drift는 현재 해소됐다. 이후 신규 checkbox 변경은 동일하게 repo별 dry-run, validation, diff 확인을 거쳐 반영한다.
