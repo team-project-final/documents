@@ -3,6 +3,10 @@
 > **프로젝트명**: Synapse — 통합 학습-지식 그래프 SaaS  
 > **기간**: 2026-05-12 ~ 2026-06-15 (5주 + 발표일, 22 영업일 — 5/25 부처님오신날·6/3 지방선거 제외)  
 > **팀 구성**: 팀장 1명 + 팀원 6명
+> **Phase D 기준점**: [2026-06-21 GitOps 및 릴리즈 하드닝 실행 리포트](./reports/phase-d-gitops-release-hardening-2026-06-21.md)
+> **Phase E 기준점**: [2026-06-21 통합 QA 및 문서 마감 실행 리포트](./reports/phase-e-qa-docs-closeout-2026-06-21.md)
+> **Phase E 실행 Runbook**: [2026-06-21 Staging Demo Runbook](./reports/phase-e-staging-demo-runbook-2026-06-21.md)
+> **Phase F 기준점**: [2026-06-21 PM Dashboard / 문서 동기화 실행 리포트](./reports/phase-f-pm-dashboard-doc-sync-2026-06-21.md)
 
 ---
 
