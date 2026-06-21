@@ -7,6 +7,7 @@
 > **Phase E 기준점**: [2026-06-21 통합 QA 및 문서 마감 실행 리포트](./reports/phase-e-qa-docs-closeout-2026-06-21.md)
 > **Phase E 실행 Runbook**: [2026-06-21 Staging Demo Runbook](./reports/phase-e-staging-demo-runbook-2026-06-21.md)
 > **Phase F 기준점**: [2026-06-21 PM Dashboard / 문서 동기화 실행 리포트](./reports/phase-f-pm-dashboard-doc-sync-2026-06-21.md)
+> **Phase F Drift Audit**: [2026-06-21 Dashboard / PM 문서 Count Drift 원인 감사](./reports/phase-f-dashboard-drift-audit-2026-06-21.md)
 
 ---
 

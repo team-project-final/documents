@@ -16,7 +16,7 @@
 | `synapse-platform-svc` | 366 / 377 | 11 | 인증/결제 live E2E, 알림 SLA/회귀 검증 |
 | `synapse-knowledge-svc` | 611 / 621 | 10 | ES 동기화 안정화, 노트/그래프 E2E 마감, 문서 최신화 |
 | `synapse-shared` | 281 / 291 | 10 | cross-service E2E 시드 데이터, SLA, staging/docs handoff |
-| `synapse-gitops` | 204 / 211 | 7 | 비용 태그, HPA/PDB 검증, image updater/writeback, 최종 handoff |
+| `synapse-gitops` | 205 / 211 | 6 | 비용 태그, image updater/writeback, 최종 handoff |
 | `synapse-engagement-svc` | 415 / 419 | 4 | Kafka ACL/live path, ECR/GitOps 배포 검증 |
 | `synapse-learning-svc` | 693 / 695 | 2 | `note.created -> AI cards`, `card.review.due -> notification` E2E 증거 |
 
@@ -230,6 +230,7 @@ GitOps
 - 2026-06-21: A~E 완료 여부를 재검토하고 [Phase F PM Dashboard / 문서 동기화 실행 리포트](./reports/phase-f-pm-dashboard-doc-sync-2026-06-21.md)를 작성했다.
 - `workflow-dashboard` `validate-data`는 0 warning으로 통과했다.
 - repo별 `DOCS_DIR` dry-run 결과 frontend/shared/gitops에서 현재 JSON과 PM 문서 count drift가 확인되어 live sync는 보류했다.
+- 2026-06-21: [Phase F Dashboard / PM 문서 Count Drift 원인 감사](./reports/phase-f-dashboard-drift-audit-2026-06-21.md)를 작성해 frontend/shared/gitops drift 원인을 레포별로 분리했다.
 - dashboard JSON 수동 수정, PRD/TASK/WORKFLOW checkbox 강제 완료 처리는 하지 않았다.
 
 작업:
@@ -372,7 +373,7 @@ GitOps
 
 ### Phase D. GitOps 및 릴리즈 하드닝
 
-현재 상태: 부분 완료. `synapse-gitops` PR #211로 GitOps 코드/문서 하드닝은 머지됐고, PM 문서 dry-run은 205/211로 계산된다. 다만 `workflow-dashboard` live sync 후보가 `team-lead` track warning과 큰 JSON diff를 만들었으므로 dashboard 기준 완료 반영은 보류한다. AWS/EKS/ArgoCD live 증거도 아직 필요하다.
+현재 상태: 부분 완료. `synapse-gitops` PR #211로 GitOps 코드/문서 하드닝은 머지됐고, `workflow-dashboard` track alias와 partial checkbox parser를 보강한 뒤 `synapse-gitops` live sync를 205/211로 반영했다. AWS/EKS/ArgoCD live 증거는 아직 필요하다.
 
 진행 기록:
 
@@ -380,6 +381,7 @@ GitOps
 - 2026-06-21: `synapse-gitops` PR #211을 머지해 dev semver image tag 계약, prod PDB `minAvailable: 2`, standalone ECR 비용 태그, Phase D 검증 스크립트/runbook을 반영했다.
 - 2026-06-21: `.\scripts\verify-phase-d-release-hardening.ps1 -RunKustomize`가 통과했다.
 - 2026-06-21: `workflow-dashboard` gitops dry-run은 211 checks / 205 done으로 재확인했지만, live sync 후보는 `synapse-gitops.json: missing track "team-lead"` warning 때문에 보류했다.
+- 2026-06-21: `workflow-dashboard`에 `trackAliases`를 추가해 `synapse-gitops`의 `gitops -> team-lead` 정규화를 적용했고, `PDB 정의` 완료 증거를 dashboard JSON에 205/211로 live sync했다.
 
 남은 작업:
 
@@ -389,7 +391,7 @@ GitOps
 - ArgoCD Image Updater writeback과 semver tag path가 실제 ECR tag push에서도 유효한지 확인한다.
 - metrics gap, 24h signoff, destroy decision을 handoff 문서에 명시한다.
 - `yamllint`/`kubeconform` 가능 환경의 검증 결과를 기록한다.
-- dashboard live sync 전 `team-lead`/`gitops` track drift와 `partial` field 제거 diff를 해결한다.
+- dashboard에 반영된 PDB check 외 남은 6개 check는 live AWS/EKS/ArgoCD 증거가 붙을 때만 완료 처리한다.
 
 완료 조건:
 
@@ -419,16 +421,16 @@ GitOps
 
 ### Phase F. PM dashboard / 문서 동기화
 
-현재 상태: 기준점 기록, dry-run 검증, drift 식별, live sync 보류 결정 완료. `validate-data`는 0 warning으로 통과했다.
+현재 상태: 기준점 기록, dry-run 검증, drift 원인 감사, parser 보강, `synapse-gitops` live sync, `synapse-frontend` W5 workflow 복구 완료. `validate-data`는 0 warning으로 통과했다. 상세 원인과 후속 조치는 [Phase F Dashboard / PM 문서 Count Drift 원인 감사](./reports/phase-f-dashboard-drift-audit-2026-06-21.md)에 고정한다.
 
 남은 작업:
 
-- `synapse-frontend` dry-run 163/475와 현재 JSON 168/481 차이를 분석한다.
-- `synapse-shared` dry-run 281/281과 현재 JSON 281/291 차이를 분석한다.
-- `synapse-gitops` dry-run 205/211과 현재 JSON 204/211 차이가 실제 증거 기반인지 확인한다.
-- drift 원인이 문서 check 삭제라면 workflow 문서를 복구하거나 변경 사유를 history에 남긴다.
-- drift 원인이 dashboard JSON stale 상태라면 repo별 dry-run, live sync, validate-data, diff 확인 순서로 반영한다.
-- live sync 후 `updatedAt`, `history`, `changelog` 변화가 의도한 범위인지 확인한다.
+- `synapse-frontend`: W5 `컨테이너 이미지 파이프라인 (이슈 #52)` step 복구는 완료됐다. dry-run은 481/168, changelog 0으로 current JSON과 일치한다.
+- `synapse-frontend`: W1/W2/W3의 raw checkbox는 current JSON보다 낮다. 일반 sync는 done-guard로 168/481을 유지하지만, force sync 또는 step rename/delete에 취약하므로 실제 완료 증거와 비교해 workflow 문서 자체를 최신화한다.
+- `synapse-shared`: `[~]` partial checkbox parser 지원은 완료됐다. dry-run은 281/291, changelog 0으로 current JSON과 일치한다. live sync는 불필요한 `updatedAt` 변경을 피하기 위해 보류한다.
+- `synapse-gitops`: `gitops -> team-lead` track alias와 partial metadata diff 보정은 완료됐다. `PDB 정의` check는 Phase D 증거 기반으로 205/211 live sync까지 반영했다.
+- frontend W1/W2/W3 raw checkbox 정리 전에는 `FORCE=true` sync를 실행하지 않는다.
+- 추가 live sync는 repo별 dry-run, validate-data, diff 확인 순서가 모두 통과할 때만 실행한다.
 
 완료 조건:
 
