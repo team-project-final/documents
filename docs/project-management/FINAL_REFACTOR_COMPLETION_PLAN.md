@@ -323,11 +323,12 @@ GitOps
 - MFA setup/verify와 backup code 발급/검증은 platform API 계약에 연결됐고, settings/auth 화면 focused test와 `flutter analyze`를 통과했다.
 - Platform billing은 subscription/checkout/usage/payment history/receipt API 계약에 연결됐고, billing focused test와 `flutter analyze`를 통과했다.
 - Platform notification inbox/preferences/device registration은 API/provider 기반으로 구현되어 있고, notification focused test를 통과했다.
+- Platform admin dashboard summary는 `/api/v1/admin/analytics/summary` 계약에 연결됐고, admin focused test와 `flutter analyze`를 통과했다.
 
 남은 작업:
 
 - Auth 주변 기능인 OAuth consent allow/deny는 platform-svc 계약 확인 후 연결한다. 현재 platform-svc에서 `/oauth/consent/allow|deny` 엔드포인트는 확인되지 않았다.
-- Platform admin summary/report 화면을 API-backed 상태로 전환한다.
+- Platform admin report 화면은 신고 목록 API 계약 확인 후 전환한다. 현재 platform-svc에서 신고 목록 엔드포인트는 확인되지 않았다.
 - Knowledge note CRUD, tag management, graph, search 화면의 `_mock*` 의존을 repository/provider로 교체한다.
 - Learning decks/cards/review/AI card generation 화면을 learning-card/learning-ai API와 연결한다.
 - Engagement community/shared decks/shared notes/gamification 화면을 engagement API와 연결한다.
