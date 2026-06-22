@@ -28,8 +28,19 @@
 - [ ] 시드 데이터 표시 상태 확인
 - [ ] 깨진 링크/이미지/버튼 확인
 
-## Done When
+## Step 13: 컨테이너 이미지 파이프라인 (이슈 #52)
 
+### 13.1 이미지 빌드
+
+- [x] 멀티스테이지 Dockerfile (Flutter web → nginx-unprivileged)
+- [x] nginx default.conf (8080 · /healthz · SPA 폴백)
+- [x] .dockerignore
+
+### 13.2 배포 파이프라인
+
+- [x] deploy.yml (semver 태그 트리거 → ECR `synapse/frontend` push)
+- [x] gitops apps/frontend/base 계약(8080·uid 101·RO 루트·/healthz) 정합 확인
+- [ ] `AWS_ROLE_ARN` 시크릿 확인 후 `1.0.0` 태그 푸시 → ECR 이미지 생성 (머지 후)
 - [ ] 주요 화면이 3개 뷰포트에서 깨지지 않는다.
 - [ ] 에러/로딩 상태가 일관되게 표시된다.
 - [ ] 발표용 데모 흐름이 안정적으로 동작한다.

@@ -80,70 +80,70 @@
 ## Step 8: 알림 센터 — 알림 목록 + 읽음/안읽음 + 설정
 
 ### 1.1 TASK 시작
-- [ ] Step Goal / Done When / Scope / Input 확인
-- [ ] PRD_W3 해당 요구사항 확인 (알림 센터)
-- [ ] Duration 산정 확인
+- [x] Step Goal / Done When / Scope / Input 확인
+- [x] PRD_W3 해당 요구사항 확인 (알림 센터)
+- [x] Duration 산정 확인
 
 ### 1.2 요구사항 분석
-- [ ] 알림 목록 UI 요건 분석 (무한 스크롤, 시간순 정렬)
-- [ ] 읽음/안읽음 표시 요건 분석 (뱃지 카운트, 볼드 처리)
-- [ ] 알림 설정 UI 요건 분석 (채널별 on/off 토글)
+- [x] 알림 목록 UI 요건 분석 (페이지네이션은 '더 보기' 버튼 방식으로 구현)
+- [x] 읽음/안읽음 표시 요건 분석 (뱃지 카운트, 볼드 처리)
+- [x] 알림 설정 UI 요건 분석 (채널별 on/off 토글)
 - [ ] Instructions 초안 → TASK 문서 반영
 
 ### 1.3 Security 1차 검토
-- [ ] 인증 필요 여부: Yes (로그인 사용자)
-- [ ] 권한 종류: 본인 알림만 조회
-- [ ] 공개 API 여부: No
+- [x] 인증 필요 여부: Yes (로그인 사용자)
+- [x] 권한 종류: 본인 알림만 조회
+- [x] 공개 API 여부: No
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.4 ERD 설계
-- [ ] 프론트엔드 — ERD 해당 없음
-- [ ] 알림 상태 모델 설계 (NotificationState: notifications[], unreadCount, settings)
-- [ ] 알림 타입별 라우팅 설계 (알림 클릭 → 관련 페이지 이동)
+- [x] 프론트엔드 — ERD 해당 없음
+- [x] 알림 상태 모델 설계 (NotificationState: notifications[], unreadCount, settings)
+- [x] 알림 타입별 라우팅 설계 (알림 클릭 → 분류별 대표 화면 이동, 시스템/미지 타입은 이동 없음)
 - [ ] Duration(final) 갱신
 
 ### 1.5 Security 2차 검토
-- [ ] 알림 내용 XSS 방지 (HTML 태그 이스케이프)
-- [ ] 알림 설정 변경 시 서버 동기화 필수
-- [ ] 민감 정보 노출: 없음
+- [x] 알림 내용 XSS 방지 (Flutter Text 위젯 — HTML 미해석)
+- [x] 알림 설정 변경 시 서버 동기화 필수
+- [x] 민감 정보 노출: 없음
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.6 DTO / Entity 설계 (API First)
-- [ ] NotificationProvider 설계 (Riverpod StateNotifier)
-- [ ] NotificationState 모델 (notifications[], unreadCount, hasMore)
-- [ ] Notification 모델 (id, type, title, body, isRead, createdAt)
-- [ ] NotificationSetting 모델 (channel, eventType, enabled)
+- [x] NotificationProvider 설계 (Riverpod)
+- [x] NotificationState 모델 (notifications[], unreadCount)
+- [x] Notification 모델 (id, type, title, body, isRead, createdAt)
+- [x] NotificationSetting 모델 (channel, eventType, enabled)
 - [ ] Output Format → TASK 반영
 
 ### 1.7 Repository 구현
-- [ ] NotificationRepository 클래스 작성 (HTTP client + platform-svc 연동)
-- [ ] GET /notifications API 호출 (페이징)
-- [ ] PATCH /notifications/{id}/read API 호출
-- [ ] GET /notifications/preferences API 호출
-- [ ] PUT /notifications/preferences API 호출
+- [x] 알림 API 클라이언트 작성 (notification_inbox_api — platform-svc 연동)
+- [x] GET /notifications API 호출 (첫 N건 — 페이지네이션 한계 기록)
+- [x] 읽음 처리 API 호출 (PUT /notifications/{id}/read + 모두 읽음)
+- [x] GET /notifications/settings API 호출
+- [x] PUT /notifications/settings API 호출
 
 ### 1.8 Service + Test
-- [ ] NotificationNotifier 구현 (알림 목록 로드, 무한 스크롤, 읽음 처리)
-- [ ] 안읽은 알림 카운트 실시간 갱신 (폴링 30초 간격)
-- [ ] 알림 설정 관리 로직 (토글 on/off → API 호출)
-- [ ] Unit 테스트 (알림 상태 전이, 읽음 처리)
+- [x] 알림 목록 로드·읽음 처리 구현 ('더 보기' 페이지네이션 포함)
+- [x] 안읽은 알림 카운트 실시간 갱신 (폴링 30초 간격 — 실제 앱에서만 활성)
+- [x] 알림 설정 관리 로직 (토글 on/off → API 호출)
+- [x] Unit 테스트 (알림 상태 전이, 읽음 처리)
 
 ### 1.9 Controller + Test
-- [ ] 알림 벨 아이콘 Widget 구현 (AppBar, 안읽은 카운트 뱃지)
-- [ ] 알림 목록 페이지 Widget 구현 (ListView + 무한 스크롤)
-- [ ] 알림 항목 Widget 구현 (아이콘 + 제목 + 시간 + 읽음/안읽음 스타일)
-- [ ] 알림 클릭 시 상세 이동 로직 (타입별 라우팅)
-- [ ] 알림 설정 페이지 Widget 구현 (채널별 토글 스위치)
-- [ ] Widget 테스트 (알림 목록, 읽음 처리, 설정 토글)
+- [x] 안읽은 카운트 뱃지 구현 (사이드바 unread-count 뱃지)
+- [x] 알림 목록 페이지 Widget 구현 (ListView + '더 보기' 페이지네이션)
+- [x] 알림 항목 Widget 구현 (아이콘 + 제목 + 시간 + 읽음/안읽음 스타일)
+- [x] 알림 클릭 시 상세 이동 로직 (분류별 라우팅 — 복습/커뮤니티/게이미피케이션)
+- [x] 알림 설정 페이지 Widget 구현 (채널별 토글 스위치)
+- [x] Widget 테스트 (알림 목록, 읽음 처리, 설정 토글)
 
 ### 1.10 View + Test
-- [ ] 알림 센터 전체 렌더링 확인
-- [ ] 읽음/안읽음 스타일 전환 확인
-- [ ] 알림 설정 토글 동작 확인
-- [ ] Smoke Test 1건 (알림 목록 → 읽음 처리 → 설정 변경)
+- [x] 알림 센터 전체 렌더링 확인
+- [x] 읽음/안읽음 스타일 전환 확인
+- [x] 알림 설정 토글 동작 확인
+- [x] Smoke Test 1건 (알림 목록 → 읽음 처리 → 설정 변경)
 - [ ] RULE Reference → TASK 반영
 
-**Step 8 Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+**Step 8 Status**: [ ] Not Started / [x] In Progress / [ ] Done
 
 ---
 
@@ -161,9 +161,9 @@
 - [ ] Instructions 초안 → TASK 문서 반영
 
 ### 1.3 Security 1차 검토
-- [ ] 인증 필요 여부: Yes (관리자 전용)
-- [ ] 권한 종류: ROLE_ADMIN
-- [ ] 라우트 가드: 관리자가 아닌 경우 접근 차단
+- [x] 인증 필요 여부: Yes (관리자 전용)
+- [x] 권한 종류: ROLE_ADMIN
+- [x] 라우트 가드: 관리자가 아닌 경우 접근 차단 (PR #34 — GoRouter redirect)
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.4 ERD 설계
@@ -173,8 +173,8 @@
 - [ ] Duration(final) 갱신
 
 ### 1.5 Security 2차 검토
-- [ ] 관리자 권한 확인 로직 (JWT role 기반)
-- [ ] 비관리자 접근 시 403 페이지 표시
+- [x] 관리자 권한 확인 로직 (JWT role 기반 — access token `roles` 클레임 디코드, PR #34)
+- [ ] 비관리자 접근 시 403 페이지 표시 — redirect 방식으로 대체 (별도 403 페이지 없음)
 - [ ] 처리 액션 확인 다이얼로그 필수 (실수 방지)
 - [ ] 결과 → TASK Constraints 반영
 
@@ -201,7 +201,7 @@
 - [x] 상태 필터 Widget 구현 (PENDING/APPROVED/REJECTED 탭)
 - [ ] 신고 상세 다이얼로그 Widget 구현 (사유 + 대상 콘텐츠 미리보기)
 - [x] 승인/거부 버튼 + 확인 다이얼로그 구현
-- [ ] 관리자 라우트 가드 구현 (GoRouter redirect)
+- [x] 관리자 라우트 가드 구현 (GoRouter redirect — PR #34, 사이드바 admin 메뉴 가드 포함)
 - [x] Widget 테스트 (목록 렌더링)
 
 ### 1.10 View + Test
@@ -211,7 +211,7 @@
 - [ ] Smoke Test 1건 (신고 목록 → 상세 → 승인 처리)
 - [ ] RULE Reference → TASK 반영
 
-**Step 9 Status**: [ ] Not Started / [x] In Progress / [ ] Done (2026-06-22 P0 slice: FE-08 admin report list/moderate API-backed. Admin role live evidence remains.)
+**Step 9 Status**: [ ] Not Started / [x] In Progress / [ ] Done
 
 ---
 

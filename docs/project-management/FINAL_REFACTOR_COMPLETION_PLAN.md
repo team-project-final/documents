@@ -2,7 +2,7 @@
 
 > 작성일: 2026-06-21 KST
 > 대상: Synapse 최상위 서비스 레포, 중앙 프로젝트 관리 문서, workflow-dashboard 데이터, 디자인 문서
-> 기준: 하위 레포 전체 pull 완료 후 확인. `workflow-dashboard/data/synapse-*.json` 기준 최신 갱신 시각은 2026-06-20 11:49 UTC 전후.
+> 기준: 하위 레포 전체 pull 완료 후 확인. `workflow-dashboard/data/synapse-*.json` 기준 최신 frontend sync는 2026-06-22 P2 PM sync hygiene 실행 결과다.
 
 ## 1. 현재 판단
 
@@ -12,7 +12,7 @@
 
 | 레포 | 완료 / 전체 | 남은 항목 | 핵심 갭 |
 |---|---:|---:|---|
-| `synapse-frontend` | 168 / 481 | 313 | mock 화면, API 연동 공백, 반응형/에러/디자인 토큰 검증 |
+| `synapse-frontend` | 260 / 483 | 223 | remaining group/dashboard/OAuth 계약 공백, staging demo, 반응형/에러/디자인 토큰 검증 |
 | `synapse-platform-svc` | 366 / 377 | 11 | 인증/결제 live E2E, 알림 SLA/회귀 검증 |
 | `synapse-knowledge-svc` | 611 / 621 | 10 | ES 동기화 안정화, 노트/그래프 E2E 마감, 문서 최신화 |
 | `synapse-shared` | 281 / 291 | 10 | cross-service E2E 시드 데이터, SLA, staging/docs handoff |
@@ -312,7 +312,7 @@ GitOps
 
 ### Phase B. 프론트엔드 API 연동 및 상태 리팩토링
 
-현재 상태: 미완료. `synapse-frontend` README의 mock/auth-bypass 설명은 2026-06-21에 실제 구현 상태에 맞게 정정했다. `core/network/dio_client.dart`의 `X-User-Id` demo header는 `APP_ENV=demo`에만 붙고, login/signup/OAuth callback은 platform API-backed repository와 token store를 경유한다. 다만 dashboard 기준 `synapse-frontend`는 168/481, 313 checks remaining이며, 지식/학습/커뮤니티/대시보드 및 일부 platform 화면에는 mock/TODO 기반 production route가 남아 있다.
+현재 상태: 미완료. `synapse-frontend` README의 mock/auth-bypass 설명은 2026-06-21에 실제 구현 상태에 맞게 정정했다. `core/network/dio_client.dart`의 `X-User-Id` demo header는 `APP_ENV=demo`에만 붙고, login/signup/OAuth callback은 platform API-backed repository와 token store를 경유한다. 2026-06-22 P2 sync 기준 dashboard는 `synapse-frontend` 260/483, 223 checks remaining이다. knowledge note/search/graph, learning review, engagement shared content/gamification/admin report의 API-backed slice는 반영됐지만, group/dashboard/OAuth 계약 공백과 staging/UX 증거는 아직 남아 있다.
 
 완료/검증된 항목:
 
@@ -324,16 +324,19 @@ GitOps
 - Platform billing은 subscription/checkout/usage/payment history/receipt API 계약에 연결됐고, billing focused test와 `flutter analyze`를 통과했다.
 - Platform notification inbox/preferences/device registration은 API/provider 기반으로 구현되어 있고, notification focused test를 통과했다.
 - Platform admin dashboard summary는 `/api/v1/admin/analytics/summary` 계약에 연결됐고, admin focused test와 `flutter analyze`를 통과했다.
+- Knowledge note CRUD, tag/version, search, graph 화면은 `KnowledgeApi`와 Riverpod provider 기반으로 전환됐고 focused API/widget tests, full `flutter test`, release build를 통과했다.
+- Learning-card review deck/session/queue/rating/complete 화면은 `LearningReviewApi` 기반으로 전환됐고 focused review tests를 통과했다.
+- Engagement shared decks/shared notes search/detail/fork/report와 gamification profile/badges/leaderboard/xp history는 engagement API 기반으로 전환됐다.
+- Engagement admin report list/moderate route는 moderation API 기반으로 전환됐고 focused admin/engagement tests를 통과했다.
 
 남은 작업:
 
 - Auth 주변 기능인 OAuth consent allow/deny는 platform-svc 계약 확인 후 연결한다. 현재 platform-svc에서 `/oauth/consent/allow|deny` 엔드포인트는 확인되지 않았다.
-- Platform admin report 화면은 신고 목록 API 계약 확인 후 전환한다. 현재 platform-svc에서 신고 목록 엔드포인트는 확인되지 않았다.
-- Knowledge note CRUD, tag management, graph, search 화면의 `_mock*` 의존을 repository/provider로 교체한다.
-- Learning decks/cards/review/AI card generation 화면을 learning-card/learning-ai API와 연결한다.
-- Engagement community/shared decks/shared notes/gamification 화면을 engagement API와 연결한다.
-- Riverpod `AsyncValue` 기반 loading/error/empty 처리를 주요 production route에 적용한다.
-- 각 통합 repository focused test와 핵심 화면 widget smoke test를 추가한다.
+- Dashboard study-board/calendar/planner summary와 group list/detail은 backend 계약 확인 후 연결한다.
+- Learning decks/cards 일부와 AI card generation 화면을 learning-card/learning-ai API와 끝까지 연결한다.
+- Engagement group list/detail과 level-up live animation/event evidence를 닫는다.
+- Riverpod `AsyncValue` 기반 loading/error/empty 처리를 남은 production route에 적용한다.
+- staging seed path와 browser/screenshot QA로 live/UX 증거를 남긴다.
 
 완료 조건:
 
@@ -430,12 +433,12 @@ GitOps
 
 ### Phase F. PM dashboard / 문서 동기화
 
-현재 상태: 기준점 기록, dry-run 검증, drift 원인 감사, parser 보강, `synapse-gitops` live sync, `synapse-frontend` W1/W2/W3/W5 workflow 정합화 완료. `validate-data`는 0 warning으로 통과했다. 상세 원인과 후속 조치는 [Phase F Dashboard / PM 문서 Count Drift 원인 감사](./reports/phase-f-dashboard-drift-audit-2026-06-21.md)에 고정한다.
+현재 상태: 기준점 기록, dry-run 검증, drift 원인 감사, parser 보강, `synapse-gitops` live sync, `synapse-frontend` W1/W2/W3/W5 workflow 정합화, 2026-06-22 frontend API-backed slice live sync 완료. `validate-data`는 0 warning으로 통과했다. 상세 원인과 후속 조치는 [Phase F Dashboard / PM 문서 Count Drift 원인 감사](./reports/phase-f-dashboard-drift-audit-2026-06-21.md)와 [P2 PM Sync Hygiene 실행 리포트](./reports/p2-pm-sync-hygiene-2026-06-22.md)에 고정한다.
 
 남은 작업:
 
-- `synapse-frontend`: W5 `컨테이너 이미지 파이프라인 (이슈 #52)` step 복구는 완료됐다. dry-run은 481/168, changelog 0으로 current JSON과 일치한다.
-- `synapse-frontend`: W1/W2/W3 raw checkbox 정합화가 완료됐다. done-guard 없이도 raw parser 결과가 168/481로 current JSON과 일치한다.
+- `synapse-frontend`: W5 `컨테이너 이미지 파이프라인 (이슈 #52)` step 복구와 W1/W2/W3 raw checkbox 정합화는 완료됐다.
+- `synapse-frontend`: 2026-06-22 source/central PM 사본 일치, dry-run 260/483, validation 0 warning, diff review 통과 후 live sync를 실행했다.
 - `synapse-shared`: `[~]` partial checkbox parser 지원은 완료됐다. dry-run은 281/291, changelog 0으로 current JSON과 일치한다. live sync는 불필요한 `updatedAt` 변경을 피하기 위해 보류한다.
 - `synapse-gitops`: `gitops -> team-lead` track alias와 partial metadata diff 보정은 완료됐다. `PDB 정의` check는 Phase D 증거 기반으로 205/211 live sync까지 반영했다.
 - 추가 live sync는 repo별 dry-run, validate-data, diff 확인 순서가 모두 통과할 때만 실행한다.
