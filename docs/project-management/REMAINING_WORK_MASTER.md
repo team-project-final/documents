@@ -33,7 +33,7 @@
 
 | Repo | Done / Total | Remaining | Percent | 현재 판단 |
 |---|---:|---:|---:|---|
-| `synapse-frontend` | 260 / 483 | 223 | 53.8% | 최대 병목은 유지. 2026-06-22 P2 sync로 API-backed slice 증거 반영, group/dashboard/OAuth/staging/UX 증거 필요 |
+| `synapse-frontend` | 276 / 485 | 209 | 56.9% | 최대 병목은 유지. 2026-06-22 group list/detail/member API 전환 증거와 dashboard live sync 반영. dashboard/OAuth/staging/UX 및 group-specific content/pagination 증거 필요 |
 | `synapse-platform-svc` | 366 / 377 | 11 | 97.1% | backend tail. live notification/admin/Stripe 증거 필요 |
 | `synapse-knowledge-svc` | 611 / 621 | 10 | 98.4% | ES sync, note/graph/search 운영 증거 필요 |
 | `synapse-learning-svc` | 693 / 695 | 2 | 99.7% | cross-service event proof 2개 필요 |
@@ -58,7 +58,7 @@
 
 | Priority | 묶음 | 이유 | 다음 액션 |
 |---|---|---|---|
-| P0 | Frontend production route API 전환 | frontend remaining 223으로 전체 릴리즈 병목 | remaining group/dashboard/OAuth consent contracts 확인 후 API-backed 전환 |
+| P0 | Frontend production route API 전환 | frontend remaining 209로 전체 릴리즈 병목 | dashboard/OAuth consent contracts, group-specific shared content, pagination UX 증거 확인 후 API-backed 전환 |
 | P0 | Full staging demo evidence | Phase E 완료 조건의 핵심 gate | staging seed path 확정 후 signup -> note -> graph/search -> AI cards -> review -> gamification -> notification/admin 실행 |
 | P1 | Backend live tail evidence | 백엔드 구현은 대부분 끝났고 운영 증거가 부족 | 2026-06-22 local/equivalent tests PASS 일부 확보. Docker/EKS/live event chain은 owner별 live 로그 수집 필요 |
 | P1 | GitOps cost/stability live gate | GitOps는 6개만 남았지만 live AWS/EKS 증거가 필요 | 2026-06-22 semver drift 수정 + local verify PASS, Cost Explorer partial. HPA/PDB, ArgoCD, 24h signoff 잔여 |
@@ -95,7 +95,7 @@
 | FE-02 | W1 대시보드 및 사이드바 네비게이션 | 35 | admin dashboard summary API-backed 완료. dashboard study-board/calendar/planner summary API contract 및 QA 증거 필요 |
 | FE-03 | W2 노트 에디터 화면 | 15 | API-backed note CRUD/autosave/render 증거 반영. live staging note smoke, 일부 service/state/doc checks 잔여 |
 | FE-04 | W2 SRS 복습 화면 | 7 | learning-card review API-backed 증거 반영. review-due notification live evidence와 staging smoke 잔여 |
-| FE-05 | W2 커뮤니티 그룹 목록/상세 화면 | 37 | shared decks/notes search/detail/fork/report API-backed 완료. 그룹 목록/상세 API contract 잔여 |
+| FE-05 | W2 커뮤니티 그룹 목록/상세 화면 | 37 | shared decks/notes search/detail/fork/report API-backed 완료. 그룹 목록/상세/멤버/join API-backed 완료. 그룹별 공유 콘텐츠 계약, 페이지네이션 UX, staging smoke 증거 잔여 |
 | FE-06 | W3 게이미피케이션 UI | 23 | profile/badge/leaderboard/xp history API-backed 완료. level-up live animation/event evidence 잔여 |
 | FE-07 | W3 알림 센터 | 6 | 이미 API 검증된 inbox/preferences/device 경로의 남은 PM 문서 정합화 |
 | FE-08 | W3 관리자 신고 화면 | 21 | engagement moderation API list/moderate 전환 완료. admin role live evidence 잔여 |
@@ -205,7 +205,7 @@
 
 ## 6. 다음 실행 순서
 
-1. `synapse-frontend` remaining production route audit을 계속해 group/dashboard/OAuth consent 계약 공백을 닫는다.
+1. `synapse-frontend` remaining production route audit을 계속해 dashboard/OAuth consent 계약 공백과 group-specific shared content/pagination 증거 공백을 닫는다.
 2. API-backed route를 staging seed path와 연결하고 Phase E runbook의 demo path를 끝까지 실행한다.
 3. mobile/tablet/desktop screenshot 또는 browser QA note로 frontend UX 증거를 보강한다.
 4. Docker Desktop/daemon을 켠 뒤 platform `AuthBillingE2ETest`와 knowledge Docker/ES search E2E를 재실행한다.

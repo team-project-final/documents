@@ -83,3 +83,20 @@ Before live sync, these frontend source PM files were copied to the central `doc
 frontend is still not complete. The remaining release blockers are group/dashboard/OAuth consent API contract gaps, staging demo evidence, and UX screenshot/browser QA evidence.
 
 For the other repos, keep the no-live-sync decision until their missing live/staging evidence is attached to source PM docs and a fresh dry-run produces an explainable diff.
+
+## 7. Frontend Group Slice Follow-up
+
+After the FE-05 group list/detail/member API-backed slice, the frontend source PM files and central mirror were updated for `TASK_frontend.md`, `WORKFLOW_frontend_W2.md`, and `HISTORY_frontend.md`.
+
+Dry-run verdict:
+
+| Item | Result |
+|---|---|
+| Source docs | source and central mirror matched for task/workflow/history |
+| Dry-run scope | `synapse-frontend` from source `docs/project-management` |
+| Dry-run result | 485 checks, 276 done |
+| Diff verdict | expected only: `W2 > 커뮤니티 그룹 목록/상세 화면` +16 done, +2 total |
+| Validation | current dashboard data validation passed with 0 warnings and 0 errors |
+| Live sync | run with bundled Codex Node runtime. `workflow-dashboard/data/synapse-frontend.json` updated to 276 / 485 and validation passed with 0 warnings |
+
+The dashboard snapshot is now 276 / 485. Remaining frontend checks are 209, with dashboard/OAuth/staging/UX and group-specific content/pagination evidence still open.

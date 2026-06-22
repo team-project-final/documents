@@ -124,7 +124,7 @@
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
-| **Status** | TODO |
+| **Status** | In Progress (2026-06-22: engagement-svc `GET /api/v1/community/groups`, `GET /api/v1/community/groups/{groupId}`, `GET /api/v1/community/groups/{groupId}/members`, `POST /api/v1/community/groups/{groupId}/members/join` 계약 확인. 그룹 목록/상세/멤버 route를 `EngagementApi` + Riverpod provider 기반으로 API-backed 전환했고 focused API/render tests와 `flutter analyze` PASS. 그룹별 공유 콘텐츠, 페이지네이션 UX, staging smoke evidence는 잔여.) |
 
 ---
 
