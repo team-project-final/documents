@@ -154,22 +154,22 @@
 - [x] Duration 산정 확인
 
 ### 6.2 요구사항 분석
-- [ ] 커뮤니티 그룹 목록 화면 요건 (검색, 카테고리 필터, 정렬)
+- [x] 커뮤니티 그룹 목록 화면 요건 (API-backed 전체/공개 그룹 탭 + 공개 그룹 검색)
 - [ ] 그룹 상세 화면 요건 (공유 콘텐츠 목록, 복사 기능)
 - [ ] 공유 콘텐츠 검색/필터 요건
-- [ ] engagement-svc API 연동 엔드포인트 확인
+- [x] engagement-svc API 연동 엔드포인트 확인 — `GET /api/v1/community/groups`, `GET /api/v1/community/groups/{groupId}`, `GET /api/v1/community/groups/{groupId}/members`, `POST /api/v1/community/groups/{groupId}/members/join`
 - [ ] Instructions 초안 → TASK 문서 반영
 
 ### 6.3 Security 1차 검토
-- [ ] 인증 필요 여부: Yes (인증된 사용자만 접근)
-- [ ] 권한 종류: 로그인 사용자
-- [ ] 공개 API 여부: No
+- [x] 인증 필요 여부: Yes (인증된 사용자만 접근) — shared Dio bearer interceptor 경유
+- [x] 권한 종류: 로그인 사용자 — join/report는 JWT subject 기준 backend 권한 검증
+- [x] 공개 API 여부: No — community group/member route는 authenticated API로 유지
 - [ ] 결과 → TASK Constraints 반영
 
 ### 6.4 ERD 설계
-- [ ] 프론트엔드 — ERD 해당 없음
-- [ ] 커뮤니티 상태 모델 설계 (CommunityState: loading/loaded/error)
-- [ ] 검색/필터 상태 관리 설계
+- [x] 프론트엔드 — ERD 해당 없음
+- [x] 커뮤니티 상태 모델 설계 (CommunityState: loading/loaded/error) — `AsyncValue` + `AppLoadingWidget`/`AppErrorWidget`/empty state
+- [x] 검색/필터 상태 관리 설계 — 공개 그룹 local query filter
 - [ ] Duration(final) 갱신
 
 ### 6.5 Security 2차 검토
@@ -183,31 +183,33 @@
 - [ ] Output Format → TASK 반영
 
 ### 6.7 Repository 구현
-- [ ] CommunityRepository 클래스 작성 (HTTP client + engagement-svc 연동)
-- [ ] 검색/필터/공유 콘텐츠 조회/복사 API 호출
-- [ ] Riverpod Provider 등록 (CommunityNotifier)
+- [x] CommunityRepository 클래스 작성 (HTTP client + engagement-svc 연동) — existing `EngagementApi`에 group/member methods 추가
+- [x] 검색/필터/공유 콘텐츠 조회/복사 API 호출 — group list/detail/member/join + 기존 shared content search/detail/fork/report 계약 유지
+- [x] Riverpod Provider 등록 (CommunityNotifier) — `communityGroupsProvider`, `communityGroupDetailProvider`
 
 ### 6.8 Service + Test
 - [ ] CommunityNotifier 구현 (search, loadSharedContent, copyContent)
 - [ ] 검색 + 필터링 상태 관리
 - [ ] 페이지네이션 (무한 스크롤 또는 페이지 번호)
 - [ ] 콘텐츠 복사(copy) 확인 다이얼로그 로직
-- [ ] Unit 테스트 (CommunityNotifier 상태 전이)
-- [ ] 테스트 통과 확인
+- [x] Unit 테스트 (CommunityNotifier 상태 전이) — API contract mapping test로 group/member/join path 고정
+- [x] 테스트 통과 확인 — `flutter test test/services/engagement/engagement_api_test.dart test/services/engagement/community_screens_render_test.dart` PASS
 
 ### 6.9 Controller + Test
-- [x] 커뮤니티 그룹 목록 페이지 Widget 구현 — 탭(내 그룹/탐색) + 빈 상태 UI 뼈대 완료
-- [ ] 검색 바 + 카테고리 필터 칩 Widget 구현 — 팀원 구현
+- [x] 커뮤니티 그룹 목록 페이지 Widget 구현 — API-backed 전체/공개 그룹 탭 + 빈 상태 UI
+- [x] 검색 바 Widget 구현 — 공개 그룹 local query filter
+- [ ] 카테고리/정렬 필터 칩 Widget 구현 — backend taxonomy/sort contract 잔여
 - [ ] 공유 콘텐츠 카드 리스트 Widget 구현 (제목, 설명, 태그, 다운로드 수) — 팀원 구현
-- [x] 공유 콘텐츠 상세 화면 Widget 구현 — 멤버/공유 콘텐츠 탭 뼈대 완료
+- [x] 공유 콘텐츠 상세 화면 Widget 구현 — 그룹 상세/멤버 목록 API-backed 전환, 그룹별 공유 콘텐츠 탭은 backend 계약 전 잔여
 - [ ] 복사 확인 다이얼로그 Widget 구현 — 팀원 구현
+- [x] Widget 테스트 (group list/detail API render smoke) — `community_screens_render_test.dart` PASS
 - [ ] Widget 테스트 (검색 → 결과 표시 → 콘텐츠 복사 플로우)
 
 ### 6.10 View + Test
-- [ ] 커뮤니티 목록 렌더링 + 검색 동작 확인
+- [x] 커뮤니티 목록 렌더링 + 검색 동작 확인 — API-backed list/detail render tests PASS
 - [ ] 카테고리 필터 동작 확인
 - [ ] 콘텐츠 복사(copy) 전체 플로우 확인
 - [ ] Smoke Test 1건 (검색 → 상세 보기 → 복사)
 - [ ] RULE Reference → TASK 반영
 
-**Step 6 Status**: [x] In Progress (뼈대 완료: 그룹 목록/상세 탭 레이아웃. API 연동/페이지네이션은 팀원 잔여)
+**Step 6 Status**: [x] In Progress (2026-06-22 P0 slice: engagement group list/detail/member/join route API-backed 전환, `_mock.dart` group fixture 제거, loading/error/empty state, focused API/render tests와 `flutter analyze` PASS. 그룹별 공유 콘텐츠 계약, 페이지네이션 UX, staging smoke evidence는 잔여)

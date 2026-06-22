@@ -180,10 +180,10 @@
 - **주간 요약**:
 
 #### 2026-06-22 (월)
-- **완료**: FE-03/FE-11/FE-14 P0 slice로 knowledge note list/detail/editor/tag/version/search/graph route를 `KnowledgeApi` + Riverpod provider 기반으로 전환. FE-04 P0 slice로 learning-card review deck/session/queue/rating/complete route를 `LearningReviewApi` + `ReviewNotifier` 기반으로 전환. FE-05/09 P0 slice로 shared decks/shared notes search/detail/fork/report route를 engagement-svc `/api/v1/community` 계약에 연결. FE-06 P0 slice로 gamification profile/badges/leaderboard/xp history route를 `/api/v1/gamification` 계약에 연결. FE-08 admin report route를 engagement moderation API에 연결. FE-01 OAuth consent는 allow/deny backend endpoint 미확인으로 fake approval 제거 및 blocker state 표시.
-- **검증**: `flutter analyze` PASS. focused knowledge tests PASS (27 tests). focused learning review tests PASS (16 tests, 1 skipped). focused engagement/admin tests PASS (45 tests). full `flutter test` PASS (210 tests, 1 skipped). `flutter build web --release` PASS.
-- **이슈**: release build는 sandbox에서 Flutter SDK/AppData 캐시 접근 권한 때문에 escalated 실행으로 PASS. build warning: CupertinoIcons font asset 미포함 경고는 기존 dependency/assets 상태로 보이며 이번 slice blocker 아님. FE-05 group list/detail API, FE-02 dashboard study-board/calendar/planner summary API, FE-01 OAuth consent allow/deny endpoint, Phase E full staging demo는 계약/환경 증거가 없어 완료 처리하지 않는다.
-- **다음**: remaining engagement group/dashboard/OAuth consent 계약 확인, staging seed path 확정, signup -> note -> graph/search -> AI cards -> review -> gamification -> notification/admin full staging demo evidence 실행.
+- **완료**: FE-03/FE-11/FE-14 P0 slice로 knowledge note list/detail/editor/tag/version/search/graph route를 `KnowledgeApi` + Riverpod provider 기반으로 전환. FE-04 P0 slice로 learning-card review deck/session/queue/rating/complete route를 `LearningReviewApi` + `ReviewNotifier` 기반으로 전환. FE-05/09 P0 slice로 shared decks/shared notes search/detail/fork/report route를 engagement-svc `/api/v1/community` 계약에 연결. FE-05 group list/detail/member/join route를 engagement-svc `/api/v1/community/groups` 계약에 연결하고 production `_mock.dart` group fixture를 제거. FE-06 P0 slice로 gamification profile/badges/leaderboard/xp history route를 `/api/v1/gamification` 계약에 연결. FE-08 admin report route를 engagement moderation API에 연결. FE-01 OAuth consent는 allow/deny backend endpoint 미확인으로 fake approval 제거 및 blocker state 표시.
+- **검증**: `flutter analyze` PASS. focused knowledge tests PASS (27 tests). focused learning review tests PASS (16 tests, 1 skipped). focused engagement/admin tests PASS (45 tests). focused community group API/render tests PASS (20 tests). full `flutter test` PASS (212 tests, 1 skipped). `flutter build web --release` PASS.
+- **이슈**: release build는 sandbox에서 Flutter SDK/AppData 캐시 접근 권한 때문에 escalated 실행으로 PASS. build warning: CupertinoIcons font asset 미포함 경고는 기존 dependency/assets 상태로 보이며 이번 slice blocker 아님. FE-05 group-specific shared content contract, group pagination UX, FE-02 dashboard study-board/calendar/planner summary API, FE-01 OAuth consent allow/deny endpoint, Phase E full staging demo는 계약/환경 증거가 없어 완료 처리하지 않는다.
+- **다음**: dashboard/OAuth consent 계약 확인, group-specific shared content contract 정리, staging seed path 확정, signup -> note -> graph/search -> AI cards -> review -> gamification -> notification/admin full staging demo evidence 실행.
 
 ---
 
@@ -191,7 +191,7 @@
 
 | 날짜 | 변경 사항 |
 |------|-----------|
-| 2026-06-22 | P0 FE-03/04/05/06/08/09/11/14 API-backed slices 및 FE-01 consent blocker 처리, analyze/test/build gate 통과 기록 |
+| 2026-06-22 | P0 FE-03/04/05/06/08/09/11/14 API-backed slices, FE-05 group list/detail/member API 전환, FE-01 consent blocker 처리, analyze/test/build gate 통과 기록 |
 | 2026-06-11 | (main) deploy.yml을 shared-caller(SHA) → semver 자체-deploy로 통일. gitops `apps/frontend` 1.0.0 semver 핀과 정합(ImagePullBackOff 근본 해소). Dockerfile/nginx.conf 보존. 이슈 #52. 상세 `REPORT.md` |
 | 2026-05-11 | W2/W3/W4 대시보드 및 로그 템플릿 추가 |
 | 2026-05-11 | 초기 템플릿 생성 |

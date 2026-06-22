@@ -2,6 +2,7 @@
 
 > 작성: 2026-06-22 KST
 > 기준 문서: [REMAINING_WORK_MASTER.md](../REMAINING_WORK_MASTER.md)
+> 현재 다음 작업: [Synapse 다음 작업 계획 - 2026-06-22](./NEXT_WORK_PLAN_2026-06-22.md)
 > 목적: 통합 남은 작업 관리판의 P0/P1/P2 큐를 실행 가능한 별도 플랜으로 나눈다.
 > 운영 원칙: PM dashboard parser 오염을 막기 위해 이 문서와 하위 플랜은 GFM task checkbox를 쓰지 않는다.
 
@@ -55,3 +56,4 @@
 | [Phase F PM Dashboard Sync Report](../reports/phase-f-pm-dashboard-doc-sync-2026-06-21.md) | PM dashboard sync gate |
 | [Phase F Dashboard Drift Audit](../reports/phase-f-dashboard-drift-audit-2026-06-21.md) | count drift 원인과 재발 방지 기준 |
 | [P2 PM Sync Hygiene Report](../reports/p2-pm-sync-hygiene-2026-06-22.md) | 2026-06-22 frontend sync 실행 증거와 no-op repo 판정 |
+| [Synapse 다음 작업 계획 - 2026-06-22](./NEXT_WORK_PLAN_2026-06-22.md) | 다음 세션 시작 순서와 P0/P1/P2 실행 기준 |
