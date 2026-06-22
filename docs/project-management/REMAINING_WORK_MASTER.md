@@ -24,6 +24,7 @@
 | Phase E runbook | `documents/docs/project-management/reports/phase-e-staging-demo-runbook-2026-06-21.md` |
 | Phase F sync | `documents/docs/project-management/reports/phase-f-pm-dashboard-doc-sync-2026-06-21.md` |
 | Phase F drift audit | `documents/docs/project-management/reports/phase-f-dashboard-drift-audit-2026-06-21.md` |
+| P1 evidence hardening | `documents/docs/project-management/reports/p1-evidence-hardening-2026-06-22.md` |
 
 ## 2. Dashboard 기준 현황
 
@@ -58,9 +59,9 @@
 |---|---|---|---|
 | P0 | Frontend production route API 전환 | frontend remaining 313으로 전체 릴리즈 병목 | remaining engagement group/dashboard/OAuth consent contracts 확인 후 API-backed 전환 |
 | P0 | Full staging demo evidence | Phase E 완료 조건의 핵심 gate | staging seed path 확정 후 signup -> note -> graph/search -> AI cards -> review -> gamification -> notification/admin 실행 |
-| P1 | Backend live tail evidence | 백엔드 구현은 대부분 끝났고 운영 증거가 부족 | platform/knowledge/learning/engagement/shared owner별 live 로그 수집 |
-| P1 | GitOps cost/stability live gate | GitOps는 6개만 남았지만 live AWS/EKS 증거가 필요 | Cost Explorer tag, HPA/PDB, Image Updater writeback, 24h signoff 기록 |
-| P1 | Design/responsive QA | API 전환 후 화면 품질 완료 처리에 필요 | auth, dashboard, notes, cards, community, search, notification, admin 3뷰포트 확인 |
+| P1 | Backend live tail evidence | 백엔드 구현은 대부분 끝났고 운영 증거가 부족 | 2026-06-22 local/equivalent tests PASS 일부 확보. Docker/EKS/live event chain은 owner별 live 로그 수집 필요 |
+| P1 | GitOps cost/stability live gate | GitOps는 6개만 남았지만 live AWS/EKS 증거가 필요 | 2026-06-22 semver drift 수정 + local verify PASS, Cost Explorer partial. HPA/PDB, ArgoCD, 24h signoff 잔여 |
+| P1 | Design/responsive QA | API 전환 후 화면 품질 완료 처리에 필요 | 2026-06-22 render suite PASS. screenshot/browser QA와 token cleanup 잔여 |
 | P2 | PM sync hygiene | count drift 재발 방지 | repo별 dry-run, validation, diff 확인 후만 dashboard sync |
 
 ### 실행 플랜 문서
@@ -205,9 +206,9 @@
 
 1. `synapse-frontend` remaining production route audit을 계속해 engagement group/dashboard/OAuth consent 계약 공백을 닫는다.
 2. full `flutter test`와 `flutter build web --release` gate를 최신 frontend slice 기준으로 재확인한다.
-3. backend tail은 platform/knowledge/learning/engagement/shared owner별 live evidence 수집으로 병렬 진행한다.
-4. staging seed path를 하나로 확정하고 Phase E runbook의 demo path를 끝까지 실행한다.
-5. GitOps live evidence를 수집한 뒤 `synapse-gitops` 잔여 6개 check를 sync 후보로 만든다.
+3. Docker Desktop/daemon을 켠 뒤 platform `AuthBillingE2ETest`와 knowledge Docker/ES search E2E를 재실행한다.
+4. EKS kubeconfig와 ArgoCD login을 준비한 뒤 HPA/PDB, Synced/Healthy, Image Updater writeback, 24h signoff를 캡처한다.
+5. staging seed path를 하나로 확정하고 Phase E runbook의 demo path를 끝까지 실행한다.
 6. 모든 완료 반영 전 `workflow-dashboard` dry-run과 validation을 통과시킨다.
 
 ## 7. 완료 처리 체크 기준

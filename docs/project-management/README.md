@@ -9,6 +9,7 @@
 > **Phase F 기준점**: [2026-06-21 PM Dashboard / 문서 동기화 실행 리포트](./reports/phase-f-pm-dashboard-doc-sync-2026-06-21.md)
 > **Phase F Drift Audit**: [2026-06-21 Dashboard / PM 문서 Count Drift 원인 감사](./reports/phase-f-dashboard-drift-audit-2026-06-21.md)
 > **통합 남은 작업 관리판**: [REMAINING_WORK_MASTER.md](./REMAINING_WORK_MASTER.md)
+> **P1 증거 하드닝 기준점**: [2026-06-22 P1 증거 하드닝 실행 리포트](./reports/p1-evidence-hardening-2026-06-22.md)
 
 ---
 
