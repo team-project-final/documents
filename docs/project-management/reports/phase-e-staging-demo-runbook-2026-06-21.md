@@ -102,7 +102,7 @@ Accepted risks:
 Dashboard items updated:
 ```
 
-## 6. Local Validation Attempt
+## 6. Frontend Validation Evidence
 
 Frontend validation was attempted from `synapse-frontend` on 2026-06-21 KST:
 
@@ -111,7 +111,23 @@ Frontend validation was attempted from `synapse-frontend` on 2026-06-21 KST:
 | `flutter analyze` | timed out after 120s with no completed analyzer output |
 | `flutter analyze --no-pub` | timed out after 120s with no completed analyzer output |
 
-Interpretation: Phase E cannot claim frontend analyze evidence yet. The next run should use a longer timeout or run from a developer shell that can show whether the analyzer is blocked on project scale, package state, or Flutter tooling.
+2026-06-22 KST rerun after P0 frontend API-backed slices:
+
+| Command | Result |
+|---|---|
+| `flutter analyze` | PASS |
+| `flutter test test/services/engagement/engagement_api_test.dart test/services/engagement/gamification_screens_render_test.dart test/services/engagement/community_screens_render_test.dart test/services/platform/admin_screens_render_test.dart` | PASS, 45 tests |
+| `flutter test` | PASS, 210 tests, 1 skipped |
+| `flutter build web --release` | PASS, built `build/web`; existing CupertinoIcons font warning remains non-blocking |
+
+Frontend interpretation:
+
+- FE-05/09 shared decks/shared notes search/detail/fork/report routes are API-backed against engagement-svc `/api/v1/community`.
+- FE-06 profile/badges/leaderboard/xp history routes are API-backed against `/api/v1/gamification`.
+- FE-08 admin report list/moderate route is API-backed against engagement moderation endpoints.
+- FE-01 OAuth consent no longer performs fake allow success; platform-svc allow/deny endpoint is still missing.
+- FE-02 dashboard shell/admin summary is partially API-backed, but study-board/calendar/planner summary contracts remain unconfirmed.
+- Phase E still cannot claim full staging demo pass until §4 is executed against staging with one approved seed path and captured service/event evidence.
 
 ## 7. P0/P1 Closeout Register
 
@@ -119,7 +135,7 @@ Interpretation: Phase E cannot claim frontend analyze evidence yet. The next run
 |---|---|---|---|
 | P0 | Avro poison-message regression | PASS by Day4 evidence | Keep `STAGING_BRINGUP_W5_DAY4.md` §9 as evidence |
 | P0 | Full demo path | OPEN | One complete run through §4 |
-| P0 | Frontend production route | OPEN | Mock/auth-bypass-free run plus analyze/test/build logs |
+| P0 | Frontend production route | PARTIAL | 2026-06-22 analyze/test/build PASS and major API-backed slices recorded; remaining group/dashboard/OAuth consent contract blockers must be resolved or accepted before closeout |
 | P1 | Metrics gap | OPEN or accepted risk | Link owner fixes or handoff accepted-risk note |
 | P1 | Admin role operational path | OPEN or accepted risk | Manual grant runbook evidence or accepted-risk note |
 | P1 | Search result>0 | OPEN or accepted risk | knowledge indexer/pgvector evidence or accepted-risk note |

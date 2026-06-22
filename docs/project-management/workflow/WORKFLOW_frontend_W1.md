@@ -70,68 +70,69 @@
 ## Step 2: 로그인/회원가입 화면 및 OAuth 인증
 
 ### 1.1 TASK 시작
-- [ ] Step Goal / Done When / Scope / Input 확인
-- [ ] PRD_W1 해당 요구사항 확인 (FR-AU-xxx 인증 화면)
-- [ ] Duration 산정 확인 (2일)
+- [x] Step Goal / Done When / Scope / Input 확인
+- [x] PRD_W1 해당 요구사항 확인 (FR-AU-xxx 인증 화면)
+- [x] Duration 산정 확인 (2일)
 
 ### 1.2 요구사항 분석
-- [ ] 로그인 화면 UI 요소 정의 (이메일/비밀번호 폼 + OAuth 버튼)
-- [ ] 회원가입 화면 UI 요소 정의 (이메일/비밀번호/확인 폼)
-- [ ] OAuth 2.0 + PKCE 플로우 분석
+- [x] 로그인 화면 UI 요소 정의 (이메일/비밀번호 폼 + OAuth 버튼)
+- [x] 회원가입 화면 UI 요소 정의 (이메일/비밀번호/확인 폼)
+- [x] OAuth 2.0 + PKCE 플로우 분석
 - [ ] Instructions 초안 → TASK 문서 반영
 
 ### 1.3 Security 1차 검토
-- [ ] 인증 필요 여부: No (인증 화면 자체는 공개)
-- [ ] 권한 종류: 없음 (인증 전 화면)
-- [ ] 공개 API 여부: Yes (인증 화면)
-- [ ] 토큰 저장: SecureStorage만 허용 (localStorage 금지)
+- [x] 인증 필요 여부: No (인증 화면 자체는 공개)
+- [x] 권한 종류: 없음 (인증 전 화면)
+- [x] 공개 API 여부: Yes (인증 화면)
+- [x] 토큰 저장: SecureStorage만 허용 (localStorage 금지)
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.4 ERD 설계
-- [ ] 프론트엔드 — ERD 해당 없음
-- [ ] 인증 상태 모델 설계 (AuthState: unauthenticated/loading/authenticated)
-- [ ] 토큰 저장 구조 설계 (access_token: SecureStorage 저장, refresh_token: httpOnly Cookie — 서버에서 Set-Cookie로 발급되므로 클라이언트에서 직접 저장 불필요)
+- [x] 프론트엔드 — ERD 해당 없음
+- [x] 인증 상태 모델 설계 (AuthState: unauthenticated/loading/authenticated)
+- [x] 토큰 저장 구조 설계 (access_token: SecureStorage 저장, refresh_token: httpOnly Cookie — 서버에서 Set-Cookie로 발급되므로 클라이언트에서 직접 저장 불필요)
 - [ ] Duration(final) 갱신
 
 ### 1.5 Security 2차 검토
-- [ ] 토큰 SecureStorage 전용 저장 확인
-- [ ] 비밀번호 입력 마스킹 확인
-- [ ] platform-svc 베이스 URL 환경변수 관리
+- [x] 토큰 SecureStorage 전용 저장 확인
+- [x] 비밀번호 입력 마스킹 확인
+- [x] platform-svc 베이스 URL 환경변수 관리
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.6 DTO / Entity 설계 (API First)
-- [ ] LoginRequest 모델 정의 (email, password)
-- [ ] SignupRequest 모델 정의 (email, password, confirmPassword)
-- [ ] AuthToken 모델 정의 (accessToken, expiresIn) — refreshToken은 httpOnly Cookie로 서버 관리, JSON body 미포함
-- [ ] AuthState Provider 설계
+- [x] LoginRequest 모델 정의 (email, password)
+- [x] SignupRequest 모델 정의 (email, password, confirmPassword)
+- [x] AuthToken 모델 정의 (accessToken) — refreshToken은 httpOnly Cookie로 서버 관리, expiresIn은 백엔드 응답 미포함으로 제외
+- [x] AuthState Provider 설계
 - [ ] Output Format → TASK 반영
 
 ### 1.7 Repository 구현
-- [ ] AuthRepository 클래스 작성 (HTTP client + platform-svc 연동)
-- [ ] SecureStorage 토큰 저장/조회/삭제 구현
-- [ ] flutter_secure_storage 의존성 추가
+- [x] AuthRepositoryPort + platform AuthRepository 구현 (OAuth redirect + token storage 경계)
+- [x] PLAT-009 email/password login/signup API 연동 구현
+- [x] SecureStorage 토큰 저장/조회/삭제 구현
+- [x] flutter_secure_storage 의존성 추가
 
 ### 1.8 Service + Test
-- [ ] AuthNotifier (Riverpod StateNotifier) 구현
-- [ ] OAuth 콜백 처리 및 토큰 수신 로직
-- [ ] GoRouter redirect guard 구현 (미인증 시 /login 이동)
-- [ ] Unit 테스트 (AuthNotifier 상태 전이)
-- [ ] 테스트 통과 확인
+- [x] AuthNotifier (Riverpod StateNotifier) 구현
+- [x] OAuth 콜백 처리 및 토큰 수신 로직
+- [x] GoRouter redirect guard 구현 (미인증 시 /login 이동)
+- [x] Unit 테스트 (AuthNotifier 상태 전이)
+- [x] 테스트 통과 확인
 
 ### 1.9 Controller + Test
-- [ ] 로그인 페이지 Widget 구현 (폼 + OAuth 버튼)
-- [ ] 회원가입 페이지 Widget 구현 (폼 + 유효성 검증)
-- [ ] 폼 유효성 검증 (비밀번호 8자+, 영문+숫자+특수문자)
-- [ ] 로딩 상태 및 에러 상태 UI 구현
-- [ ] Widget 테스트 (폼 제출, 에러 표시)
+- [x] 로그인 페이지 Widget 구현 (폼 + OAuth 버튼)
+- [x] 회원가입 페이지 Widget 구현 (폼 + 유효성 검증)
+- [x] 폼 유효성 검증 (비밀번호 8자+, 영문+숫자+특수문자)
+- [x] 로딩 상태 및 에러 상태 UI 구현
+- [x] Widget 테스트 (폼 제출, 에러 표시)
 
 ### 1.10 View + Test
-- [ ] 로그인 화면 렌더링 + OAuth 버튼 동작 확인
-- [ ] 회원가입 화면 렌더링 + 유효성 검증 확인
-- [ ] Smoke Test 1건 (로그인 → 대시보드 이동)
+- [x] 로그인 화면 렌더링 + OAuth 버튼 동작 확인
+- [x] 회원가입 화면 렌더링 + 유효성 검증 확인
+- [x] Smoke Test 1건 (로그인 → 대시보드 이동) — 위젯 테스트로 검증 (현재 dev 로그인 바이패스 경유)
 - [ ] RULE Reference → TASK 반영
 
-**Step 2 Status**: [x] In Progress (폼 UI 뼈대 완료, OAuth 연동 잔여)
+**Step 2 Status**: [x] In Progress (OAuth 프론트 연동, AuthRepositoryPort 경계, SecureStorage 토큰 저장 완료 / PLAT-009 email/password API 연동 완료 / 2026-06-22 OAuth consent allow/deny backend endpoint 미확인으로 fake approval 제거 및 blocker state 표시)
 
 ---
 
@@ -149,10 +150,10 @@
 - [ ] Instructions 초안 → TASK 문서 반영
 
 ### 1.3 Security 1차 검토
-- [ ] 인증 필요 여부: Yes (인증된 사용자만 접근)
-- [ ] 권한 종류: 로그인 사용자
-- [ ] 공개 API 여부: No
-- [ ] GoRouter guard로 미인증 리다이렉트 확인
+- [x] 인증 필요 여부: Yes (인증된 사용자만 접근)
+- [x] 권한 종류: 로그인 사용자
+- [x] 공개 API 여부: No
+- [x] GoRouter guard로 미인증 리다이렉트 확인
 - [ ] 결과 → TASK Constraints 반영
 
 ### 1.4 ERD 설계
@@ -196,4 +197,4 @@
 - [ ] Smoke Test 1건 (사이드바 토글 + 페이지 이동)
 - [ ] RULE Reference → TASK 반영
 
-**Step 3 Status**: [x] In Progress (ShellRoute + SideNav 뼈대 완료, API 연동 잔여)
+**Step 3 Status**: [x] In Progress (ShellRoute + SideNav 뼈대 완료 / admin dashboard summary는 API-backed / dashboard study-board·calendar·planner summary API contract 미확인으로 production mock 제거 완료 보류)

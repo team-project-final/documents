@@ -9,6 +9,9 @@
 > **Phase F 기준점**: [2026-06-21 PM Dashboard / 문서 동기화 실행 리포트](./reports/phase-f-pm-dashboard-doc-sync-2026-06-21.md)
 > **Phase F Drift Audit**: [2026-06-21 Dashboard / PM 문서 Count Drift 원인 감사](./reports/phase-f-dashboard-drift-audit-2026-06-21.md)
 > **통합 남은 작업 관리판**: [REMAINING_WORK_MASTER.md](./REMAINING_WORK_MASTER.md)
+> **우선순위 실행 플랜**: [PRIORITY_WORK_PLAN_INDEX.md](./plans/PRIORITY_WORK_PLAN_INDEX.md)
+> **P1 증거 하드닝 기준점**: [2026-06-22 P1 증거 하드닝 실행 리포트](./reports/p1-evidence-hardening-2026-06-22.md)
+> **P2 Sync Hygiene 기준점**: [2026-06-22 P2 PM Sync Hygiene 실행 리포트](./reports/p2-pm-sync-hygiene-2026-06-22.md)
 
 ---
 
@@ -51,6 +54,7 @@ HISTORY (상태 대시보드 + 날짜별 일지)
 ```
 docs/project-management/
 ├── README.md                              # 본 문서
+├── plans/                                 # P0/P1/P2 우선순위별 실행 플랜
 ├── scope/                                 # 작업 스코프 정의
 │   ├── SCOPE_team-lead.md
 │   ├── SCOPE_platform.md
