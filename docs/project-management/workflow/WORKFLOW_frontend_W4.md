@@ -13,9 +13,9 @@
 - [ ] 테스트 데이터 준비
 
 ### 11.2 E2E 테스트 실행
-- [ ] Mobile 뷰포트 전체 화면 검증
+- [x] Mobile 뷰포트 전체 화면 검증 — 2026-06-22 knowledge note/search/graph + learning review render tests PASS
 - [ ] Tablet 뷰포트 전체 화면 검증
-- [ ] Desktop 뷰포트 전체 화면 검증
+- [x] Desktop 뷰포트 전체 화면 검증 — 2026-06-22 knowledge note/search/graph + learning review render tests PASS
 - [ ] 실패 항목 기록
 
 ### 11.3 버그 트리아지
@@ -27,14 +27,14 @@
 - [ ] 수정 코드 리뷰 + 테스트
 
 ### 11.5 회귀 테스트
-- [ ] 수정 후 전체 테스트 재실행
+- [x] 수정 후 전체 테스트 재실행 — `flutter test` PASS (202 tests, 1 skipped)
 - [ ] 커버리지 80% 이상 확인
 
 ### 11.6 문서 업데이트
 - [ ] API 문서 최신화
 - [ ] HISTORY 완료 기록
 
-**Step 11 Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+**Step 11 Status**: [ ] Not Started / [x] In Progress / [ ] Done
 
 ---
 
@@ -45,8 +45,8 @@
 - [ ] 테스트 데이터 준비
 
 ### 12.2 E2E 테스트 실행
-- [ ] AppErrorWidget 일관성 전수 검증
-- [ ] AppLoadingWidget 일관성 전수 검증
+- [x] AppErrorWidget 일관성 전수 검증 — knowledge note/search/graph + learning review route partial
+- [x] AppLoadingWidget 일관성 전수 검증 — knowledge note/search/graph + learning review route partial
 - [ ] 실패 항목 기록
 
 ### 12.3 버그 트리아지
@@ -58,14 +58,14 @@
 - [ ] 수정 코드 리뷰 + 테스트
 
 ### 12.5 회귀 테스트
-- [ ] 수정 후 전체 테스트 재실행
+- [x] 수정 후 전체 테스트 재실행 — `flutter analyze`, focused knowledge tests, `flutter test`, `flutter build web --release` PASS
 - [ ] 커버리지 80% 이상 확인
 
 ### 12.6 문서 업데이트
 - [ ] API 문서 최신화
 - [ ] HISTORY 완료 기록
 
-**Step 12 Status**: [ ] Not Started / [ ] In Progress / [ ] Done
+**Step 12 Status**: [ ] Not Started / [x] In Progress / [ ] Done
 
 ---
 
