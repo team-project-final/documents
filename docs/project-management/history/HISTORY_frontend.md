@@ -1,7 +1,7 @@
 # Work History: @frontend
 
 > **담당**: Flutter 앱 / UI·UX
-> **관련 문서**: [SCOPE](../scope/SCOPE_frontend.md) | [TASK](../task/TASK_frontend.md) | [WORKFLOW](../workflow/WORKFLOW_frontend_W1.md)
+> **관련 문서**: [공동 책임 모델](../README.md) | [TASK](../task/TASK_frontend.md) | [WORKFLOW](../workflow/WORKFLOW_frontend_W1.md)
 
 ---
 
@@ -192,6 +192,6 @@
 | 날짜 | 변경 사항 |
 |------|-----------|
 | 2026-06-22 | P0 FE-03/04/05/06/08/09/11/14 API-backed slices 및 FE-01 consent blocker 처리, analyze/test/build gate 통과 기록 |
-| 2026-06-11 | (main) deploy.yml을 shared-caller(SHA) → semver 자체-deploy로 통일. gitops `apps/frontend` 1.0.0 semver 핀과 정합(ImagePullBackOff 근본 해소). Dockerfile/nginx.conf 보존. 이슈 #52. 상세 [REPORT.md](../../REPORT.md) |
+| 2026-06-11 | (main) deploy.yml을 shared-caller(SHA) → semver 자체-deploy로 통일. gitops `apps/frontend` 1.0.0 semver 핀과 정합(ImagePullBackOff 근본 해소). Dockerfile/nginx.conf 보존. 이슈 #52. 상세 `REPORT.md` |
 | 2026-05-11 | W2/W3/W4 대시보드 및 로그 템플릿 추가 |
 | 2026-05-11 | 초기 템플릿 생성 |
