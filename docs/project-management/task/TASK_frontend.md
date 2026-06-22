@@ -42,6 +42,7 @@
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) · [17-스케줄](../../wiki/17-스케줄.md) |
 | **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
+| **Status** | In Progress (2026-06-22: login/signup/OAuth callback은 API-backed 유지. OAuth consent allow/deny는 platform-svc 계약 미확인으로 fake approval 제거 및 blocker state 표시.) |
 
 ---
 
@@ -61,6 +62,7 @@
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) · [17-스케줄](../../wiki/17-스케줄.md) |
 | **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
+| **Status** | In Progress (2026-06-22: shell/sidebar route render 유지. dashboard study-board/calendar/planner summary API contract는 미확인이라 mock 제거 완료 처리 보류.) |
 
 ---
 
@@ -82,7 +84,7 @@
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
-| **Status** | TODO |
+| **Status** | In Progress (2026-06-22: shared decks/notes search/detail/fork/report는 engagement-svc `/api/v1/community` 계약으로 API-backed 전환. 그룹 목록/상세 API contract는 미확인으로 잔여.) |
 
 ---
 
@@ -102,7 +104,7 @@
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
-| **Status** | TODO |
+| **Status** | In Progress (2026-06-22: `/api/v1/gamification/me`, `/badges`, `/leaderboard`, `/xp/history` API-backed 전환 및 focused render/API tests PASS. level-up live animation/event evidence는 Phase E 잔여.) |
 
 ---
 
@@ -176,15 +178,15 @@
 | **Step Goal** | 관리자가 관리 화면에서 신고를 처리(승인/거부)할 수 있다. |
 | **Done When** | 신고 목록 화면 + 신고 상세 + 승인/거부 처리 + 관리자 권한 가드 + 테스트 통과 |
 | **Scope** | **In**: 신고 목록 UI, 신고 상세 UI, 승인/거부 처리, 관리자 권한 가드 / **Out**: 신고 통계 대시보드, 자동 제재, 이의 제기 |
-| **Input** | admin-svc API 명세, DESIGN.md UI 규격, PRD_W3 관리자 요구사항 |
-| **Instructions** | 1. 관리자 전용 라우트 가드 구현 (role=ADMIN 검증)<br>2. 신고 목록 화면 구현 (신고 유형, 상태, 날짜 필터)<br>3. 신고 상세 화면 구현 (신고 내용, 신고 대상 콘텐츠, 신고자 정보)<br>4. 처리(resolve/dismiss) 버튼 및 사유 입력 모달<br>5. admin-svc API 연동 — 처리 시 `PUT /admin/reports/{id}/resolve` (body: `{ "status": "resolved"/"dismissed", "actionTaken": "..." }`)<br>6. 처리 완료 후 목록 자동 갱신<br>7. 관리자 미인증 시 접근 차단 UI<br>8. Widget 테스트 작성 |
+| **Input** | engagement-svc moderation API 명세, DESIGN.md UI 규격, PRD_W3 관리자 요구사항 |
+| **Instructions** | 1. 관리자 전용 라우트 가드 구현 (role=ADMIN 검증)<br>2. 신고 목록 화면 구현 (신고 유형, 상태, 날짜 필터)<br>3. 신고 대상/사유/접수일 표시<br>4. 처리(APPROVED/REJECTED) 버튼 및 확인 다이얼로그<br>5. engagement-svc API 연동 — `GET /api/v1/admin/reports?status=...`, `PATCH /api/v1/admin/reports/{reportId}`<br>6. 처리 완료 후 목록 자동 갱신<br>7. 관리자 미인증 시 접근 차단 UI<br>8. Widget 테스트 작성 |
 | **Output Format** | 관리자 화면 스크린샷 + 신고 처리 플로우 캡처 + Widget 테스트 결과 |
-| **Constraints** | - 관리자 권한 필수 (role=ADMIN)<br>- 신고 상태: `pending`, `resolved`, `dismissed` (소문자, Wiki 기준 — PENDING/APPROVED/REJECTED 아님)<br>- 처리 사유 필수 입력 (최소 10자)<br>- 처리 후 되돌리기 불가 (확인 다이얼로그)<br>- DESIGN.md 토큰 일관 적용 |
+| **Constraints** | - 관리자 권한 필수 (role=ADMIN)<br>- 신고 상태는 engagement-svc `PENDING` / `APPROVED` / `REJECTED` 계약을 따른다.<br>- 처리 전 확인 다이얼로그 필수<br>- 처리 후 되돌리기 불가<br>- DESIGN.md 토큰 일관 적용 |
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
-| **Status** | TODO |
+| **Status** | In Progress (2026-06-22: engagement-svc admin report list/moderate API-backed 전환 및 admin render/API tests PASS. Admin role live evidence는 Phase E 잔여.) |
 
 ---
 
@@ -196,15 +198,15 @@
 | **Step Goal** | 사용자가 공유 덱을 탐색하고 상세를 보고 내 덱으로 복사할 수 있다. |
 | **Done When** | 공유 덱 목록 + 상세 화면 + 내 덱으로 복사 + API 연동 + 테스트 통과 |
 | **Scope** | **In**: 공유 덱 목록 UI, 공유 덱 상세 UI, 덱 복사 기능 / **Out**: 덱 공유 설정, 평점/리뷰, 추천 알고리즘 |
-| **Input** | learning-card 런타임 공유 덱 API 명세, DESIGN.md UI 규격, PRD_W3 요구사항 |
-| **Instructions** | 1. 공유 덱 목록 화면 구현 (덱명, 카드 수, 작성자, 복사 수 표시)<br>2. 검색 및 카테고리 필터 구현<br>3. 공유 덱 상세 화면 구현 (설명, 카드 미리보기, 작성자 정보)<br>4. "내 덱으로 복사" 버튼 및 확인 다이얼로그<br>5. learning-card 런타임 API 연동 (공유 덱 목록/상세/복사)<br>6. 복사 완료 후 내 덱 목록으로 이동<br>7. 무한 스크롤 페이지네이션<br>8. Widget 테스트 작성 |
+| **Input** | engagement-svc shared content API 명세, DESIGN.md UI 규격, PRD_W3 요구사항 |
+| **Instructions** | 1. 공유 덱/노트 목록 화면 구현 (제목, 설명, 작성자, 복사 수 표시)<br>2. 검색 및 최신/인기 정렬 구현<br>3. 공유 콘텐츠 상세 화면 구현 (설명, 태그, 공유 토큰, 원본 contentId)<br>4. "복사하기" 버튼 및 로딩/성공/실패 피드백<br>5. engagement-svc API 연동 — `GET /api/v1/community/search`, `GET /api/v1/community/share/{token}`, `POST /api/v1/community/share/{token}/fork`<br>6. 신고 접수 API 연동 — `POST /api/v1/community/reports`<br>7. 반응형 목록 레이아웃<br>8. Widget 테스트 작성 |
 | **Output Format** | 공유 덱 화면 스크린샷 + 복사 플로우 캡처 + Widget 테스트 결과 |
-| **Constraints** | - 공유 덱 목록 페이지네이션: 20건씩<br>- 카드 미리보기: 최대 5장<br>- 복사 시 원본과의 연결 없음 (독립 사본)<br>- 복사 후 즉시 내 덱 목록에 반영<br>- DESIGN.md 토큰 일관 적용 |
+| **Constraints** | - backend가 제공하는 `SharedContentResponse` 필드만 표시한다. 카드 본문 미리보기/평점/카테고리 필터는 API 계약 전까지 완료 처리하지 않는다.<br>- 복사는 share token 기반 fork 계약을 따른다.<br>- 검색은 `q` + `contentType` 계약을 따른다.<br>- DESIGN.md 토큰 일관 적용 |
 | **Duration** | 1일 |
 | **RULE Reference** | [03-아키텍처](../../wiki/03-아키텍처.md) · [18-기술-스택](../../wiki/18-기술-스택.md) |
 | **Assignee** | Frontend 전체 협업 |
 | **Reviewer** | @team-lead |
-| **Status** | TODO |
+| **Status** | In Progress (2026-06-22: shared decks/shared notes search/detail/fork/report API-backed 전환 및 focused render/API tests PASS. Live staging copy evidence는 Phase E 잔여.) |
 
 ---
 

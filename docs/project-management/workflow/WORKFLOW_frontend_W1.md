@@ -131,7 +131,7 @@
 - [ ] Smoke Test 1건 (로그인 → 대시보드 이동)
 - [ ] RULE Reference → TASK 반영
 
-**Step 2 Status**: [x] In Progress (폼 UI 뼈대 완료, OAuth 연동 잔여)
+**Step 2 Status**: [x] In Progress (OAuth 프론트 연동, AuthRepositoryPort 경계, SecureStorage 토큰 저장 완료 / PLAT-009 email/password API 연동 완료 / 2026-06-22 OAuth consent allow/deny backend endpoint 미확인으로 fake approval 제거 및 blocker state 표시)
 
 ---
 
@@ -196,4 +196,4 @@
 - [ ] Smoke Test 1건 (사이드바 토글 + 페이지 이동)
 - [ ] RULE Reference → TASK 반영
 
-**Step 3 Status**: [x] In Progress (ShellRoute + SideNav 뼈대 완료, API 연동 잔여)
+**Step 3 Status**: [x] In Progress (ShellRoute + SideNav 뼈대 완료 / admin dashboard summary는 API-backed / dashboard study-board·calendar·planner summary API contract 미확인으로 production mock 제거 완료 보류)

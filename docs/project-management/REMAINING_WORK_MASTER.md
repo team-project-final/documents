@@ -46,7 +46,7 @@
 | Phase | 상태 | 남은 작업 | 완료 조건 |
 |---|---|---|---|
 | A. 프론트 디자인 시스템 정렬 | Partial | `SynapseOrb`/orb 흔적 검토, hardcoded color 구분, desktop/tablet/mobile 화면 QA | DESIGN.md와 충돌 없는 화면 증거, responsive/design dashboard check 감소 |
-| B. 프론트 API 연동 및 상태 리팩토링 | Open | OAuth consent, admin report, knowledge, learning, engagement, AsyncValue/error/loading, focused tests | `flutter analyze`, `flutter test`, `flutter build web --release`, production route mock 제거 |
+| B. 프론트 API 연동 및 상태 리팩토링 | Partial | OAuth consent contract, dashboard group/board API contract, staging/live evidence, remaining production mocks | `flutter analyze`, `flutter test`, `flutter build web --release`, production route mock 제거 |
 | C. 백엔드 검증 잔여 작업 | Partial | platform 11, knowledge 10, learning 2, engagement 4, shared 10 tail gate | staging/live 또는 동등한 실행 로그와 eventId/tenantId 추적 |
 | D. GitOps 및 릴리즈 하드닝 | Partial | cost/stability 6개, ECR tag, ArgoCD Image Updater writeback, metrics gap, 24h signoff | AWS/EKS/ArgoCD live 증거와 handoff 기록 |
 | E. 통합 QA 및 문서 마감 | Partial | full staging demo, frontend QA, search/AI blocker, owner/date/blocker 세분화 | demo path end-to-end pass, P0 0건, P1 해결 또는 accepted risk |
@@ -56,12 +56,21 @@
 
 | Priority | 묶음 | 이유 | 다음 액션 |
 |---|---|---|---|
-| P0 | Frontend production route API 전환 | frontend remaining 313으로 전체 릴리즈 병목 | knowledge note/search부터 repository/provider 전환 후 focused test |
+| P0 | Frontend production route API 전환 | frontend remaining 313으로 전체 릴리즈 병목 | remaining engagement group/dashboard/OAuth consent contracts 확인 후 API-backed 전환 |
 | P0 | Full staging demo evidence | Phase E 완료 조건의 핵심 gate | staging seed path 확정 후 signup -> note -> graph/search -> AI cards -> review -> gamification -> notification/admin 실행 |
 | P1 | Backend live tail evidence | 백엔드 구현은 대부분 끝났고 운영 증거가 부족 | platform/knowledge/learning/engagement/shared owner별 live 로그 수집 |
 | P1 | GitOps cost/stability live gate | GitOps는 6개만 남았지만 live AWS/EKS 증거가 필요 | Cost Explorer tag, HPA/PDB, Image Updater writeback, 24h signoff 기록 |
 | P1 | Design/responsive QA | API 전환 후 화면 품질 완료 처리에 필요 | auth, dashboard, notes, cards, community, search, notification, admin 3뷰포트 확인 |
 | P2 | PM sync hygiene | count drift 재발 방지 | repo별 dry-run, validation, diff 확인 후만 dashboard sync |
+
+### 실행 플랜 문서
+
+| Priority | 문서 | 적용 범위 |
+|---|---|---|
+| P0 | [P0 릴리즈 차단 해소 실행 플랜](./plans/P0_RELEASE_BLOCKER_PLAN.md) | frontend production route API 전환, full staging demo evidence |
+| P1 | [P1 증거 하드닝 실행 플랜](./plans/P1_EVIDENCE_HARDENING_PLAN.md) | backend live tail evidence, GitOps cost/stability live gate, design/responsive QA |
+| P2 | [P2 PM Sync Hygiene 실행 플랜](./plans/P2_PM_SYNC_HYGIENE_PLAN.md) | PM source 문서, 중앙 사본, workflow-dashboard sync 위생 |
+| 전체 | [우선순위별 실행 플랜 인덱스](./plans/PRIORITY_WORK_PLAN_INDEX.md) | P0/P1/P2 선택 규칙, 공통 증거 기준, 관련 기준 문서 |
 
 ## 5. Repo별 남은 작업
 
@@ -80,15 +89,15 @@
 
 | ID | Open step | Open count | 남은 내용 |
 |---|---|---:|---|
-| FE-01 | W1 로그인/회원가입 화면 및 OAuth 인증 | 6 | OAuth consent allow/deny 계약 확인, 남은 task/workflow constraints 정리 |
-| FE-02 | W1 대시보드 및 사이드바 네비게이션 | 35 | dashboard/sidebar 요구사항, API-backed summary/state, QA 증거 |
+| FE-01 | W1 로그인/회원가입 화면 및 OAuth 인증 | 6 | OAuth consent allow/deny backend endpoint 미확인. Frontend fake approval 제거 완료, platform-svc 계약 필요 |
+| FE-02 | W1 대시보드 및 사이드바 네비게이션 | 35 | admin dashboard summary API-backed 완료. dashboard study-board/calendar/planner summary API contract 및 QA 증거 필요 |
 | FE-03 | W2 노트 에디터 화면 | 36 | knowledge note CRUD, autosave, markdown preview, repository/provider 전환 |
 | FE-04 | W2 SRS 복습 화면 | 13 | learning-card review API, duration/constraints 정리, smoke test |
-| FE-05 | W2 커뮤니티 그룹 목록/상세 화면 | 37 | engagement community API, 검색/필터/정렬, 상세/복사 기능 |
-| FE-06 | W3 게이미피케이션 UI | 44 | XP bar, badge gallery, level display, level-up animation API 연동 |
+| FE-05 | W2 커뮤니티 그룹 목록/상세 화면 | 37 | shared decks/notes search/detail/fork/report API-backed 완료. 그룹 목록/상세 API contract 잔여 |
+| FE-06 | W3 게이미피케이션 UI | 44 | profile/badge/leaderboard/xp history API-backed 완료. level-up live animation/event evidence 잔여 |
 | FE-07 | W3 알림 센터 | 6 | 이미 API 검증된 inbox/preferences/device 경로의 남은 PM 문서 정합화 |
-| FE-08 | W3 관리자 신고 화면 | 37 | admin report 또는 engagement moderation API 소유권 확정 후 mock 제거 |
-| FE-09 | W3 공유 덱 탐색/상세 | 42 | shared decks/shared notes API, copy action, focused test |
+| FE-08 | W3 관리자 신고 화면 | 37 | engagement moderation API list/moderate 전환 완료. admin role live evidence 잔여 |
+| FE-09 | W3 공유 덱 탐색/상세 | 42 | shared decks/shared notes search/detail/fork/report API-backed 완료. staging copy evidence 잔여 |
 | FE-10 | W4 전체 화면 반응형 검증 | 14 | mobile/tablet/desktop 시나리오와 화면 증거 |
 | FE-11 | W4 에러/로딩 상태 일관성 | 13 | `AppErrorWidget`, `AppLoadingWidget`, empty state 전수 확인 |
 | FE-12 | W4 DESIGN.md 토큰 일관성 | 13 | hardcoded color/spacing 검토, token alignment 증거 |
@@ -194,8 +203,8 @@
 
 ## 6. 다음 실행 순서
 
-1. `synapse-frontend` knowledge note CRUD/search/graph API 전환부터 시작한다.
-2. 같은 frontend pass에서 `AsyncValue` loading/error/empty와 focused widget/API tests를 같이 닫는다.
+1. `synapse-frontend` remaining production route audit을 계속해 engagement group/dashboard/OAuth consent 계약 공백을 닫는다.
+2. full `flutter test`와 `flutter build web --release` gate를 최신 frontend slice 기준으로 재확인한다.
 3. backend tail은 platform/knowledge/learning/engagement/shared owner별 live evidence 수집으로 병렬 진행한다.
 4. staging seed path를 하나로 확정하고 Phase E runbook의 demo path를 끝까지 실행한다.
 5. GitOps live evidence를 수집한 뒤 `synapse-gitops` 잔여 6개 check를 sync 후보로 만든다.
